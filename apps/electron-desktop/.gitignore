@@ -2,5 +2,8 @@ dist/
 node_modules/
 release/
 vendor/
+.gog-runtime/
+.env
+.env.*
 .DS_Store
 

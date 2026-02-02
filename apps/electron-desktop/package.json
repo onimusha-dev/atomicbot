@@ -8,14 +8,17 @@
   "author": "",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "npm run build && npm run build:renderer && cross-env ELECTRON_RUN_AS_NODE= electron .",
+    "dev": "npm run build && npm run build:renderer && npm run fetch:gog && npm run prepare:gog:credentials && cross-env ELECTRON_RUN_AS_NODE= electron .",
     "build": "tsc -p tsconfig.json",
     "build:renderer": "vite build --config renderer/vite.config.ts",
     "prepare:openclaw": "node scripts/prepare-openclaw-bundle.mjs",
     "prepare:node": "node scripts/prepare-node-runtime.mjs",
+    "fetch:gog": "node scripts/fetch-gog-runtime.mjs",
+    "prepare:gog:credentials": "node --env-file=.env scripts/prepare-gog-credentials.mjs",
+    "prepare:gog": "node scripts/prepare-gog-runtime.mjs",
     "reset:local": "node scripts/reset-local-state.mjs",
     "reset:local:yes": "node scripts/reset-local-state.mjs --yes",
-    "dist": "npm run build && npm run build:renderer && npm run prepare:openclaw && npm run prepare:node && electron-builder"
+    "dist": "npm run build && npm run build:renderer && npm run prepare:openclaw && npm run prepare:node && npm run fetch:gog && npm run prepare:gog:credentials && npm run prepare:gog && electron-builder"
   },
   "devDependencies": {
     "@types/node": "^25.2.0",
@@ -52,8 +55,23 @@
         "to": "openclaw"
       },
       {
+        "from": "vendor/openclaw/node_modules",
+        "to": "openclaw/node_modules",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
         "from": "vendor/node",
         "to": "node"
+      },
+      {
+        "from": "vendor/gog",
+        "to": "gog"
+      },
+      {
+        "from": ".gog-runtime/credentials",
+        "to": "gog-credentials"
       }
     ],
     "mac": {

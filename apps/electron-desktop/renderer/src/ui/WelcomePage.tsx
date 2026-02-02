@@ -14,8 +14,16 @@ type ChannelsStatusResult = {
   channelAccounts?: Record<string, Array<{ accountId?: string; configured?: boolean; lastError?: string }>>;
 };
 
+type GogExecResult = {
+  ok: boolean;
+  code: number | null;
+  stdout: string;
+  stderr: string;
+};
+
 const ONBOARDED_KEY = "openclaw.desktop.onboarded.v1";
 const DEFAULT_ANTHROPIC_MODEL = "anthropic/claude-sonnet-4-5";
+const DEFAULT_GOG_SERVICES = "gmail,calendar,drive,docs,sheets,contacts";
 
 function inferWorkspaceDirFromConfigPath(configPath: string | undefined): string {
   const raw = typeof configPath === "string" ? configPath.trim() : "";
@@ -49,7 +57,7 @@ function unique(list: string[]): string[] {
   return Array.from(new Set(list));
 }
 
-type StepId = "config" | "anthropic" | "telegramToken" | "telegramUser" | "done";
+type StepId = "config" | "anthropic" | "telegramToken" | "telegramUser" | "gog" | "done";
 
 export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   const gw = useGatewayRpc();
@@ -62,6 +70,10 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
   const [anthropicKey, setAnthropicKey] = React.useState("");
   const [telegramToken, setTelegramToken] = React.useState("");
   const [telegramUserId, setTelegramUserId] = React.useState("");
+  const [gogAccount, setGogAccount] = React.useState("");
+  const [gogBusy, setGogBusy] = React.useState(false);
+  const [gogError, setGogError] = React.useState<string | null>(null);
+  const [gogOutput, setGogOutput] = React.useState<string | null>(null);
 
   const [configPath, setConfigPath] = React.useState<string | null>(null);
   const [channelsProbe, setChannelsProbe] = React.useState<ChannelsStatusResult | null>(null);
@@ -69,7 +81,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
   React.useEffect(() => {
     const already = typeof localStorage !== "undefined" && localStorage.getItem(ONBOARDED_KEY) === "1";
     if (already) {
-      navigate("/legacy", { replace: true });
+      navigate("/chat", { replace: true });
     }
   }, [navigate]);
 
@@ -279,6 +291,91 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
     setStatus("Telegram allowlist updated.");
   }, [gw, loadConfig, telegramUserId]);
 
+  const runGog = React.useCallback(async (fn: () => Promise<GogExecResult>) => {
+    setGogError(null);
+    setGogBusy(true);
+    try {
+      const res = await fn();
+      const out = [
+        `ok: ${res.ok ? "true" : "false"}`,
+        `code: ${res.code ?? "null"}`,
+        res.stderr ? `stderr:\n${res.stderr.trim()}` : "",
+        res.stdout ? `stdout:\n${res.stdout.trim()}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n\n");
+      setGogOutput(out || "(no output)");
+      if (!res.ok) {
+        setGogError(res.stderr?.trim() || "gog command failed");
+      }
+      return res;
+    } catch (err) {
+      setGogError(String(err));
+      setGogOutput(null);
+      throw err;
+    } finally {
+      setGogBusy(false);
+    }
+  }, []);
+
+  const ensureGogExecDefaults = React.useCallback(async () => {
+    const snap = (await gw.request("config.get", {})) as ConfigSnapshot;
+    const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
+    if (!baseHash) {
+      throw new Error("Config base hash missing. Reload and try again.");
+    }
+    const cfg = getObject(snap.config);
+    const tools = getObject(cfg.tools);
+    const exec = getObject(tools.exec);
+    const existingSafeBins = getStringArray(exec.safeBins);
+    const safeBins = unique([...existingSafeBins, "gog"].map((v) => v.toLowerCase()));
+
+    const host = typeof exec.host === "string" && exec.host.trim() ? exec.host.trim() : "gateway";
+    const security =
+      typeof exec.security === "string" && exec.security.trim() ? exec.security.trim() : "allowlist";
+    const ask = typeof exec.ask === "string" && exec.ask.trim() ? exec.ask.trim() : "on-miss";
+
+    await gw.request("config.patch", {
+      baseHash,
+      raw: JSON.stringify(
+        {
+          tools: {
+            exec: {
+              host,
+              security,
+              ask,
+              safeBins,
+            },
+          },
+        },
+        null,
+        2,
+      ),
+      note: "Welcome: ensure gog exec defaults",
+    });
+  }, [gw]);
+
+  const finish = React.useCallback(() => {
+    localStorage.setItem(ONBOARDED_KEY, "1");
+    navigate("/chat", { replace: true });
+  }, [navigate]);
+
+  const skip = React.useCallback(() => {
+    // "Skip" should skip the current step (not exit onboarding) for Telegram steps,
+    // so users can continue the setup flow without configuring Telegram right now.
+    setError(null);
+    setStatus(null);
+    if (step === "telegramToken" || step === "telegramUser") {
+      setStep("gog");
+      return;
+    }
+    if (step === "done") {
+      navigate("/chat", { replace: true });
+      return;
+    }
+    finish();
+  }, [finish, navigate, step]);
+
   const next = React.useCallback(async () => {
     try {
       if (step === "config") {
@@ -298,18 +395,30 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
       }
       if (step === "telegramUser") {
         await saveTelegramAllowFrom();
-        setStep("done");
-        localStorage.setItem(ONBOARDED_KEY, "1");
+        setStep("gog");
+        return;
+      }
+      if (step === "gog") {
+        // Do not auto-run gog auth here. This step is optional and should be driven by explicit buttons.
+        finish();
         return;
       }
       if (step === "done") {
-        navigate("/legacy", { replace: true });
+        navigate("/chat", { replace: true });
       }
     } catch (err) {
       setError(String(err));
       setStatus(null);
     }
-  }, [ensureExtendedConfig, navigate, saveAnthropic, saveTelegramAllowFrom, saveTelegramToken, step]);
+  }, [
+    ensureExtendedConfig,
+    finish,
+    navigate,
+    saveAnthropic,
+    saveTelegramAllowFrom,
+    saveTelegramToken,
+    step,
+  ]);
 
   return (
     <div className="Centered" style={{ alignItems: "stretch", padding: 12 }}>
@@ -317,7 +426,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
         <div className="CardTitle">Welcome</div>
         <div className="CardSubtitle">
           First-time setup for the embedded OpenClaw Gateway. This will patch missing config keys and help you
-          configure Anthropic + Telegram safely.
+          configure Anthropic + Telegram + gog safely.
         </div>
 
         <div className="Meta">
@@ -433,6 +542,80 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
           </div>
         ) : null}
 
+        {step === "gog" ? (
+          <div>
+            <div className="CardTitle">5) gog (Gmail hooks)</div>
+            <div className="CardSubtitle">
+              Optional: authorize your Google account for Gmail hooks via the embedded <code>gog</code> binary.
+              This will open a browser for consent. If you skip, you can do it later in Settings.
+            </div>
+            {gogError ? (
+              <div className="CardSubtitle" style={{ color: "rgba(255, 122, 0, 0.95)" }}>
+                {gogError}
+              </div>
+            ) : null}
+            <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+              <input
+                type="text"
+                value={gogAccount}
+                onChange={(e) => setGogAccount(e.target.value)}
+                placeholder="you@gmail.com"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                style={{
+                  width: "100%",
+                  borderRadius: 10,
+                  border: "1px solid rgba(230,237,243,0.16)",
+                  background: "rgba(230,237,243,0.06)",
+                  color: "var(--text)",
+                  padding: "8px 10px",
+                }}
+              />
+              <button
+                className="primary"
+                disabled={gogBusy || !gogAccount.trim()}
+                onClick={() =>
+                  void runGog(async () => {
+                    const api = window.openclawDesktop;
+                    if (!api) {
+                      throw new Error("Desktop API not available");
+                    }
+                    const res = await api.gogAuthAdd({
+                      account: gogAccount.trim(),
+                      services: DEFAULT_GOG_SERVICES,
+                    });
+                    if (res.ok) {
+                      await ensureGogExecDefaults();
+                    }
+                    return res;
+                  })
+                }
+              >
+                {gogBusy ? "Running…" : "Run gog auth add"}
+              </button>
+              <button
+                disabled={gogBusy}
+                onClick={() =>
+                  void runGog(async () => {
+                    const api = window.openclawDesktop;
+                    if (!api) {
+                      throw new Error("Desktop API not available");
+                    }
+                    return await api.gogAuthList();
+                  })
+                }
+              >
+                {gogBusy ? "Running…" : "Run gog auth list"}
+              </button>
+            </div>
+            <div className="CardSubtitle" style={{ marginTop: 8, opacity: 0.8 }}>
+              Services: <code>{DEFAULT_GOG_SERVICES}</code>
+            </div>
+            {gogOutput ? <pre style={{ marginTop: 10, whiteSpace: "pre-wrap" }}>{gogOutput}</pre> : null}
+          </div>
+        ) : null}
+
         {step === "done" ? (
           <div>
             <div className="CardTitle">Done</div>
@@ -444,12 +627,11 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
 
         <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
           <button className="primary" onClick={() => void next()}>
-            {step === "done" ? "Go to dashboard" : "Next"}
+            {step === "gog" ? "Finish" : step === "done" ? "Go to dashboard" : "Next"}
           </button>
           <button
             onClick={() => {
-              localStorage.setItem(ONBOARDED_KEY, "1");
-              navigate("/legacy", { replace: true });
+              skip();
             }}
           >
             Skip

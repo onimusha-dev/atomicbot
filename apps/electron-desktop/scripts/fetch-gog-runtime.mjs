@@ -1,0 +1,233 @@
+import fs from "node:fs";
+import path from "node:path";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const appRoot = path.resolve(here, "..");
+
+// This directory is gitignored and used in dev + as input for prepare-gog-runtime.
+const runtimeRoot = path.join(appRoot, ".gog-runtime");
+
+function ensureDir(p) {
+  fs.mkdirSync(p, { recursive: true });
+}
+
+function rmrf(p) {
+  try {
+    fs.rmSync(p, { recursive: true, force: true });
+  } catch {
+    // ignore
+  }
+}
+
+function listDirSafe(p) {
+  try {
+    return fs.readdirSync(p);
+  } catch {
+    return [];
+  }
+}
+
+function resolveGogcliOs(platform) {
+  if (platform === "darwin") {
+    return "darwin";
+  }
+  if (platform === "linux") {
+    return "linux";
+  }
+  if (platform === "win32") {
+    return "windows";
+  }
+  throw new Error(`unsupported platform for gogcli: ${platform}`);
+}
+
+function resolveGogcliArch(arch) {
+  if (arch === "arm64") {
+    return "arm64";
+  }
+  if (arch === "x64") {
+    return "amd64";
+  }
+  throw new Error(`unsupported arch for gogcli: ${arch}`);
+}
+
+function findFileRecursive(rootDir, filename) {
+  const queue = [rootDir];
+  while (queue.length > 0) {
+    const dir = queue.shift();
+    if (!dir) {
+      continue;
+    }
+    for (const entry of listDirSafe(dir)) {
+      const full = path.join(dir, entry);
+      let st;
+      try {
+        st = fs.statSync(full);
+      } catch {
+        continue;
+      }
+      if (st.isDirectory()) {
+        queue.push(full);
+        continue;
+      }
+      if (st.isFile() && entry === filename) {
+        return full;
+      }
+    }
+  }
+  return null;
+}
+
+async function fetchJson(url) {
+  if (typeof fetch !== "function") {
+    throw new Error("global fetch() not available; please run this script with Node 18+");
+  }
+  const res = await fetch(url, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      "User-Agent": "openclaw-electron-desktop/fetch-gog-runtime",
+    },
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`HTTP ${res.status} fetching ${url}: ${text || res.statusText}`);
+  }
+  return await res.json();
+}
+
+async function downloadToFile(url, destPath) {
+  if (typeof fetch !== "function") {
+    throw new Error("global fetch() not available; please run this script with Node 18+");
+  }
+  const res = await fetch(url, {
+    headers: {
+      "User-Agent": "openclaw-electron-desktop/fetch-gog-runtime",
+    },
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`HTTP ${res.status} downloading ${url}: ${text || res.statusText}`);
+  }
+  ensureDir(path.dirname(destPath));
+  const tmpPath = `${destPath}.tmp`;
+  try {
+    const body = res.body;
+    if (!body) {
+      throw new Error(`empty response body for ${url}`);
+    }
+    await pipeline(Readable.fromWeb(body), fs.createWriteStream(tmpPath));
+    fs.renameSync(tmpPath, destPath);
+  } finally {
+    try {
+      fs.rmSync(tmpPath, { force: true });
+    } catch {
+      // ignore
+    }
+  }
+}
+
+function extractArchive(params) {
+  const { archivePath, extractDir, isZip } = params;
+  rmrf(extractDir);
+  ensureDir(extractDir);
+  if (isZip) {
+    const res = spawnSync("unzip", ["-q", archivePath, "-d", extractDir], { encoding: "utf-8" });
+    if (res.status !== 0) {
+      const stderr = String(res.stderr || "").trim();
+      throw new Error(`failed to unzip gogcli archive: ${stderr || "unknown error"}`);
+    }
+    return;
+  }
+  const res = spawnSync("tar", ["-xzf", archivePath, "-C", extractDir], { encoding: "utf-8" });
+  if (res.status !== 0) {
+    const stderr = String(res.stderr || "").trim();
+    throw new Error(`failed to untar gogcli archive: ${stderr || "unknown error"}`);
+  }
+}
+
+function copyExecutable(src, dest) {
+  ensureDir(path.dirname(dest));
+  fs.copyFileSync(src, dest);
+  fs.chmodSync(dest, 0o755);
+}
+
+async function main() {
+  if (process.platform !== "darwin") {
+    throw new Error("fetch-gog-runtime is macOS-only (darwin)");
+  }
+
+  const platform = process.platform;
+  const arch = process.arch;
+  const os = resolveGogcliOs(platform);
+  const assetArch = resolveGogcliArch(arch);
+
+  const repo = (process.env.GOGCLI_REPO && String(process.env.GOGCLI_REPO).trim()) || "moltbot/gogcli";
+  const tag = (process.env.GOGCLI_TAG && String(process.env.GOGCLI_TAG).trim()) || "latest";
+  const apiUrl =
+    tag === "latest"
+      ? `https://api.github.com/repos/${repo}/releases/latest`
+      : `https://api.github.com/repos/${repo}/releases/tags/${tag}`;
+
+  const release = await fetchJson(apiUrl);
+  const tagName = typeof release?.tag_name === "string" ? release.tag_name : "";
+  const version = tagName && tagName.startsWith("v") ? tagName.slice(1) : tagName;
+  if (!version) {
+    throw new Error(`failed to resolve gogcli version from GitHub release tag: ${tagName || "<missing>"}`);
+  }
+
+  const isZip = os === "windows";
+  const assetName = `gogcli_${version}_${os}_${assetArch}.${isZip ? "zip" : "tar.gz"}`;
+  const assets = Array.isArray(release?.assets) ? release.assets : [];
+  const match = assets.find((a) => a && typeof a.name === "string" && a.name === assetName);
+  const downloadUrl = match && typeof match.browser_download_url === "string" ? match.browser_download_url : "";
+  if (!downloadUrl) {
+    const known = assets
+      .map((a) => (a && typeof a.name === "string" ? a.name : ""))
+      .filter(Boolean)
+      .slice(0, 40)
+      .join(", ");
+    throw new Error(
+      `gogcli asset not found for ${platform}/${arch}. Expected ${assetName}. Known assets (first 40): ${known || "<none>"}`,
+    );
+  }
+
+  const cacheDir = path.join(runtimeRoot, "_cache", `${tagName || tag}`, `${os}-${assetArch}`);
+  const archivePath = path.join(cacheDir, assetName);
+  const extractDir = path.join(cacheDir, "extract");
+
+  console.log(`[electron-desktop] gog runtime dir: ${runtimeRoot}`);
+  console.log(`[electron-desktop] gogcli cache dir: ${cacheDir}`);
+
+  console.log(`[electron-desktop] Downloading gogcli: ${downloadUrl}`);
+  await downloadToFile(downloadUrl, archivePath);
+
+  extractArchive({ archivePath, extractDir, isZip });
+  const binName = os === "windows" ? "gog.exe" : "gog";
+  const extracted = findFileRecursive(extractDir, binName);
+  if (!extracted) {
+    throw new Error(`failed to locate ${binName} in extracted gogcli archive (dir: ${extractDir})`);
+  }
+
+  const targetDir = path.join(runtimeRoot, `${platform}-${arch}`);
+  const targetBin = path.join(targetDir, "gog");
+  copyExecutable(extracted, targetBin);
+
+  // Sanity check.
+  const res = spawnSync(targetBin, ["--version"], { encoding: "utf-8" });
+  if (res.status !== 0) {
+    const stderr = String(res.stderr || "").trim();
+    const stdout = String(res.stdout || "").trim();
+    throw new Error(`downloaded gog failed to run: ${stderr || stdout || "unknown error"}`);
+  }
+
+  console.log(`[electron-desktop] gog downloaded to: ${targetBin}`);
+}
+
+main().catch((err) => {
+  console.error(String(err?.stack || err?.message || err));
+  process.exitCode = 1;
+});
+

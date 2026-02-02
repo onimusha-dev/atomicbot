@@ -1,8 +1,9 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import { spawn, type ChildProcess } from "node:child_process";
 import { randomBytes } from "node:crypto";
 import * as fs from "node:fs";
 import * as net from "node:net";
+import * as os from "node:os";
 import * as path from "node:path";
 import JSON5 from "json5";
 
@@ -36,6 +37,96 @@ function resolveBundledNodeBin(): string {
     return path.join(base, "node.exe");
   }
   return path.join(base, "bin", "node");
+}
+
+function resolveBundledGogBin(): string {
+  const platform = process.platform;
+  const arch = process.arch;
+  return path.join(process.resourcesPath, "gog", `${platform}-${arch}`, "gog");
+}
+
+function resolveDownloadedGogBin(): string {
+  const platform = process.platform;
+  const arch = process.arch;
+  // In dev, this file compiles to apps/electron-desktop/dist/main.js.
+  // We keep the downloaded gog runtime next to the Electron app sources.
+  const appDir = path.resolve(THIS_DIR, "..");
+  return path.join(appDir, ".gog-runtime", `${platform}-${arch}`, "gog");
+}
+
+function resolveBundledGogCredentialsPath(): string {
+  return path.join(process.resourcesPath, "gog-credentials", "gog-client-secret.json");
+}
+
+function resolveDownloadedGogCredentialsPath(): string {
+  // In dev, this file compiles to apps/electron-desktop/dist/main.js.
+  const appDir = path.resolve(THIS_DIR, "..");
+  return path.join(appDir, ".gog-runtime", "credentials", "gog-client-secret.json");
+}
+
+function resolveGogCredentialsPaths(): string[] {
+  const paths: string[] = [];
+  const xdg = process.env.XDG_CONFIG_HOME;
+  if (xdg) {
+    paths.push(path.join(xdg, "gogcli", "credentials.json"));
+  }
+  paths.push(path.join(os.homedir(), ".config", "gogcli", "credentials.json"));
+  if (process.platform === "darwin") {
+    paths.push(path.join(os.homedir(), "Library", "Application Support", "gogcli", "credentials.json"));
+  }
+  return paths;
+}
+
+async function ensureGogCredentialsConfigured(params: {
+  gogBin: string;
+  openclawDir: string;
+  credentialsJsonPath: string;
+}): Promise<void> {
+  if (!fs.existsSync(params.gogBin)) {
+    return;
+  }
+  if (!fs.existsSync(params.credentialsJsonPath)) {
+    return;
+  }
+
+  // If credentials already exist (file-based or gog-managed), do not override user config.
+  if (resolveGogCredentialsPaths().some((p) => fs.existsSync(p))) {
+    return;
+  }
+  try {
+    const list = await runGog({
+      bin: params.gogBin,
+      args: ["auth", "credentials", "list", "--json", "--no-input"],
+      cwd: params.openclawDir,
+      timeoutMs: 15_000,
+    });
+    if (list.ok) {
+      try {
+        const parsed = JSON.parse(list.stdout || "{}") as { clients?: unknown };
+        if (Array.isArray(parsed.clients) && parsed.clients.length > 0) {
+          return;
+        }
+      } catch {
+        // ignore and proceed to set
+      }
+    }
+  } catch {
+    // ignore and proceed to set
+  }
+
+  const res = await runGog({
+    bin: params.gogBin,
+    args: ["auth", "credentials", "set", params.credentialsJsonPath, "--no-input"],
+    cwd: params.openclawDir,
+    timeoutMs: 30_000,
+  });
+  if (!res.ok) {
+    const stderr = res.stderr.trim();
+    const stdout = res.stdout.trim();
+    console.warn(
+      `[electron-desktop] gog auth credentials set failed: ${stderr || stdout || "unknown error"} (bin: ${params.gogBin})`,
+    );
+  }
 }
 
 function resolveRendererIndex(): string {
@@ -220,9 +311,11 @@ function spawnGateway(params: {
   token: string;
   openclawDir: string;
   nodeBin: string;
+  gogBin?: string;
   stderrTail: ReturnType<typeof createTailBuffer>;
 }): ChildProcess {
-  const { port, logsDir, stateDir, configPath, token, openclawDir, nodeBin, stderrTail } = params;
+  const { port, logsDir, stateDir, configPath, token, openclawDir, nodeBin, gogBin, stderrTail } =
+    params;
 
   ensureDir(logsDir);
   ensureDir(stateDir);
@@ -237,6 +330,10 @@ function spawnGateway(params: {
   // so the Control UI/WebChat + wizard flows can create config.
   const args = [script, "gateway", "--bind", "loopback", "--port", String(port), "--allow-unconfigured"];
 
+  const envPath = typeof process.env.PATH === "string" ? process.env.PATH : "";
+  const extraBinDir = gogBin ? path.dirname(gogBin) : "";
+  const mergedPath = extraBinDir ? `${extraBinDir}:${envPath}` : envPath;
+
   const env: NodeJS.ProcessEnv = {
     ...process.env,
     // In dev mode we spawn the Gateway using the Electron binary (process.execPath). That binary
@@ -247,6 +344,8 @@ function spawnGateway(params: {
     OPENCLAW_CONFIG_PATH: configPath,
     OPENCLAW_GATEWAY_PORT: String(port),
     OPENCLAW_GATEWAY_TOKEN: token,
+    // Ensure the embedded Gateway resolves the bundled gog binary via PATH.
+    PATH: mergedPath,
     // Reduce noise in embedded contexts.
     NO_COLOR: "1",
     FORCE_COLOR: "0",
@@ -272,6 +371,121 @@ function spawnGateway(params: {
   return child;
 }
 
+type GogExecResult = {
+  ok: boolean;
+  code: number | null;
+  stdout: string;
+  stderr: string;
+};
+
+type ResetAndCloseResult = {
+  ok: true;
+  warnings?: string[];
+};
+
+function runGog(params: {
+  bin: string;
+  args: string[];
+  cwd: string;
+  env?: NodeJS.ProcessEnv;
+  timeoutMs?: number;
+}): Promise<GogExecResult> {
+  const timeoutMs = typeof params.timeoutMs === "number" ? params.timeoutMs : 120_000;
+  return new Promise<GogExecResult>((resolve) => {
+    const child = spawn(params.bin, params.args, {
+      cwd: params.cwd,
+      env: params.env,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stdout = "";
+    let stderr = "";
+    const onData = (buf: Buffer, which: "stdout" | "stderr") => {
+      const text = buf.toString("utf-8");
+      if (which === "stdout") {
+        stdout += text;
+      } else {
+        stderr += text;
+      }
+    };
+    child.stdout?.on("data", (b: Buffer) => onData(b, "stdout"));
+    child.stderr?.on("data", (b: Buffer) => onData(b, "stderr"));
+
+    let killed = false;
+    const timer = setTimeout(() => {
+      killed = true;
+      try {
+        child.kill("SIGKILL");
+      } catch {
+        // ignore
+      }
+    }, timeoutMs);
+
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      resolve({
+        ok: !killed && code === 0,
+        code: typeof code === "number" ? code : null,
+        stdout,
+        stderr,
+      });
+    });
+    child.on("error", (err) => {
+      clearTimeout(timer);
+      resolve({
+        ok: false,
+        code: null,
+        stdout,
+        stderr: `${stderr}${stderr ? "\n" : ""}${String(err)}`,
+      });
+    });
+  });
+}
+
+function parseGogAuthListEmails(jsonText: string): string[] {
+  try {
+    const parsed = JSON.parse(jsonText || "{}") as { accounts?: unknown };
+    const accounts = Array.isArray(parsed.accounts) ? parsed.accounts : [];
+    const emails = accounts
+      .map((a) => (a && typeof a === "object" ? (a as { email?: unknown }).email : undefined))
+      .map((v) => (typeof v === "string" ? v.trim() : ""))
+      .filter(Boolean);
+    return Array.from(new Set(emails));
+  } catch {
+    return [];
+  }
+}
+
+async function clearGogAuthTokens(params: { gogBin: string; openclawDir: string; warnings: string[] }) {
+  if (!fs.existsSync(params.gogBin)) {
+    params.warnings.push(`gog binary not found at: ${params.gogBin}`);
+    return;
+  }
+  const list = await runGog({
+    bin: params.gogBin,
+    args: ["auth", "list", "--json", "--no-input"],
+    cwd: params.openclawDir,
+    timeoutMs: 15_000,
+  });
+  if (!list.ok) {
+    const msg = (list.stderr || list.stdout || "").trim();
+    params.warnings.push(`gog auth list failed: ${msg || "unknown error"}`);
+    return;
+  }
+  const emails = parseGogAuthListEmails(list.stdout);
+  for (const email of emails) {
+    const res = await runGog({
+      bin: params.gogBin,
+      args: ["auth", "remove", email, "--force", "--no-input"],
+      cwd: params.openclawDir,
+      timeoutMs: 15_000,
+    });
+    if (!res.ok) {
+      const msg = (res.stderr || res.stdout || "").trim();
+      params.warnings.push(`gog auth remove failed for ${email}: ${msg || "unknown error"}`);
+    }
+  }
+}
+
 async function createMainWindow(): Promise<BrowserWindow> {
   const win = new BrowserWindow({
     width: 1200,
@@ -293,6 +507,27 @@ let gateway: ChildProcess | null = null;
 let logsDirForUi: string | null = null;
 let gatewayState: GatewayState | null = null;
 
+async function stopGatewayChild(): Promise<void> {
+  const child = gateway;
+  gateway = null;
+  if (!child) {
+    return;
+  }
+  try {
+    child.kill("SIGTERM");
+  } catch {
+    // ignore
+  }
+  await new Promise((r) => setTimeout(r, 1500));
+  if (!child.killed) {
+    try {
+      child.kill("SIGKILL");
+    } catch {
+      // ignore
+    }
+  }
+}
+
 function broadcastGatewayState(win: BrowserWindow | null, state: GatewayState) {
   gatewayState = state;
   try {
@@ -310,16 +545,7 @@ app.on("window-all-closed", () => {
 });
 
 app.on("before-quit", async () => {
-  const child = gateway;
-  gateway = null;
-  if (!child) {
-    return;
-  }
-  child.kill("SIGTERM");
-  await new Promise((r) => setTimeout(r, 1500));
-  if (!child.killed) {
-    child.kill("SIGKILL");
-  }
+  await stopGatewayChild();
 });
 
 app.whenReady().then(async () => {
@@ -365,15 +591,169 @@ app.whenReady().then(async () => {
     return { ok: true } as const;
   });
 
+  const openclawDir = app.isPackaged ? resolveBundledOpenClawDir() : resolveRepoRoot();
+  const nodeBin = app.isPackaged ? resolveBundledNodeBin() : process.execPath;
+  const bundledGogBin = app.isPackaged ? resolveBundledGogBin() : resolveDownloadedGogBin();
+  const bundledGogCredentialsPath = app.isPackaged
+    ? resolveBundledGogCredentialsPath()
+    : resolveDownloadedGogCredentialsPath();
+
+  await ensureGogCredentialsConfigured({
+    gogBin: bundledGogBin,
+    openclawDir,
+    credentialsJsonPath: bundledGogCredentialsPath,
+  });
+
+  ipcMain.handle("gog-auth-list", async () => {
+    if (!fs.existsSync(bundledGogBin)) {
+      return {
+        ok: false,
+        code: null,
+        stdout: "",
+        stderr: `gog binary not found at: ${bundledGogBin}\nRun: npm run fetch:gog (in apps/electron-desktop)`,
+      } satisfies GogExecResult;
+    }
+    const res = await runGog({ bin: bundledGogBin, args: ["auth", "list"], cwd: openclawDir });
+    return res;
+  });
+
+  ipcMain.handle(
+    "gog-auth-add",
+    async (_evt, params: { account?: unknown; services?: unknown; noInput?: unknown }) => {
+      if (!fs.existsSync(bundledGogBin)) {
+        return {
+          ok: false,
+          code: null,
+          stdout: "",
+          stderr: `gog binary not found at: ${bundledGogBin}\nRun: npm run fetch:gog (in apps/electron-desktop)`,
+        } satisfies GogExecResult;
+      }
+      const account = typeof params?.account === "string" ? params.account.trim() : "";
+      const services = typeof params?.services === "string" ? params.services.trim() : "gmail";
+      const noInput = Boolean(params?.noInput);
+      if (!account) {
+        return {
+          ok: false,
+          code: null,
+          stdout: "",
+          stderr: "account is required",
+        } satisfies GogExecResult;
+      }
+      const args = ["auth", "add", account, "--services", services];
+      if (noInput) {
+        args.push("--no-input");
+      }
+      const res = await runGog({ bin: bundledGogBin, args, cwd: openclawDir });
+      return res;
+    },
+  );
+
+  ipcMain.handle(
+    "gog-auth-credentials",
+    async (_evt, params: { credentialsJson?: unknown; filename?: unknown }) => {
+      if (!fs.existsSync(bundledGogBin)) {
+        return {
+          ok: false,
+          code: null,
+          stdout: "",
+          stderr: `gog binary not found at: ${bundledGogBin}\nRun: npm run fetch:gog (in apps/electron-desktop)`,
+        } satisfies GogExecResult;
+      }
+      const text = typeof params?.credentialsJson === "string" ? params.credentialsJson : "";
+      if (!text.trim()) {
+        return {
+          ok: false,
+          code: null,
+          stdout: "",
+          stderr: "credentialsJson is required",
+        } satisfies GogExecResult;
+      }
+      const tmpDir = path.join(userData, "tmp");
+      ensureDir(tmpDir);
+      const nameRaw = typeof params?.filename === "string" ? params.filename.trim() : "";
+      const base = nameRaw && nameRaw.endsWith(".json") ? nameRaw : "gog-client-secret.json";
+      const tmpPath = path.join(tmpDir, `${randomBytes(8).toString("hex")}-${base}`);
+      fs.writeFileSync(tmpPath, text, { encoding: "utf-8" });
+      try {
+        fs.chmodSync(tmpPath, 0o600);
+      } catch {
+        // ignore
+      }
+      try {
+        const res = await runGog({
+          bin: bundledGogBin,
+          args: ["auth", "credentials", "set", tmpPath, "--no-input"],
+          cwd: openclawDir,
+        });
+        return res;
+      } finally {
+        try {
+          fs.rmSync(tmpPath, { force: true });
+        } catch {
+          // ignore
+        }
+      }
+    },
+  );
+
+  ipcMain.handle("reset-and-close", async () => {
+    const warnings: string[] = [];
+
+    try {
+      await stopGatewayChild();
+    } catch (err) {
+      warnings.push(`failed to stop gateway: ${String(err)}`);
+    }
+
+    try {
+      await clearGogAuthTokens({ gogBin: bundledGogBin, openclawDir, warnings });
+    } catch (err) {
+      warnings.push(`failed to clear gog auth tokens: ${String(err)}`);
+    }
+
+    // Clear the embedded OpenClaw state/logs plus any temp files we created under userData.
+    const tmpDir = path.join(userData, "tmp");
+    for (const dir of [stateDir, logsDir, tmpDir]) {
+      try {
+        fs.rmSync(dir, { recursive: true, force: true });
+      } catch (err) {
+        warnings.push(`failed to delete ${dir}: ${String(err)}`);
+      }
+    }
+
+    // Clear renderer storage (localStorage/IndexedDB/etc.) so onboarding state is reset too.
+    try {
+      await session.defaultSession.clearStorageData();
+    } catch (err) {
+      warnings.push(`failed to clear renderer storage: ${String(err)}`);
+    }
+
+    // Let the IPC reply resolve before quitting.
+    setTimeout(() => {
+      try {
+        app.quit();
+      } catch {
+        // ignore
+      }
+      setTimeout(() => {
+        try {
+          app.exit(0);
+        } catch {
+          // ignore
+        }
+      }, 2000);
+    }, 25);
+
+    const res: ResetAndCloseResult = warnings.length > 0 ? { ok: true, warnings } : { ok: true };
+    return res;
+  });
+
   const port = await pickPort(DEFAULT_PORT);
   const url = `http://127.0.0.1:${port}/`;
   const configPath = path.join(stateDir, "openclaw.json");
   const tokenFromConfig = readGatewayTokenFromConfig(configPath);
   const token = tokenFromConfig ?? randomBytes(24).toString("base64url");
   ensureGatewayConfigFile({ configPath, token });
-
-  const openclawDir = app.isPackaged ? resolveBundledOpenClawDir() : resolveRepoRoot();
-  const nodeBin = app.isPackaged ? resolveBundledNodeBin() : process.execPath;
 
   const stderrTail = createTailBuffer(24_000);
   gateway = spawnGateway({
@@ -384,6 +764,7 @@ app.whenReady().then(async () => {
     token,
     openclawDir,
     nodeBin,
+    gogBin: bundledGogBin,
     stderrTail,
   });
 
