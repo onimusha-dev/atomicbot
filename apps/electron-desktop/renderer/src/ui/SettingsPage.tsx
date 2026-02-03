@@ -15,6 +15,9 @@ type GogExecResult = {
 const DEFAULT_ANTHROPIC_MODEL = "anthropic/claude-sonnet-4-5";
 
 function getTelegramBotToken(cfg: unknown): string {
+  if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) {
+    return "";
+  }
   const obj = cfg as {
     channels?: { telegram?: { botToken?: unknown } };
   };
