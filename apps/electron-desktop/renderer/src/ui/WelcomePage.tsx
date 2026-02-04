@@ -3,14 +3,49 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import type { GatewayState } from "../../../src/main/types";
 import { routes } from "./routes";
+import { GlassCard, HeroPageLayout, InlineError, PrimaryButton } from "./kit";
+import { LoadingScreen } from "./LoadingScreen";
 import { ApiKeyPage } from "./onboarding/ApiKeyPage";
 import { GogPage } from "./onboarding/GogPage";
-import { IntroPage } from "./onboarding/IntroPage";
 import { ModelSelectPage } from "./onboarding/ModelSelectPage";
 import { ProviderSelectPage } from "./onboarding/ProviderSelectPage";
 import { TelegramTokenPage } from "./onboarding/TelegramTokenPage";
 import { TelegramUserPage } from "./onboarding/TelegramUserPage";
 import { useWelcomeState } from "./onboarding/welcome/useWelcomeState";
+
+function WelcomeAutoStart(props: { startBusy: boolean; error: string | null; onStart: () => void }) {
+  const didStartRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (didStartRef.current) {
+      return;
+    }
+    didStartRef.current = true;
+    props.onStart();
+  }, [props.onStart]);
+
+  if (props.startBusy) {
+    return <LoadingScreen state={null} />;
+  }
+
+  if (props.error) {
+    return (
+      <HeroPageLayout title="WELCOME" variant="compact" align="center" aria-label="Welcome setup">
+        <GlassCard className="UiGlassCard-intro">
+          <div className="UiIntroInner">
+            <div className="UiSectionTitle">Setup failed.</div>
+            <div className="UiSectionSubtitle">Please retry to continue onboarding.</div>
+            <InlineError>{props.error}</InlineError>
+            <PrimaryButton onClick={props.onStart}>Retry</PrimaryButton>
+          </div>
+        </GlassCard>
+      </HeroPageLayout>
+    );
+  }
+
+  // If start is neither busy nor errored, we should have navigated away already.
+  return <LoadingScreen state={null} />;
+}
 
 export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   const navigate = useNavigate();
@@ -28,7 +63,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
       <Route
         index
         element={
-          <IntroPage
+          <WelcomeAutoStart
             startBusy={welcome.startBusy}
             error={welcome.error}
             onStart={() => {

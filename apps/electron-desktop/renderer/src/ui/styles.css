@@ -515,10 +515,23 @@ button:disabled {
   font-size: 13px;
 }
 
+.UiCheckRow--error {
+  padding: 10px 12px;
+  margin-left: -12px;
+  margin-right: -12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 122, 0, 0.55);
+  background: rgba(255, 122, 0, 0.10);
+}
+
 .UiCheckRow input {
   width: 18px;
   height: 18px;
   accent-color: var(--lime);
+}
+
+.UiCheckRow.UiCheckRow--error input {
+  accent-color: var(--accent);
 }
 
 .UiInput {
