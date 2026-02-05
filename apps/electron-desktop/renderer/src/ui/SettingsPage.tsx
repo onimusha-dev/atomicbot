@@ -83,7 +83,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
       return;
     }
     const ok = window.confirm(
-      "Reset and close will delete the app's local state (including onboarding + logs) and remove all gog authorizations from the keystore. Continue?",
+      "Reset and close will delete the app's local state (including onboarding + logs) and remove all Google Workspace authorizations from the keystore. Continue?",
     );
     if (!ok) {
       return;
@@ -414,7 +414,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
         .join("\n\n");
       setGogOutput(out || "(no output)");
       if (!res.ok) {
-        setGogError(res.stderr?.trim() || "gog command failed");
+        setGogError(res.stderr?.trim() || "Google Workspace connection failed");
       }
       return res;
     } catch (err) {
@@ -620,20 +620,20 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
           </div>
         </section>
 
-        {/* gog (Gmail hooks) Section */}
+        {/* Google Workspace Section */}
         <section className="UiSettingsSection">
-          <div className="UiSectionTitle">gog (Gmail hooks)</div>
+          <div className="UiSectionTitle">Google Workspace</div>
           <div className="UiSectionSubtitle">
-            Configures <code>gogcli</code> locally via the embedded <code>gog</code> binary (OAuth credentials +
-            account). This does not write secrets into <code>openclaw.json</code>.
+            Connects your Google account locally to enable email and calendar skills. This opens a browser for consent.
+            Secrets are stored locally and are not written into <code>openclaw.json</code>.
             <br />
-            By default, the Desktop app auto-configures OAuth client credentials on startup. Upload is not required.
+            By default, the Desktop app auto-configures OAuth client credentials on startup.
           </div>
           {gogError && <InlineError>{gogError}</InlineError>}
 
           <div className="UiSettingsSubsection">
             <div className="UiSectionSubtitle" style={{ margin: 0 }}>
-              1) Add an account
+              1) Connect an account
             </div>
             <TextInput
               type="text"
@@ -645,7 +645,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
               spellCheck={false}
             />
             <div className="UiSectionSubtitle" style={{ margin: 0 }}>
-              Services are passed as <code>--services</code> (comma-separated). Using: <code>{gogServices}</code>.
+              Enabled services (comma-separated): <code>{gogServices}</code>.
             </div>
             <ButtonRow>
               <ActionButton
@@ -669,7 +669,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
                   })
                 }
               >
-                {gogBusy ? "Running…" : "Run gog auth add"}
+                {gogBusy ? "Connecting…" : "Connect"}
               </ActionButton>
             </ButtonRow>
           </div>
@@ -691,7 +691,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
                   })
                 }
               >
-                {gogBusy ? "Running…" : "Run gog auth list"}
+                {gogBusy ? "Checking…" : "Check"}
               </ActionButton>
             </ButtonRow>
           </div>
@@ -703,8 +703,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
         <section className="UiSettingsSection UiSettingsSection--danger">
           <div className="UiSectionTitle">Danger zone</div>
           <div className="UiSectionSubtitle">
-            This will wipe the app's local state and remove all <code>gog</code> authorizations. The app will then
-            close.
+            This will wipe the app's local state and remove all Google Workspace authorizations. The app will then close.
           </div>
           <ButtonRow>
             <ActionButton variant="primary" disabled={resetBusy} onClick={() => void resetAndClose()}>

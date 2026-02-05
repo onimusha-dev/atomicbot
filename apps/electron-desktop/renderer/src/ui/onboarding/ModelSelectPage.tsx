@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ActionButton, ButtonRow, GlassCard, HeroPageLayout, InlineError } from "../kit";
+import { GlassCard, HeroPageLayout, InlineError, PrimaryButton } from "../kit";
 
 export type ModelEntry = {
   id: string;
@@ -13,6 +13,7 @@ export type ModelEntry = {
 type ModelTier = "ultra" | "pro" | "fast";
 
 // Exact model IDs for each tier - only these specific models get badges
+// (except OpenRouter and Google, which can be name/ID matched to handle dynamic IDs).
 const MODEL_TIERS: Record<string, Record<ModelTier, string>> = {
   anthropic: {
     ultra: "claude-opus-4-5",
@@ -22,7 +23,7 @@ const MODEL_TIERS: Record<string, Record<ModelTier, string>> = {
   google: {
     ultra: "gemini-2.5-pro",
     pro: "gemini-2.5-flash",
-    fast: "gemini-2.0-flash-lite",
+    fast: "gemini-3-flash-preview",
   },
   openai: {
     ultra: "gpt-5.2-pro",
@@ -30,7 +31,7 @@ const MODEL_TIERS: Record<string, Record<ModelTier, string>> = {
     fast: "gpt-5-mini",
   },
   openrouter: {
-    ultra: "auto",
+    ultra: "",
     pro: "",
     fast: "",
   },
@@ -45,13 +46,32 @@ const TIER_INFO: Record<ModelTier, { label: string; description: string }> = {
 const TIER_ORDER: ModelTier[] = ["ultra", "pro", "fast"];
 const TIER_PRIORITY: Record<ModelTier, number> = { ultra: 0, pro: 1, fast: 2 };
 
-function getModelTier(provider: string, modelId: string): ModelTier | null {
-  const providerTiers = MODEL_TIERS[provider];
+function normalizeTierMatchText(text: string): string {
+  return text.toLowerCase().replaceAll(/[\s_-]+/g, " ").trim();
+}
+
+function getModelTier(model: ModelEntry): ModelTier | null {
+  const providerTiers = MODEL_TIERS[model.provider];
   if (!providerTiers) return null;
+
+  const haystack = normalizeTierMatchText(`${model.id} ${model.name}`);
+
+  if (model.provider === "openrouter") {
+    // OpenRouter model IDs can vary by sub-provider; match by stable name/ID fragments.
+    if (haystack.includes("trinity large preview")) return "ultra";
+    if (haystack.includes("kimi") && (haystack.includes("2.5") || haystack.includes("k2.5"))) return "pro";
+    // OpenRouter can prefix IDs with sub-provider (e.g. "google/gemini-3-flash-preview").
+    if (haystack.includes("gemini 3 flash") && haystack.includes("preview")) return "fast";
+  }
+
+  if (model.provider === "google") {
+    // "Gemini 3 Flash Preview" should always show as FAST, even if the UI name varies slightly.
+    if (haystack.includes("gemini 3 flash") && haystack.includes("preview")) return "fast";
+  }
 
   for (const tier of TIER_ORDER) {
     const exactId = providerTiers[tier];
-    if (exactId && modelId === exactId) {
+    if (exactId && model.id === exactId) {
       return tier;
     }
   }
@@ -65,6 +85,13 @@ function formatContextWindow(ctx: number | undefined): string {
   return String(ctx);
 }
 
+function formatModelMeta(model: ModelEntry): string | null {
+  const parts: string[] = [];
+  if (model.contextWindow) parts.push(`ctx ${formatContextWindow(model.contextWindow)}`);
+  if (model.reasoning) parts.push("reasoning");
+  return parts.length ? parts.join(" · ") : null;
+}
+
 export function ModelSelectPage(props: {
   models: ModelEntry[];
   filterProvider?: string;
@@ -75,6 +102,8 @@ export function ModelSelectPage(props: {
   onRetry: () => void;
 }) {
   const [selected, setSelected] = React.useState<string | null>(null);
+  const totalSteps = 5;
+  const activeStep = 2;
 
   // Filter and sort models by provider and tier
   const filteredModels = React.useMemo(() => {
@@ -84,9 +113,9 @@ export function ModelSelectPage(props: {
     }
 
     // Sort: tiered models first (ultra → pro → fast), then the rest alphabetically
-    return models.toSorted((a, b) => {
-      const tierA = getModelTier(a.provider, a.id);
-      const tierB = getModelTier(b.provider, b.id);
+    return models.slice().sort((a: ModelEntry, b: ModelEntry) => {
+      const tierA = getModelTier(a);
+      const tierB = getModelTier(b);
 
       // Both have tiers - sort by tier priority
       if (tierA && tierB) {
@@ -103,9 +132,19 @@ export function ModelSelectPage(props: {
 
   if (props.loading) {
     return (
-      <HeroPageLayout title="SELECT MODEL" variant="compact" align="center" aria-label="Model selection">
-        <GlassCard>
-          <div className="UiSectionTitle">Loading models...</div>
+      <HeroPageLayout variant="compact" align="center" aria-label="Model selection">
+        <GlassCard className="UiModelCard">
+          <div className="UiOnboardingDots" aria-label="Onboarding progress">
+            {Array.from({ length: totalSteps }).map((_, idx) => (
+              <span
+                // eslint-disable-next-line react/no-array-index-key
+                key={idx}
+                className={`UiOnboardingDot ${idx === activeStep ? "UiOnboardingDot--active" : ""}`}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+          <div className="UiSectionTitle">Select AI Model</div>
           <div className="UiSectionSubtitle">Fetching available models from your configured provider.</div>
         </GlassCard>
       </HeroPageLayout>
@@ -114,16 +153,27 @@ export function ModelSelectPage(props: {
 
   if (props.error) {
     return (
-      <HeroPageLayout title="SELECT MODEL" variant="compact" align="center" aria-label="Model selection">
-        <GlassCard>
-          <div className="UiSectionTitle">Failed to load models</div>
+      <HeroPageLayout variant="compact" align="center" aria-label="Model selection">
+        <GlassCard className="UiModelCard">
+          <div className="UiOnboardingDots" aria-label="Onboarding progress">
+            {Array.from({ length: totalSteps }).map((_, idx) => (
+              <span
+                // eslint-disable-next-line react/no-array-index-key
+                key={idx}
+                className={`UiOnboardingDot ${idx === activeStep ? "UiOnboardingDot--active" : ""}`}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+          <div className="UiSectionTitle">Select AI Model</div>
+          <div className="UiSectionSubtitle">Failed to load models.</div>
           <InlineError>{props.error}</InlineError>
-          <ButtonRow>
-            <ActionButton variant="primary" onClick={props.onRetry}>
-              Retry
-            </ActionButton>
-            <ActionButton onClick={props.onBack}>Back</ActionButton>
-          </ButtonRow>
+          <div className="UiModelBottomRow">
+            <button className="UiTextButton" onClick={props.onBack}>
+              Back
+            </button>
+            <PrimaryButton onClick={props.onRetry}>Retry</PrimaryButton>
+          </div>
         </GlassCard>
       </HeroPageLayout>
     );
@@ -131,52 +181,54 @@ export function ModelSelectPage(props: {
 
   if (filteredModels.length === 0) {
     return (
-      <HeroPageLayout title="SELECT MODEL" variant="compact" align="center" aria-label="Model selection">
-        <GlassCard>
-          <div className="UiSectionTitle">No models available</div>
+      <HeroPageLayout variant="compact" align="center" aria-label="Model selection">
+        <GlassCard className="UiModelCard">
+          <div className="UiOnboardingDots" aria-label="Onboarding progress">
+            {Array.from({ length: totalSteps }).map((_, idx) => (
+              <span
+                // eslint-disable-next-line react/no-array-index-key
+                key={idx}
+                className={`UiOnboardingDot ${idx === activeStep ? "UiOnboardingDot--active" : ""}`}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+          <div className="UiSectionTitle">Select AI Model</div>
           <div className="UiSectionSubtitle">
             No models were found for your configured API key. The key may be invalid or the provider may be temporarily
             unavailable.
           </div>
-          <ButtonRow>
-            <ActionButton variant="primary" onClick={props.onRetry}>
-              Retry
-            </ActionButton>
-            <ActionButton onClick={props.onBack}>Back</ActionButton>
-          </ButtonRow>
+          <div className="UiModelBottomRow">
+            <button className="UiTextButton" onClick={props.onBack}>
+              Back
+            </button>
+            <PrimaryButton onClick={props.onRetry}>Retry</PrimaryButton>
+          </div>
         </GlassCard>
       </HeroPageLayout>
     );
   }
 
   return (
-    <HeroPageLayout title="SELECT MODEL" variant="compact" align="center" aria-label="Model selection">
-      <GlassCard>
-        <div className="UiSectionTitleRow">
-          <div className="UiSectionTitle">Select Default Model</div>
-          <div className="UiTierHelp">
-            <span className="UiTierHelpIcon">?</span>
-            <div className="UiTierHelpTooltip">
-              <div className="UiTierHelpItem">
-                <span className="UiModelTier">ULTRA</span>
-                <span>{TIER_INFO.ultra.description}</span>
-              </div>
-              <div className="UiTierHelpItem">
-                <span className="UiModelTier">PRO</span>
-                <span>{TIER_INFO.pro.description}</span>
-              </div>
-              <div className="UiTierHelpItem">
-                <span className="UiModelTier">FAST</span>
-                <span>{TIER_INFO.fast.description}</span>
-              </div>
-            </div>
-          </div>
+    <HeroPageLayout variant="compact" align="center" aria-label="Model selection">
+      <GlassCard className="UiModelCard">
+        <div className="UiOnboardingDots" aria-label="Onboarding progress">
+          {Array.from({ length: totalSteps }).map((_, idx) => (
+            <span
+              // eslint-disable-next-line react/no-array-index-key
+              key={idx}
+              className={`UiOnboardingDot ${idx === activeStep ? "UiOnboardingDot--active" : ""}`}
+              aria-hidden="true"
+            />
+          ))}
         </div>
+        <div className="UiSectionTitle">Select AI Model</div>
         <div className="UiSectionSubtitle">Choose your preferred model. You can change this later in settings.</div>
         <div className="UiModelList">
           {filteredModels.map((model) => {
             const modelKey = `${model.provider}/${model.id}`;
-            const tier = getModelTier(model.provider, model.id);
+            const tier = getModelTier(model);
+            const meta = formatModelMeta(model);
             return (
               <label
                 key={modelKey}
@@ -193,23 +245,24 @@ export function ModelSelectPage(props: {
                 <div className="UiModelContent">
                   <div className="UiModelNameRow">
                     <span className="UiModelName">{model.name || model.id}</span>
-                    {tier && <span className="UiModelTier">{tier.toUpperCase()}</span>}
+                    {tier ? (
+                      <span className={`UiModelTierBadge UiModelTierBadge--${tier}`}>{TIER_INFO[tier].label}</span>
+                    ) : null}
                   </div>
-                  <span className="UiModelHints">
-                    {model.contextWindow && <span className="UiModelHint">ctx {formatContextWindow(model.contextWindow)}</span>}
-                    {model.reasoning && <span className="UiModelHint">reasoning</span>}
-                  </span>
+                  {meta ? <div className="UiModelMeta">{meta}</div> : null}
                 </div>
               </label>
             );
           })}
         </div>
-        <ButtonRow>
-          <ActionButton variant="primary" disabled={!selected} onClick={() => selected && props.onSelect(selected)}>
-            Next
-          </ActionButton>
-          <ActionButton onClick={props.onBack}>Back</ActionButton>
-        </ButtonRow>
+        <div className="UiModelBottomRow">
+          <button className="UiTextButton" onClick={props.onBack}>
+            Back
+          </button>
+          <PrimaryButton disabled={!selected} onClick={() => selected && props.onSelect(selected)}>
+            Continue
+          </PrimaryButton>
+        </div>
       </GlassCard>
     </HeroPageLayout>
   );

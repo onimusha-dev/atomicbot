@@ -33,6 +33,12 @@ const PROVIDERS: ProviderInfo[] = [
     recommended: true,
   },
   {
+    id: "openrouter",
+    name: "OpenRouter",
+    description: "Access to 200+ models from multiple providers through a single API.",
+    recommended: true,
+  },
+  {
     id: "google",
     name: "Google (Gemini)",
     description: "Gemini models with strong multimodal understanding and large context windows.",
@@ -41,11 +47,6 @@ const PROVIDERS: ProviderInfo[] = [
     id: "openai",
     name: "OpenAI (GPT)",
     description: "GPT models with broad capabilities and extensive tool use support.",
-  },
-  {
-    id: "openrouter",
-    name: "OpenRouter",
-    description: "Access to 200+ models from multiple providers through a single API.",
   },
   {
     id: "zai",

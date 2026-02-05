@@ -9,6 +9,7 @@ import { ApiKeyPage } from "./onboarding/ApiKeyPage";
 import { GogPage } from "./onboarding/GogPage";
 import { ModelSelectPage } from "./onboarding/ModelSelectPage";
 import { ProviderSelectPage } from "./onboarding/ProviderSelectPage";
+import { SkillsSetupPage } from "./onboarding/SkillsSetupPage";
 import { TelegramTokenPage } from "./onboarding/TelegramTokenPage";
 import { TelegramUserPage } from "./onboarding/TelegramUserPage";
 import { useWelcomeState } from "./onboarding/welcome/useWelcomeState";
@@ -112,6 +113,19 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
       />
 
       <Route
+        path="skills"
+        element={
+          <SkillsSetupPage
+            googleWorkspaceStatus={welcome.skills["google-workspace"]}
+            onGoogleWorkspaceConnect={welcome.goGogGoogleWorkspace}
+            onBack={welcome.goModelSelect}
+            onSkip={welcome.goTelegramToken}
+            onContinue={welcome.goTelegramToken}
+          />
+        }
+      />
+
+      <Route
         path="telegram-token"
         element={
           <TelegramTokenPage
@@ -151,9 +165,37 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             gogOutput={welcome.gogOutput}
             gogAccount={welcome.gogAccount}
             setGogAccount={welcome.setGogAccount}
-            onRunAuthAdd={welcome.onGogAuthAdd}
-            onRunAuthList={welcome.onGogAuthList}
+            onRunAuthAdd={(servicesCsv) => welcome.onGogAuthAdd(servicesCsv)}
+            onRunAuthList={() => welcome.onGogAuthList()}
             onFinish={() => welcome.finish()}
+          />
+        }
+      />
+
+      <Route
+        path="gog-google-workspace"
+        element={
+          <GogPage
+            status={welcome.status}
+            error={welcome.error}
+            gogBusy={welcome.gogBusy}
+            gogError={welcome.gogError}
+            gogOutput={welcome.gogOutput}
+            gogAccount={welcome.gogAccount}
+            setGogAccount={welcome.setGogAccount}
+            onRunAuthAdd={async (servicesCsv) => {
+              const res = await welcome.onGogAuthAdd(servicesCsv);
+              if (res.ok) {
+                welcome.markSkillConnected("google-workspace");
+                welcome.goSkills();
+              }
+              return res;
+            }}
+            onRunAuthList={() => welcome.onGogAuthList()}
+            onFinish={welcome.goSkills}
+            onSkip={welcome.goSkills}
+            finishText="Back to skills"
+            skipText="Back"
           />
         }
       />

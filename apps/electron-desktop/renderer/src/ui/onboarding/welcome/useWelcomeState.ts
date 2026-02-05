@@ -17,6 +17,9 @@ type WelcomeStateInput = {
   navigate: NavigateFunction;
 };
 
+type SkillId = "google-workspace";
+type SkillStatus = "connect" | "connected";
+
 export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const gw = useGatewayRpc();
   const dispatch = useAppDispatch();
@@ -27,6 +30,9 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
 
   const [selectedProvider, setSelectedProvider] = React.useState<Provider | null>(null);
   const [apiKeyBusy, setApiKeyBusy] = React.useState(false);
+  const [skills, setSkills] = React.useState<Record<SkillId, SkillStatus>>({
+    "google-workspace": "connect",
+  });
 
   const { configPath, ensureExtendedConfig, loadConfig } = useWelcomeConfig({
     gw,
@@ -75,10 +81,21 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
 
   const goApiKey = React.useCallback(() => navigate(`${routes.welcome}/api-key`), [navigate]);
   const goModelSelect = React.useCallback(() => navigate(`${routes.welcome}/model-select`), [navigate]);
+  const goSkills = React.useCallback(() => navigate(`${routes.welcome}/skills`), [navigate]);
   const goTelegramToken = React.useCallback(() => navigate(`${routes.welcome}/telegram-token`), [navigate]);
   const goTelegramUser = React.useCallback(() => navigate(`${routes.welcome}/telegram-user`), [navigate]);
   const goGog = React.useCallback(() => navigate(`${routes.welcome}/gog`), [navigate]);
+  const goGogGoogleWorkspace = React.useCallback(() => navigate(`${routes.welcome}/gog-google-workspace`), [navigate]);
   const goProviderSelect = React.useCallback(() => navigate(`${routes.welcome}/provider-select`), [navigate]);
+
+  const markSkillConnected = React.useCallback((skillId: SkillId) => {
+    setSkills((prev) => {
+      if (prev[skillId] === "connected") {
+        return prev;
+      }
+      return { ...prev, [skillId]: "connected" };
+    });
+  }, []);
 
   const onProviderSelect = React.useCallback(
     (provider: Provider) => {
@@ -116,12 +133,12 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       setError(null);
       try {
         await saveDefaultModel(modelId);
-        goTelegramToken();
+        goSkills();
       } catch (err) {
         setError(String(err));
       }
     },
-    [saveDefaultModel, goTelegramToken],
+    [saveDefaultModel, goSkills],
   );
 
   const onTelegramTokenNext = React.useCallback(async () => {
@@ -160,8 +177,10 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     finish,
     goApiKey,
     goGog,
+    goGogGoogleWorkspace,
     goModelSelect,
     goProviderSelect,
+    goSkills,
     goTelegramToken,
     goTelegramUser,
     gogAccount,
@@ -169,6 +188,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     gogError,
     gogOutput,
     loadModels,
+    markSkillConnected,
     models,
     modelsError,
     modelsLoading,
@@ -183,6 +203,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     setGogAccount,
     setTelegramToken,
     setTelegramUserId,
+    skills,
     start,
     startBusy,
     status,

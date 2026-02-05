@@ -1,7 +1,7 @@
 {
   "name": "atomicbot-desktop",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Atomic Bot makes things for you",
   "type": "commonjs",
   "main": "dist/main.js",
@@ -49,6 +49,7 @@
     "productName": "Atomic Bot",
     "afterPack": "scripts/electron-builder.afterPack-sign-extra-resources.cjs",
     "afterSign": "scripts/electron-builder.afterSign-notarize.cjs",
+    "afterAllArtifactBuild": "scripts/electron-builder.afterAllArtifactBuild-notarize-dmg.cjs",
     "directories": {
       "output": "release"
     },

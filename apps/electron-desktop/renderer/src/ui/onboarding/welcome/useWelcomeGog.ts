@@ -28,7 +28,7 @@ export function useWelcomeGog({ gw }: UseWelcomeGogInput) {
         .join("\n\n");
       setGogOutput(out || "(no output)");
       if (!res.ok) {
-        setGogError(res.stderr?.trim() || "gog command failed");
+        setGogError(res.stderr?.trim() || "Google Workspace connection failed");
       }
       return res;
     } catch (err) {
@@ -77,15 +77,16 @@ export function useWelcomeGog({ gw }: UseWelcomeGogInput) {
     });
   }, [gw]);
 
-  const onGogAuthAdd = React.useCallback(() => {
-    void runGog(async () => {
+  const onGogAuthAdd = React.useCallback(async (services?: string) => {
+    const servicesCsv = typeof services === "string" && services.trim() ? services.trim() : DEFAULT_GOG_SERVICES;
+    return await runGog(async () => {
       const api = window.openclawDesktop;
       if (!api) {
         throw new Error("Desktop API not available");
       }
       const res = await api.gogAuthAdd({
         account: gogAccount.trim(),
-        services: DEFAULT_GOG_SERVICES,
+        services: servicesCsv,
       });
       if (res.ok) {
         await ensureGogExecDefaults();
@@ -94,8 +95,8 @@ export function useWelcomeGog({ gw }: UseWelcomeGogInput) {
     });
   }, [ensureGogExecDefaults, gogAccount, runGog]);
 
-  const onGogAuthList = React.useCallback(() => {
-    void runGog(async () => {
+  const onGogAuthList = React.useCallback(async () => {
+    return await runGog(async () => {
       const api = window.openclawDesktop;
       if (!api) {
         throw new Error("Desktop API not available");
