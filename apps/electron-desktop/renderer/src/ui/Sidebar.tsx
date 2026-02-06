@@ -1,0 +1,157 @@
+import React from "react";
+import { NavLink, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useGatewayRpc } from "../gateway/context";
+import type { OptimisticSession } from "./optimisticSessionContext";
+import { useOptimisticSession } from "./optimisticSessionContext";
+import { routes } from "./routes";
+
+type SessionsListResult = {
+  ts: number;
+  path: string;
+  count: number;
+  sessions: Array<{
+    key: string;
+    kind: string;
+    label?: string;
+    derivedTitle?: string;
+    lastMessagePreview?: string;
+    updatedAt: number | null;
+  }>;
+};
+
+type SessionWithTitle = {
+  key: string;
+  title: string;
+};
+
+const SESSIONS_LIST_LIMIT = 50;
+const TITLE_MAX_LEN = 48;
+
+function titleFromRow(row: SessionsListResult["sessions"][number]): string {
+  const raw = row.derivedTitle?.trim();
+  if (raw) {
+    return raw.length > TITLE_MAX_LEN ? `${raw.slice(0, TITLE_MAX_LEN)}…` : raw;
+  }
+  return "New Chat";
+}
+
+export function Sidebar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const currentSessionKey = searchParams.get("session") ?? null;
+  const gw = useGatewayRpc();
+  const { optimistic: optimisticFromContext, setOptimistic } = useOptimisticSession();
+  const optimisticFromState = (location.state as { optimisticNewSession?: OptimisticSession } | null)
+    ?.optimisticNewSession ?? null;
+  const optimistic = optimisticFromContext ?? optimisticFromState;
+
+  const [sessions, setSessions] = React.useState<SessionWithTitle[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const loadSessionsWithTitles = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await gw.request<SessionsListResult>("sessions.list", {
+        includeGlobal: true,
+        includeUnknown: true,
+        limit: SESSIONS_LIST_LIMIT,
+        includeDerivedTitles: true,
+        includeLastMessage: true,
+      });
+      const rows = res?.sessions ?? [];
+      const withTitles: SessionWithTitle[] = rows.map((row) => ({
+        key: row.key,
+        title: titleFromRow(row),
+      }));
+
+      setSessions(withTitles);
+      if (currentSessionKey && withTitles.some((s) => s.key === currentSessionKey)) {
+        setOptimistic(null);
+      }
+    } catch (err) {
+      setError(String(err));
+      setSessions([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [gw.request, currentSessionKey, setOptimistic]);
+
+  React.useEffect(() => {
+    loadSessionsWithTitles();
+  }, [loadSessionsWithTitles, currentSessionKey]);
+
+  const handleNewSession = React.useCallback(() => {
+    navigate(routes.chat, { replace: true });
+  }, [navigate]);
+
+  const handleSelectSession = React.useCallback(
+    (key: string) => {
+      navigate(`${routes.chat}?session=${encodeURIComponent(key)}`, { replace: true });
+    },
+    [navigate],
+  );
+
+  return (
+    <aside className="UiChatSidebar" aria-label="Chat sessions">
+      <button
+        type="button"
+        className="UiChatSidebarNewSession"
+        onClick={handleNewSession}
+        aria-label="New session"
+      >
+        <span className="UiChatSidebarNewSessionIcon" aria-hidden="true">
+          +
+        </span>
+        New session
+      </button>
+
+      <div className="UiChatSidebarSessions">
+        <h2 className="UiChatSidebarSessionsTitle">Sessions</h2>
+        {error && (
+          <div className="UiChatSidebarError" role="alert">
+            {error}
+          </div>
+        )}
+        {loading && !optimistic ? (
+          <div className="UiChatSidebarLoading">Loading…</div>
+        ) : (
+          <ul className="UiChatSidebarSessionList" role="list">
+            {(optimistic
+              ? [{ key: optimistic.key, title: optimistic.title }, ...sessions.filter((s) => s.key !== optimistic.key)]
+              : sessions
+            ).map((s) => (
+              <li key={s.key}>
+                <button
+                  type="button"
+                  className={`UiChatSidebarSessionItem${currentSessionKey != null && currentSessionKey === s.key ? " UiChatSidebarSessionItem-active" : ""}`}
+                  onClick={() => handleSelectSession(s.key)}
+                  title={s.key}
+                >
+                  {s.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="UiChatSidebarFooter">
+        <NavLink
+          to={routes.settings}
+          className={({ isActive }) =>
+            `UiChatSidebarSettings${isActive ? " UiChatSidebarSettings-active" : ""}`
+          }
+          aria-label="Settings"
+        >
+          <span className="UiChatSidebarSettingsIcon" aria-hidden="true">
+            ⚙
+          </span>
+          Settings
+        </NavLink>
+      </div>
+    </aside>
+  );
+}

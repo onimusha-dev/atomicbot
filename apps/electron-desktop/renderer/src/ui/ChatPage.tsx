@@ -1,5 +1,6 @@
 import React from "react";
 import Markdown from "react-markdown";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useGatewayRpc } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { chatActions, extractText, loadChatHistory, sendChatMessage } from "../store/slices/chatSlice";
@@ -16,8 +17,14 @@ type ChatEvent = {
 };
 
 export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
-  const sessionKey = "main";
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const sessionKey = searchParams.get("session") ?? "";
   const [input, setInput] = React.useState("");
+  const [optimisticFirstMessage, setOptimisticFirstMessage] = React.useState<string | null>(() => {
+    const state = location.state as { pendingFirstMessage?: string } | null;
+    return state?.pendingFirstMessage ?? null;
+  });
 
   const logoUrl = React.useMemo(() => {
     return new URL("../../assets/icon-simple-splash.png", document.baseURI).toString();
@@ -69,13 +76,18 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
   }, [refresh]);
 
   React.useEffect(() => {
+    if (messages.length > 0 && optimisticFirstMessage != null) {
+      setOptimisticFirstMessage(null);
+    }
+  }, [messages.length, optimisticFirstMessage]);
+
+  React.useEffect(() => {
     const el = scrollRef.current;
     if (!el) {
       return;
     }
-    // Keep the latest content in view, like Control UI.
     el.scrollTop = el.scrollHeight;
-  }, [messages, streamByRun]);
+  }, [messages.length, optimisticFirstMessage, streamByRun]);
 
   const send = React.useCallback(() => {
     const message = input.trim();
@@ -86,7 +98,14 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     void dispatch(sendChatMessage({ request: gw.request, sessionKey, message }));
   }, [dispatch, gw.request, input, sessionKey]);
 
-  const isEmpty = messages.length === 0 && Object.keys(streamByRun).length === 0;
+  const displayMessages =
+    optimisticFirstMessage != null
+      ? [
+          { id: "opt-first", role: "user" as const, text: optimisticFirstMessage },
+          ...messages,
+        ]
+      : messages;
+  const isEmpty = displayMessages.length === 0 && Object.keys(streamByRun).length === 0;
 
   return (
     <div className="UiChatShell">
@@ -102,7 +121,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
             <div className="UiChatEmptySubtitle">Send a message to begin chatting with the assistant.</div>
           </div>
         )}
-        {messages.map((m) => (
+        {displayMessages.map((m) => (
           <div key={m.id} className={`UiChatRow UiChatRow-${m.role}`}>
             <div className={`UiChatBubble UiChatBubble-${m.role}`}>
               <div className="UiChatBubbleMeta">
