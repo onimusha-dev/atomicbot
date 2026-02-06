@@ -15,6 +15,7 @@ import { NotionConnectPage } from "./onboarding/NotionConnectPage";
 import { ObsidianConnectPage } from "./onboarding/ObsidianConnectPage";
 import { GitHubConnectPage } from "./onboarding/GitHubConnectPage";
 import { ProviderSelectPage } from "./onboarding/ProviderSelectPage";
+import { ConnectionsSetupPage } from "./onboarding/ConnectionsSetupPage";
 import { SkillsSetupPage } from "./onboarding/SkillsSetupPage";
 import { SlackConnectPage } from "./onboarding/SlackConnectPage";
 import { TrelloConnectPage } from "./onboarding/TrelloConnectPage";
@@ -174,10 +175,25 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             githubStatus={welcome.skills.github}
             onGitHubConnect={welcome.goGitHub}
             slackStatus={welcome.skills.slack}
-            onSlackConnect={welcome.goSlack}
+            onSlackConnect={welcome.goSlackFromSkills}
             onBack={welcome.goModelSelect}
-            onSkip={welcome.goTelegramToken}
-            onContinue={welcome.goTelegramToken}
+            onSkip={welcome.goConnections}
+            onContinue={welcome.goConnections}
+          />
+        }
+      />
+
+      <Route
+        path="connections"
+        element={
+          <ConnectionsSetupPage
+            telegramStatus={welcome.telegramStatus}
+            onTelegramConnect={welcome.goTelegramToken}
+            slackStatus={welcome.skills.slack}
+            onSlackConnect={welcome.goSlackFromConnections}
+            onBack={welcome.goSkills}
+            onSkip={welcome.finish}
+            onContinue={welcome.finish}
           />
         }
       />
@@ -247,7 +263,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             error={welcome.error}
             busy={welcome.slackBusy}
             onSubmit={(settings) => void welcome.onSlackConnect(settings)}
-            onBack={welcome.goSkills}
+            onBack={welcome.goSlackBack}
           />
         }
       />
@@ -287,7 +303,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             telegramToken={welcome.telegramToken}
             setTelegramToken={welcome.setTelegramToken}
             onNext={() => void welcome.onTelegramTokenNext()}
-            onSkip={() => welcome.finish()}
+            onSkip={welcome.goConnections}
           />
         }
       />
@@ -302,7 +318,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             setTelegramUserId={welcome.setTelegramUserId}
             channelsProbe={welcome.channelsProbe}
             onNext={() => void welcome.onTelegramUserNext()}
-            onSkip={() => welcome.finish()}
+            onSkip={welcome.goConnections}
           />
         }
       />

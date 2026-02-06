@@ -38,6 +38,7 @@ type SkillId =
   | "github"
   | "slack";
 type SkillStatus = "connect" | "connected";
+type ConnectionStatus = "connect" | "connected";
 
 type ObsidianVault = {
   name: string;
@@ -64,6 +65,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const [obsidianBusy, setObsidianBusy] = React.useState(false);
   const [githubBusy, setGitHubBusy] = React.useState(false);
   const [slackBusy, setSlackBusy] = React.useState(false);
+  const [telegramStatus, setTelegramStatus] = React.useState<ConnectionStatus>("connect");
   const [obsidianVaultsLoading, setObsidianVaultsLoading] = React.useState(false);
   const [obsidianVaults, setObsidianVaults] = React.useState<ObsidianVault[]>([]);
   const [selectedObsidianVaultName, setSelectedObsidianVaultName] = React.useState("");
@@ -183,9 +185,26 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const goGitHub = React.useCallback(() => {
     void navigate(`${routes.welcome}/github`);
   }, [navigate]);
-  const goSlack = React.useCallback(() => {
+  const goConnections = React.useCallback(() => {
+    void navigate(`${routes.welcome}/connections`);
+  }, [navigate]);
+
+  const slackReturnToRef = React.useRef<"skills" | "connections">("skills");
+  const goSlackFromSkills = React.useCallback(() => {
+    slackReturnToRef.current = "skills";
     void navigate(`${routes.welcome}/slack`);
   }, [navigate]);
+  const goSlackFromConnections = React.useCallback(() => {
+    slackReturnToRef.current = "connections";
+    void navigate(`${routes.welcome}/slack`);
+  }, [navigate]);
+  const goSlackBack = React.useCallback(() => {
+    if (slackReturnToRef.current === "connections") {
+      goConnections();
+      return;
+    }
+    goSkills();
+  }, [goConnections, goSkills]);
 
   const refreshObsidianVaults = React.useCallback(async (): Promise<void> => {
     const api = window.openclawDesktop;
@@ -670,7 +689,11 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         const ok = await saveSlackConfig(settings);
         if (ok) {
           markSkillConnected("slack");
-          goSkills();
+          if (slackReturnToRef.current === "connections") {
+            goConnections();
+          } else {
+            goSkills();
+          }
         }
       } catch (err) {
         setError(String(err));
@@ -679,7 +702,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
         setSlackBusy(false);
       }
     },
-    [goSkills, markSkillConnected, saveSlackConfig],
+    [goConnections, goSkills, markSkillConnected, saveSlackConfig],
   );
 
   const onTelegramTokenNext = React.useCallback(async () => {
@@ -702,13 +725,14 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     try {
       const ok = await saveTelegramAllowFrom();
       if (ok) {
-        finish();
+        setTelegramStatus("connected");
+        goConnections();
       }
     } catch (err) {
       setError(String(err));
       setStatus(null);
     }
-  }, [finish, saveTelegramAllowFrom]);
+  }, [goConnections, saveTelegramAllowFrom]);
 
   return {
     appleNotesBusy,
@@ -728,7 +752,10 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     goAppleReminders,
     goObsidian,
     goGitHub,
-    goSlack,
+    goConnections,
+    goSlackFromSkills,
+    goSlackFromConnections,
+    goSlackBack,
     goModelSelect,
     goMediaUnderstanding,
     goWebSearch,
@@ -783,6 +810,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     status,
     telegramToken,
     telegramUserId,
+    telegramStatus,
     webSearchBusy,
   };
 }

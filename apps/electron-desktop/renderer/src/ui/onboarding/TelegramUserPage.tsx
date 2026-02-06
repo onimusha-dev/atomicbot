@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ActionButton, ButtonRow, GlassCard, HeroPageLayout, InlineError, TextInput } from "../kit";
+import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../kit";
 
 export function TelegramUserPage(props: {
   status: string | null;
@@ -11,36 +11,96 @@ export function TelegramUserPage(props: {
   onNext: () => void;
   onSkip: () => void;
 }) {
+  const totalSteps = 5;
+  const activeStep = 4;
+
+  const trimmed = props.telegramUserId.trim();
+
   return (
-    <HeroPageLayout title="SETUP" variant="compact" align="center" aria-label="Telegram allowlist setup">
-      <GlassCard>
-        <div className="UiSectionTitle">Telegram allowlist (your user id)</div>
-        <div className="UiSectionSubtitle">
-          DM your bot first, then paste your numeric Telegram user id (<code>message.from.id</code>) to allow direct
-          messages.
+    <HeroPageLayout variant="compact" align="center" aria-label="Telegram allowlist setup">
+      <GlassCard className="UiApiKeyCard">
+        <div className="UiOnboardingDots" aria-label="Onboarding progress">
+          {Array.from({ length: totalSteps }).map((_, idx) => (
+            <span
+              // eslint-disable-next-line react/no-array-index-key
+              key={idx}
+              className={`UiOnboardingDot ${idx === activeStep ? "UiOnboardingDot--active" : ""}`}
+              aria-hidden="true"
+            />
+          ))}
         </div>
+
+        <div className="UiApiKeyTitle">Allow Telegram DMs</div>
+        <div className="UiApiKeySubtitle">
+          Add your Telegram user id to the DM allowlist. This configures <code>channels.telegram.dmPolicy</code> to{" "}
+          <code>allowlist</code> and appends to <code>channels.telegram.allowFrom</code>.
+        </div>
+
+        <div className="UiSectionSubtitle">
+          Steps:
+          <ol>
+            <li>Send a DM to your bot (so it can see your account).</li>
+            <li>Paste your numeric Telegram user id (<code>message.from.id</code>) below.</li>
+          </ol>
+          Tips:
+          <ul>
+            <li>
+              Accepted forms: <code>123456789</code>, <code>tg:123456789</code>, <code>telegram:123456789</code>.
+            </li>
+            <li>
+              If you're unsure, you can inspect the probe output (below) after saving, or use a Telegram “user info” bot
+              to read your id.
+            </li>
+          </ul>
+          Docs:{" "}
+          <a
+            href="https://docs.openclaw.ai/channels/telegram"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="UiLink"
+            onClick={(e) => {
+              e.preventDefault();
+              void window.openclawDesktop?.openExternal("https://docs.openclaw.ai/channels/telegram");
+            }}
+          >
+            Telegram setup ↗
+          </a>
+        </div>
+
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
         {props.error ? <InlineError>{props.error}</InlineError> : null}
-        <TextInput
-          value={props.telegramUserId}
-          onChange={props.setTelegramUserId}
-          placeholder="e.g. 123456789"
-          autoCapitalize="none"
-          autoCorrect="off"
-          spellCheck={false}
-        />
+
+        <div className="UiApiKeyInputRow">
+          <TextInput
+            value={props.telegramUserId}
+            onChange={props.setTelegramUserId}
+            placeholder="123456789"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+          />
+        </div>
+
         {props.channelsProbe ? (
-          <div style={{ marginTop: 10 }}>
-            <div className="UiPill">channels.status (probe)</div>
-            <pre style={{ maxHeight: 240 }}>{JSON.stringify(props.channelsProbe, null, 2)}</pre>
-          </div>
+          <details className="UiGoogleWorkspaceDetails" style={{ marginTop: 10 }}>
+            <summary className="UiGoogleWorkspaceDetailsSummary">Troubleshooting: channels.status (probe)</summary>
+            <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
+              <div className="UiPill">channels.status (probe)</div>
+              <pre style={{ maxHeight: 240, overflow: "auto" }}>{JSON.stringify(props.channelsProbe, null, 2)}</pre>
+            </div>
+          </details>
         ) : null}
-        <ButtonRow>
-          <ActionButton variant="primary" onClick={props.onNext}>
-            Next
-          </ActionButton>
-          <ActionButton onClick={props.onSkip}>Skip</ActionButton>
-        </ButtonRow>
+
+        <div className="UiApiKeySpacer" aria-hidden="true" />
+
+        <div className="UiApiKeyButtonRow">
+          <button className="UiTextButton" onClick={props.onSkip} type="button">
+            Back
+          </button>
+          <PrimaryButton disabled={!trimmed} onClick={props.onNext}>
+            Save & return
+          </PrimaryButton>
+        </div>
       </GlassCard>
     </HeroPageLayout>
   );
