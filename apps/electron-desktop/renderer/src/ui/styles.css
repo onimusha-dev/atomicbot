@@ -7,7 +7,7 @@
   --muted: rgba(230, 237, 243, 0.82);
   --muted2: rgba(230, 237, 243, 0.65);
   --accent: #ff7a00;
-  --lime: #c2ff40;
+  --lime: #AEFF00;
 }
 
 html,
@@ -20,12 +20,11 @@ body {
   height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family: system-ui,
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  sans-serif;
 }
 
 a {
@@ -119,10 +118,9 @@ button:disabled {
   height: 100%;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(900px 520px at 50% 35%, rgba(194, 255, 64, 0.10), transparent 55%),
-    radial-gradient(800px 500px at 50% 60%, rgba(0, 229, 204, 0.05), transparent 60%),
-    var(--bg);
+  background: radial-gradient(900px 520px at 50% 35%, rgba(194, 255, 64, 0.10), transparent 55%),
+  radial-gradient(800px 500px at 50% 60%, rgba(0, 229, 204, 0.05), transparent 60%),
+  var(--bg);
 }
 
 .GatewaySplashInner {
@@ -139,9 +137,7 @@ button:disabled {
   height: 160px;
   border-radius: 28%;
   object-fit: contain;
-  filter:
-    drop-shadow(0 22px 55px rgba(0, 0, 0, 0.55))
-    drop-shadow(0 0 32px rgba(255, 122, 0, 0.16));
+  filter: drop-shadow(0 22px 55px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 32px rgba(255, 122, 0, 0.16));
   animation: gatewaySplashSpin 3.2s linear infinite;
   transform-origin: 50% 50%;
 }
@@ -202,12 +198,15 @@ button:disabled {
   .GatewaySplashInner {
     animation: none;
   }
+
   .GatewaySplashLogo {
     animation: none;
   }
+
   .UiSplashLogo--spin {
     animation: none;
   }
+
   .ChatTypingDots span {
     animation: none;
   }
@@ -217,10 +216,9 @@ button:disabled {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background:
-    radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.12), transparent 58%),
-    radial-gradient(900px 520px at 50% 60%, rgba(194, 255, 64, 0.06), transparent 62%),
-    var(--bg);
+  background: radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.12), transparent 58%),
+  radial-gradient(900px 520px at 50% 60%, rgba(194, 255, 64, 0.06), transparent 62%),
+  var(--bg);
 }
 
 .ConsentTopbar {
@@ -356,10 +354,6 @@ button:disabled {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background:
-    radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.12), transparent 58%),
-    radial-gradient(900px 520px at 50% 60%, rgba(194, 255, 64, 0.06), transparent 62%),
-    var(--bg);
 }
 
 .UiHeroTopbar {
@@ -382,9 +376,7 @@ button:disabled {
   height: 18px;
   border-radius: 6px;
   object-fit: contain;
-  filter:
-    drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35))
-    drop-shadow(0 0 16px rgba(194, 255, 64, 0.16));
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35)) drop-shadow(0 0 16px rgba(194, 255, 64, 0.16));
 }
 
 .UiBrandMark {
@@ -406,13 +398,13 @@ button:disabled {
 }
 
 .UiSplashLogo {
-  width: 64px;
-  height: 64px;
+  width: 70px !important;
+  height: 70px !important;
   border-radius: 18px;
   object-fit: contain;
-  filter:
-    drop-shadow(0 18px 55px rgba(0, 0, 0, 0.45))
-    drop-shadow(0 0 18px rgba(194, 255, 64, 0.10));
+  filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 18px rgba(194, 255, 64, 0.10));
+  user-select: none;
+  margin-bottom: 8px;
 }
 
 .UiSplashLogo--spin {
@@ -439,10 +431,11 @@ button:disabled {
 }
 
 .UiLoadingTitle {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  color: rgba(230, 237, 243, 0.92);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 32px;
+  text-align: center;
+  color: #FFFFFF;
 }
 
 .UiHero {
@@ -552,29 +545,45 @@ button:disabled {
 .UiCheckRow {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 3px;
   color: rgba(230, 237, 243, 0.90);
   font-size: 13px;
-}
-
-.UiCheckRow--error {
-  padding: 10px 12px;
-  margin-left: -12px;
-  margin-right: -12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 122, 0, 0.55);
-  background: rgba(255, 122, 0, 0.10);
+  cursor: pointer;
+  user-select: none;
 }
 
 .UiCheckRow input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--lime);
+  position: relative;
+  width: 12px;
+  height: 12px;
+  background-color: #414141;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  margin: 0;
+}
+
+.UiCheckRow input:checked {
+  background-color: #0D6FFF !important;
+}
+
+.UiCheckRow input:checked::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 6px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(45deg);
+  top: 0;
+  left: 3px;
 }
 
 .UiCheckRow.UiCheckRow--error input {
-  accent-color: var(--accent);
+  border-color: #FF3939;
+  background-color: #FFDFDF !important;
 }
 
 .UiConsentStage {
@@ -592,27 +601,31 @@ button:disabled {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 10px;
-  padding: 18px 18px 34px;
 }
 
 .UiConsentTitle {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  margin-top: 8px;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 32px;
+  user-select: none;
+  margin-bottom: 4px;
 }
 
 .UiConsentSubtitle {
+  font-weight: 400;
   font-size: 13px;
-  color: rgba(230, 237, 243, 0.55);
-  margin-top: -4px;
+  line-height: 16px;
+  color: #A0A0A0;
+  margin-bottom: 32px;
+  user-select: none;
 }
 
 .UiConsentAgreement {
-  margin-top: 10px;
-  color: rgba(230, 237, 243, 0.45);
-  font-size: 12px;
+  color: #A0A0A0;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 13px;
+  margin-bottom: 4px;
 }
 
 .UiConsentAgreement a.UiLink {
@@ -678,10 +691,9 @@ button:disabled {
   padding: 10px 12px;
   font-size: 13px;
   cursor: pointer;
-  transition:
-    background 120ms ease,
-    border-color 120ms ease,
-    transform 120ms ease;
+  transition: background 120ms ease,
+  border-color 120ms ease,
+  transform 120ms ease;
 }
 
 .UiActionButton:hover:enabled {
@@ -742,17 +754,17 @@ button:disabled {
 }
 
 .UiPrimaryButton {
-  margin-top: 14px;
-  width: min(340px, 100%);
+  width: min(250px, 100%);
   display: block;
-  margin-left: auto;
-  margin-right: auto;
   border: 0;
   border-radius: 999px;
-  background: var(--lime);
-  color: rgba(0, 0, 0, 0.86);
-  font-weight: 800;
-  padding: 12px 14px;
+  background: linear-gradient(0deg, #AEFF00, #AEFF00),
+  linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.2) 100%);
+  color: #121212;
+  padding: 9px 14px;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 22px;
 }
 
 .UiPrimaryButton:disabled {
@@ -772,10 +784,9 @@ button:disabled {
   color: rgba(230, 237, 243, 0.92);
   font-weight: 750;
   padding: 12px 14px;
-  transition:
-    background 120ms ease,
-    border-color 120ms ease,
-    transform 120ms ease;
+  transition: background 120ms ease,
+  border-color 120ms ease,
+  transform 120ms ease;
 }
 
 .UiSecondaryButton:hover:enabled {
@@ -846,9 +857,8 @@ button:disabled {
   border-radius: 999px;
   border: 1px solid rgba(230, 237, 243, 0.12);
   background: rgba(0, 0, 0, 0.20);
-  box-shadow:
-    0 18px 55px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .UiTab {
@@ -864,10 +874,9 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   user-select: none;
-  transition:
-    background 140ms ease,
-    color 140ms ease,
-    transform 140ms ease;
+  transition: background 140ms ease,
+  color 140ms ease,
+  transform 140ms ease;
 }
 
 .UiTab:hover {
@@ -890,9 +899,8 @@ button:disabled {
   padding: 8px 10px;
   font-size: 13px;
   cursor: pointer;
-  transition:
-    background 120ms ease,
-    border-color 120ms ease;
+  transition: background 120ms ease,
+  border-color 120ms ease;
 }
 
 .UiToolbarButton-primary {
@@ -1016,7 +1024,7 @@ pre {
   white-space: pre-wrap;
   word-break: break-word;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  "Courier New", monospace;
   font-size: 12px;
   line-height: 1.45;
   color: #d2dbe6;
@@ -1305,9 +1313,8 @@ pre {
   border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 14px;
   cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
+  transition: border-color 0.15s ease,
+  background-color 0.15s ease;
 }
 
 .UiProviderOption:hover {
@@ -1330,9 +1337,8 @@ pre {
   margin: 0;
   flex-shrink: 0;
   cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
+  transition: border-color 0.15s ease,
+  background-color 0.15s ease;
 }
 
 .UiProviderRadio:checked {
@@ -1458,9 +1464,8 @@ pre {
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.18);
   padding: 12px 14px;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
+  transition: border-color 0.15s ease,
+  background-color 0.15s ease;
 }
 
 .UiSkillCard:hover {
@@ -1751,9 +1756,8 @@ pre {
   border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 14px;
   cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
+  transition: border-color 0.15s ease,
+  background-color 0.15s ease;
 }
 
 .UiModelOption:hover {
@@ -1776,9 +1780,8 @@ pre {
   margin: 0;
   flex-shrink: 0;
   cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
+  transition: border-color 0.15s ease,
+  background-color 0.15s ease;
 }
 
 .UiModelRadio:checked {
@@ -2023,10 +2026,9 @@ pre {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background:
-    radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.06), transparent 58%),
-    radial-gradient(900px 520px at 50% 80%, rgba(194, 255, 64, 0.03), transparent 62%),
-    var(--bg);
+  background: radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.06), transparent 58%),
+  radial-gradient(900px 520px at 50% 80%, rgba(194, 255, 64, 0.03), transparent 62%),
+  var(--bg);
 }
 
 .UiChatTranscript {
@@ -2066,10 +2068,9 @@ pre {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 0 24px rgba(255, 122, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35),
+  0 0 24px rgba(255, 122, 0, 0.08),
+  inset 0 1px 0 rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 140, 80, 0.12);
 }
 
@@ -2372,9 +2373,8 @@ pre {
   line-height: 1.5;
   min-height: 48px;
   max-height: 180px;
-  transition:
-    border-color 120ms ease,
-    background 120ms ease;
+  transition: border-color 120ms ease,
+  background 120ms ease;
 }
 
 .UiChatInput:focus {
@@ -2395,9 +2395,11 @@ pre {
   .UiChatRow {
     animation: none;
   }
+
   .UiChatEmpty {
     animation: none;
   }
+
   .UiChatTypingDots span {
     animation: none;
   }
