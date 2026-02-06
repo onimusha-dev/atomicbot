@@ -2,12 +2,13 @@ import React from "react";
 import { Navigate, NavLink, useLocation } from "react-router-dom";
 import { useGatewayRpc } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { reloadConfig } from "../store/slices/configSlice";
+import { configActions, reloadConfig } from "../store/slices/configSlice";
 import type { GatewayState } from "../../../src/main/types";
 import { GlassCard, HeroPageLayout, InlineError } from "./kit";
 import { ConnectorsTab } from "./settings/ConnectorsTab";
 import { ModelProvidersTab } from "./settings/ModelProvidersTab";
 import { SkillsIntegrationsTab } from "./settings/SkillsIntegrationsTab";
+import { addToastError } from "./toast";
 
 type SettingsTab = "model-providers" | "skills-integrations" | "connectors";
 const DEFAULT_TAB: SettingsTab = "model-providers";
@@ -64,7 +65,12 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
     return <Navigate to={`/settings/${DEFAULT_TAB}`} replace />;
   }
 
-  const error = pageError ?? configError;
+  React.useEffect(() => {
+    if (configError) {
+      addToastError(configError);
+      dispatch(configActions.setError(null));
+    }
+  }, [configError, dispatch]);
 
   return (
     <HeroPageLayout title="SETTINGS" variant="compact" align="center" aria-label="Settings page" hideTopbar>
@@ -79,7 +85,6 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
           </aside>
 
           <div className="UiSettingsContent">
-            {error && <InlineError>{error}</InlineError>}
             {activeTab === "model-providers" ? (
               <ModelProvidersTab gw={gw} configSnap={configSnap ?? null} reload={reload} onError={setPageError} />
             ) : activeTab === "skills-integrations" ? (
