@@ -20,7 +20,8 @@ type SkillEntry = {
     | "apple"
     | "reminders"
     | "obsidian"
-    | "github";
+    | "github"
+    | "slack";
 };
 
 const SKILLS: SkillEntry[] = [
@@ -97,6 +98,14 @@ const SKILLS: SkillEntry[] = [
     iconVariant: "github",
   },
   {
+    id: "slack",
+    name: "Slack",
+    description: "Send messages, react, and manage pins in your Slack workspace",
+    status: "connect",
+    iconText: "S",
+    iconVariant: "slack",
+  },
+  {
     id: "gemini",
     name: "Gemini",
     description: "Interact with Google's Gemini models and experiment with powerful multimodal AI",
@@ -169,6 +178,8 @@ export function SkillsSetupPage(props: {
   onObsidianConnect: () => void;
   githubStatus: Exclude<SkillStatus, "coming-soon">;
   onGitHubConnect: () => void;
+  slackStatus: Exclude<SkillStatus, "coming-soon">;
+  onSlackConnect: () => void;
   onBack: () => void;
   onSkip: () => void;
   onContinue: () => void;
@@ -213,6 +224,8 @@ export function SkillsSetupPage(props: {
                       ? props.obsidianStatus
                     : skill.id === "github"
                       ? props.githubStatus
+                    : skill.id === "slack"
+                      ? props.slackStatus
                     : skill.status;
               const onConnect =
                 skill.id === "google-workspace"
@@ -233,6 +246,8 @@ export function SkillsSetupPage(props: {
                       ? props.onObsidianConnect
                     : skill.id === "github"
                       ? props.onGitHubConnect
+                : skill.id === "slack"
+                      ? props.onSlackConnect
                     : undefined;
               const effectiveStatus: SkillStatus =
                 onConnect || status === "connected" ? status : "coming-soon";

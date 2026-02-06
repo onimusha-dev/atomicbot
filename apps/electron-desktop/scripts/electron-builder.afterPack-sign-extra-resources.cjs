@@ -96,7 +96,9 @@ function walkFiles(rootDir, onFile) {
   const stack = [rootDir];
   while (stack.length > 0) {
     const dir = stack.pop();
-    if (!dir) continue;
+    if (!dir) {
+      continue;
+    }
     let entries;
     try {
       entries = fs.readdirSync(dir, { withFileTypes: true });

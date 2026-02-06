@@ -89,7 +89,7 @@ export function useWelcomeTelegram({ gw, loadConfig, setError, setStatus }: UseW
 
     // Kick: probe channel status to surface immediate errors/config state.
     try {
-      const probe = (await gw.request("channels.status", { probe: true, timeoutMs: 12_000 })) as ChannelsStatusResult;
+      const probe = await gw.request<ChannelsStatusResult>("channels.status", { probe: true, timeoutMs: 12_000 });
       setChannelsProbe(probe);
     } catch {
       // ignore probe failures; config patch is the primary action

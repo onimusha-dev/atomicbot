@@ -18,7 +18,7 @@ export function useWelcomeModels({ gw, loadConfig, setError, setStatus }: UseWel
     setModelsLoading(true);
     setModelsError(null);
     try {
-      const result = (await gw.request("models.list", {})) as ModelsListResult;
+      const result = await gw.request<ModelsListResult>("models.list", {});
       const entries: ModelEntry[] = (result.models ?? []).map((m) => ({
         id: m.id,
         name: m.name ?? m.id,

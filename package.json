@@ -184,6 +184,9 @@
   "engines": {
     "node": ">=22.12.0"
   },
+  "volta": {
+    "node": "22.22.0"
+  },
   "packageManager": "pnpm@10.23.0",
   "pnpm": {
     "minimumReleaseAge": 2880,
@@ -240,8 +243,5 @@
       "apps/macos/.build/**",
       "dist/OpenClaw.app/**"
     ]
-  },
-  "volta": {
-    "node": "22.22.0"
   }
 }

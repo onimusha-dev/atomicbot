@@ -15,7 +15,7 @@ export function readGatewayTokenFromConfig(configPath: string): string | null {
       return null;
     }
     const text = fs.readFileSync(configPath, "utf-8");
-    const parsed = JSON5.parse(text) as unknown;
+    const parsed: unknown = JSON5.parse(text);
     if (!parsed || typeof parsed !== "object") {
       return null;
     }
@@ -61,19 +61,19 @@ export function ensureGatewayConfigFile(params: { configPath: string; token: str
   // Patch existing configs (created by earlier desktop versions) so onboarding doesn't fail on Origin checks.
   try {
     const text = fs.readFileSync(params.configPath, "utf-8");
-    const parsed = JSON5.parse(text) as unknown;
+    const parsed: unknown = JSON5.parse(text);
     if (!isPlainObject(parsed)) {
       return;
     }
-    const cfg = parsed as Record<string, unknown>;
-    const gateway = isPlainObject(cfg.gateway) ? (cfg.gateway as Record<string, unknown>) : {};
+    const cfg = parsed;
+    const gateway = isPlainObject(cfg.gateway) ? cfg.gateway : {};
     const mode = typeof gateway.mode === "string" ? gateway.mode.trim() : "";
     const bind = typeof gateway.bind === "string" ? gateway.bind.trim() : "";
     if (mode !== "local" || bind !== "loopback") {
       return;
     }
 
-    const controlUi = isPlainObject(gateway.controlUi) ? (gateway.controlUi as Record<string, unknown>) : {};
+    const controlUi = isPlainObject(gateway.controlUi) ? gateway.controlUi : {};
     const allowedOrigins = Array.isArray(controlUi.allowedOrigins)
       ? controlUi.allowedOrigins.map((v) => String(v).trim()).filter(Boolean)
       : [];

@@ -44,7 +44,7 @@ export function NotionConnectPage(props: {
             className="UiLink"
             onClick={(e) => {
               e.preventDefault();
-              window.openclawDesktop?.openExternal("https://notion.so/my-integrations");
+            void window.openclawDesktop?.openExternal("https://notion.so/my-integrations");
             }}
           >
             Open integrations ↗

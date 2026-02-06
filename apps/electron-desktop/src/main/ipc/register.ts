@@ -49,7 +49,9 @@ function parseObsidianVaultsFromJson(payload: unknown): ObsidianVaultEntry[] {
     out.push({ name, path: vaultPath, open: isOpen });
   }
   out.sort((a, b) => {
-    if (a.open !== b.open) return a.open ? -1 : 1;
+    if (a.open !== b.open) {
+      return a.open ? -1 : 1;
+    }
     return a.name.localeCompare(b.name);
   });
   return out;

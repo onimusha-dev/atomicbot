@@ -28,7 +28,7 @@ export const reloadConfig = createAsyncThunk(
     thunkApi.dispatch(configActions.setError(null));
     thunkApi.dispatch(configActions.setStatus("loading"));
     try {
-      const snap = (await request("config.get", {})) as ConfigSnapshot;
+      const snap = await request<ConfigSnapshot>("config.get", {});
       thunkApi.dispatch(configActions.setSnapshot(snap));
       thunkApi.dispatch(configActions.setStatus("ready"));
     } catch (err) {

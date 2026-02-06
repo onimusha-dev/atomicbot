@@ -41,7 +41,7 @@ export function useWelcomeGog({ gw }: UseWelcomeGogInput) {
   }, []);
 
   const ensureGogExecDefaults = React.useCallback(async () => {
-    const snap = (await gw.request("config.get", {})) as ConfigSnapshot;
+    const snap = await gw.request<ConfigSnapshot>("config.get", {});
     const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
     if (!baseHash) {
       throw new Error("Config base hash missing. Reload and try again.");

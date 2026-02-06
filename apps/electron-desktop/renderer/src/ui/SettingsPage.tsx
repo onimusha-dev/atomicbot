@@ -127,7 +127,7 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
     setPageError(null);
     setConfigActionStatus("seeding");
     try {
-      const snap = (await gw.request("config.get", {})) as ConfigSnapshot;
+      const snap = await gw.request<ConfigSnapshot>("config.get", {});
       const cfg =
         snap.config && typeof snap.config === "object" && !Array.isArray(snap.config)
           ? (snap.config as Record<string, unknown>)
@@ -193,12 +193,12 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
         authToken !== state.token;
       if (needsGateway) {
         patch.gateway = {
-          ...(gateway as Record<string, unknown>),
+          ...gateway,
           mode: "local",
           bind: "loopback",
           port: state.port,
           auth: {
-            ...(gatewayAuth as Record<string, unknown>),
+            ...gatewayAuth,
             mode: "token",
             token: state.token,
           },
@@ -208,9 +208,9 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
       const needsWorkspace = !currentWorkspace;
       if (needsWorkspace) {
         patch.agents = {
-          ...(agents as Record<string, unknown>),
+          ...agents,
           defaults: {
-            ...(agentDefaults as Record<string, unknown>),
+            ...agentDefaults,
             workspace: workspaceDir,
           },
         };
@@ -472,14 +472,14 @@ export function SettingsPage({ state }: { state: Extract<GatewayState, { kind: "
     const isPlainObject = (v: unknown): v is Record<string, unknown> =>
       typeof v === "object" && v !== null && !Array.isArray(v);
 
-    const snap = (await gw.request("config.get", {})) as ConfigSnapshot;
+    const snap = await gw.request<ConfigSnapshot>("config.get", {});
     const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : "";
     if (!baseHash) {
       throw new Error("Missing config base hash. Click Reload and try again.");
     }
-    const cfg = isPlainObject(snap.config) ? (snap.config as Record<string, unknown>) : {};
-    const tools = isPlainObject(cfg.tools) ? (cfg.tools as Record<string, unknown>) : {};
-    const exec = isPlainObject(tools.exec) ? (tools.exec as Record<string, unknown>) : {};
+    const cfg = isPlainObject(snap.config) ? snap.config : {};
+    const tools = isPlainObject(cfg.tools) ? cfg.tools : {};
+    const exec = isPlainObject(tools.exec) ? tools.exec : {};
 
     const existingSafeBins = Array.isArray(exec.safeBins) ? exec.safeBins : [];
     const safeBins = Array.from(

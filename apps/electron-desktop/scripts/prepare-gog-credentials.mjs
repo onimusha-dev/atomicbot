@@ -42,7 +42,7 @@ function readSourceJson() {
       }
       return decoded;
     } catch (err) {
-      throw new Error(`Failed to decode OAuth client secret base64: ${String(err)}`);
+      throw new Error(`Failed to decode OAuth client secret base64: ${String(err)}`, { cause: err });
     }
   }
 

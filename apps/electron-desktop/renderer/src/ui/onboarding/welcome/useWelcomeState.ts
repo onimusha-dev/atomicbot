@@ -14,6 +14,7 @@ import { useWelcomeGog } from "./useWelcomeGog";
 import { useWelcomeModels } from "./useWelcomeModels";
 import { useWelcomeNotion } from "./useWelcomeNotion";
 import { useWelcomeObsidian } from "./useWelcomeObsidian";
+import { useWelcomeSlack } from "./useWelcomeSlack";
 import { useWelcomeGitHub } from "./useWelcomeGitHub";
 import { useWelcomeTrello } from "./useWelcomeTrello";
 import { useWelcomeTelegram } from "./useWelcomeTelegram";
@@ -34,7 +35,8 @@ type SkillId =
   | "apple-notes"
   | "apple-reminders"
   | "obsidian"
-  | "github";
+  | "github"
+  | "slack";
 type SkillStatus = "connect" | "connected";
 
 type ObsidianVault = {
@@ -61,6 +63,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const [appleRemindersBusy, setAppleRemindersBusy] = React.useState(false);
   const [obsidianBusy, setObsidianBusy] = React.useState(false);
   const [githubBusy, setGitHubBusy] = React.useState(false);
+  const [slackBusy, setSlackBusy] = React.useState(false);
   const [obsidianVaultsLoading, setObsidianVaultsLoading] = React.useState(false);
   const [obsidianVaults, setObsidianVaults] = React.useState<ObsidianVault[]>([]);
   const [selectedObsidianVaultName, setSelectedObsidianVaultName] = React.useState("");
@@ -75,6 +78,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     "apple-reminders": "connect",
     obsidian: "connect",
     github: "connect",
+    slack: "connect",
   });
 
   const { configPath, ensureExtendedConfig, loadConfig } = useWelcomeConfig({
@@ -90,6 +94,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
   const { enableGitHub } = useWelcomeGitHub({ gw, loadConfig, setError, setStatus });
   const { saveNotionApiKey } = useWelcomeNotion({ gw, loadConfig, setError, setStatus });
   const { saveTrello } = useWelcomeTrello({ gw, loadConfig, setError, setStatus });
+  const { saveSlackConfig } = useWelcomeSlack({ gw, loadConfig, setError, setStatus });
   const { saveWebSearch } = useWelcomeWebSearch({ gw, loadConfig, setError, setStatus });
   const { loadModels, models, modelsError, modelsLoading, saveDefaultModel } = useWelcomeModels({
     gw,
@@ -112,7 +117,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
 
   const finish = React.useCallback(() => {
     void dispatch(setOnboarded(true));
-    navigate(routes.chat, { replace: true });
+    void navigate(routes.chat, { replace: true });
   }, [dispatch, navigate]);
 
   const start = React.useCallback(async () => {
@@ -121,7 +126,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     setStartBusy(true);
     try {
       await ensureExtendedConfig();
-      navigate(`${routes.welcome}/provider-select`);
+      void navigate(`${routes.welcome}/provider-select`);
     } catch (err) {
       setError(String(err));
     } finally {
@@ -129,27 +134,58 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     }
   }, [ensureExtendedConfig, navigate]);
 
-  const goApiKey = React.useCallback(() => navigate(`${routes.welcome}/api-key`), [navigate]);
-  const goModelSelect = React.useCallback(() => navigate(`${routes.welcome}/model-select`), [navigate]);
-  const goWebSearch = React.useCallback(() => navigate(`${routes.welcome}/web-search`), [navigate]);
+  const goApiKey = React.useCallback(() => {
+    void navigate(`${routes.welcome}/api-key`);
+  }, [navigate]);
+  const goModelSelect = React.useCallback(() => {
+    void navigate(`${routes.welcome}/model-select`);
+  }, [navigate]);
+  const goWebSearch = React.useCallback(() => {
+    void navigate(`${routes.welcome}/web-search`);
+  }, [navigate]);
   const goMediaUnderstanding = React.useCallback(
     () => {
       void refreshProviderFlags();
-      navigate(`${routes.welcome}/media-understanding`);
+      void navigate(`${routes.welcome}/media-understanding`);
     },
     [navigate],
   );
-  const goSkills = React.useCallback(() => navigate(`${routes.welcome}/skills`), [navigate]);
-  const goNotion = React.useCallback(() => navigate(`${routes.welcome}/notion`), [navigate]);
-  const goTrello = React.useCallback(() => navigate(`${routes.welcome}/trello`), [navigate]);
-  const goTelegramToken = React.useCallback(() => navigate(`${routes.welcome}/telegram-token`), [navigate]);
-  const goTelegramUser = React.useCallback(() => navigate(`${routes.welcome}/telegram-user`), [navigate]);
-  const goGog = React.useCallback(() => navigate(`${routes.welcome}/gog`), [navigate]);
-  const goGogGoogleWorkspace = React.useCallback(() => navigate(`${routes.welcome}/gog-google-workspace`), [navigate]);
-  const goProviderSelect = React.useCallback(() => navigate(`${routes.welcome}/provider-select`), [navigate]);
-  const goAppleNotes = React.useCallback(() => navigate(`${routes.welcome}/apple-notes`), [navigate]);
-  const goAppleReminders = React.useCallback(() => navigate(`${routes.welcome}/apple-reminders`), [navigate]);
-  const goGitHub = React.useCallback(() => navigate(`${routes.welcome}/github`), [navigate]);
+  const goSkills = React.useCallback(() => {
+    void navigate(`${routes.welcome}/skills`);
+  }, [navigate]);
+  const goNotion = React.useCallback(() => {
+    void navigate(`${routes.welcome}/notion`);
+  }, [navigate]);
+  const goTrello = React.useCallback(() => {
+    void navigate(`${routes.welcome}/trello`);
+  }, [navigate]);
+  const goTelegramToken = React.useCallback(() => {
+    void navigate(`${routes.welcome}/telegram-token`);
+  }, [navigate]);
+  const goTelegramUser = React.useCallback(() => {
+    void navigate(`${routes.welcome}/telegram-user`);
+  }, [navigate]);
+  const goGog = React.useCallback(() => {
+    void navigate(`${routes.welcome}/gog`);
+  }, [navigate]);
+  const goGogGoogleWorkspace = React.useCallback(() => {
+    void navigate(`${routes.welcome}/gog-google-workspace`);
+  }, [navigate]);
+  const goProviderSelect = React.useCallback(() => {
+    void navigate(`${routes.welcome}/provider-select`);
+  }, [navigate]);
+  const goAppleNotes = React.useCallback(() => {
+    void navigate(`${routes.welcome}/apple-notes`);
+  }, [navigate]);
+  const goAppleReminders = React.useCallback(() => {
+    void navigate(`${routes.welcome}/apple-reminders`);
+  }, [navigate]);
+  const goGitHub = React.useCallback(() => {
+    void navigate(`${routes.welcome}/github`);
+  }, [navigate]);
+  const goSlack = React.useCallback(() => {
+    void navigate(`${routes.welcome}/slack`);
+  }, [navigate]);
 
   const refreshObsidianVaults = React.useCallback(async (): Promise<void> => {
     const api = window.openclawDesktop;
@@ -168,12 +204,16 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       const list: ObsidianVault[] = Array.isArray(parsed)
         ? parsed
             .map((v) => {
-              if (!v || typeof v !== "object" || Array.isArray(v)) return null;
+              if (!v || typeof v !== "object" || Array.isArray(v)) {
+                return null;
+              }
               const o = v as { name?: unknown; path?: unknown; open?: unknown };
               const name = typeof o.name === "string" ? o.name : "";
               const vaultPath = typeof o.path === "string" ? o.path : "";
               const open = o.open === true;
-              if (!name || !vaultPath) return null;
+              if (!name || !vaultPath) {
+                return null;
+              }
               return { name, path: vaultPath, open };
             })
             .filter((v): v is ObsidianVault => Boolean(v))
@@ -194,7 +234,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       try {
         await refreshObsidianVaults();
         setStatus(null);
-        navigate(`${routes.welcome}/obsidian`);
+        void navigate(`${routes.welcome}/obsidian`);
       } catch (err) {
         setError(String(err));
         setStatus(null);
@@ -223,7 +263,9 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
 
   const onApiKeySubmit = React.useCallback(
     async (apiKey: string) => {
-      if (!selectedProvider) return;
+      if (!selectedProvider) {
+        return;
+      }
       setApiKeyBusy(true);
       setError(null);
       try {
@@ -263,7 +305,9 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       const profiles = getObject(auth.profiles);
       const order = getObject(auth.order);
       const hasProfile = Object.values(profiles).some((p) => {
-        if (!p || typeof p !== "object" || Array.isArray(p)) return false;
+        if (!p || typeof p !== "object" || Array.isArray(p)) {
+          return false;
+        }
         return (p as { provider?: unknown }).provider === "openai";
       });
       const hasOrder = Object.prototype.hasOwnProperty.call(order, "openai");
@@ -336,7 +380,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     [goSkills, gw, loadConfig, markSkillConnected, setError, setStatus],
   );
 
-  const mediaProvidersDetected = React.useMemo(() => {
+  const _mediaProvidersDetected = React.useMemo(() => {
     const providers = new Set((models ?? []).map((m) => m.provider).filter(Boolean));
     const image = ["openai", "google", "anthropic", "minimax"].filter((p) => providers.has(p));
     const audio = ["openai", "google", "groq"].filter((p) => providers.has(p));
@@ -609,6 +653,35 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     [enableGitHub, goSkills, markSkillConnected],
   );
 
+  const onSlackConnect = React.useCallback(
+    async (settings: {
+      botName: string;
+      botToken: string;
+      appToken: string;
+      groupPolicy: "open" | "allowlist" | "disabled";
+      channelAllowlist: string[];
+      dmPolicy: "pairing" | "allowlist" | "open" | "disabled";
+      dmAllowFrom: string[];
+    }) => {
+      setSlackBusy(true);
+      setError(null);
+      setStatus(null);
+      try {
+        const ok = await saveSlackConfig(settings);
+        if (ok) {
+          markSkillConnected("slack");
+          goSkills();
+        }
+      } catch (err) {
+        setError(String(err));
+        setStatus(null);
+      } finally {
+        setSlackBusy(false);
+      }
+    },
+    [goSkills, markSkillConnected, saveSlackConfig],
+  );
+
   const onTelegramTokenNext = React.useCallback(async () => {
     setError(null);
     setStatus(null);
@@ -642,6 +715,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     appleRemindersBusy,
     obsidianBusy,
     githubBusy,
+    slackBusy,
     apiKeyBusy,
     channelsProbe,
     configPath,
@@ -654,6 +728,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     goAppleReminders,
     goObsidian,
     goGitHub,
+    goSlack,
     goModelSelect,
     goMediaUnderstanding,
     goWebSearch,
@@ -690,6 +765,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
     onObsidianSetDefaultAndEnable,
     onObsidianRecheck,
     onGitHubConnect,
+    onSlackConnect,
     onApiKeySubmit,
     onGogAuthAdd,
     onGogAuthList,

@@ -119,7 +119,7 @@ export function useWelcomeObsidian({ gw, loadConfig, setError, setStatus }: UseW
 
       try {
         setStatus("Allowing obsidian-cli (exec approvals)…");
-        const approvals = (await gw.request("exec.approvals.get", {})) as ExecApprovalsSnapshot;
+        const approvals = await gw.request<ExecApprovalsSnapshot>("exec.approvals.get", {});
         const file = approvals.file ?? { version: 1 };
         const agents = file.agents ?? {};
 

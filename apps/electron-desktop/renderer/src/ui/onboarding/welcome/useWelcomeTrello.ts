@@ -107,7 +107,7 @@ export function useWelcomeTrello({ gw, loadConfig, setError, setStatus }: UseWel
       // to reduce onboarding friction and avoid "allowlist miss" failures.
       try {
         setStatus("Allowing curl and jq (exec defaults)…");
-        const snap2 = (await gw.request("config.get", {})) as ConfigSnapshot;
+        const snap2 = await gw.request<ConfigSnapshot>("config.get", {});
         const baseHash2 = typeof snap2.hash === "string" && snap2.hash.trim() ? snap2.hash.trim() : null;
         if (baseHash2) {
           const cfg = getObject(snap2.config);
@@ -143,7 +143,7 @@ export function useWelcomeTrello({ gw, loadConfig, setError, setStatus }: UseWel
 
       try {
         setStatus("Allowing curl and jq (exec approvals)…");
-        const approvals = (await gw.request("exec.approvals.get", {})) as ExecApprovalsSnapshot;
+        const approvals = await gw.request<ExecApprovalsSnapshot>("exec.approvals.get", {});
         const agentId = "main";
         const file = approvals.file ?? { version: 1 };
         const agents = file.agents ?? {};

@@ -87,7 +87,11 @@ export function ApiKeyPage(props: {
               className="UiLink"
               onClick={(e) => {
                 e.preventDefault();
-                window.openclawDesktop?.openExternal(meta.helpUrl!);
+                const url = meta.helpUrl;
+                if (!url) {
+                  return;
+                }
+                void window.openclawDesktop?.openExternal(url);
               }}
             >
               Get API key ↗

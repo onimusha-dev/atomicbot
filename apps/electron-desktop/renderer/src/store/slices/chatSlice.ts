@@ -100,7 +100,7 @@ export const loadChatHistory = createAsyncThunk(
   "chat/loadChatHistory",
   async ({ request, sessionKey, limit = 200 }: { request: GatewayRequest; sessionKey: string; limit?: number }, thunkApi) => {
     thunkApi.dispatch(chatActions.setError(null));
-    const res = (await request("chat.history", { sessionKey, limit })) as ChatHistoryResult;
+    const res = await request<ChatHistoryResult>("chat.history", { sessionKey, limit });
     thunkApi.dispatch(chatActions.historyLoaded(parseHistoryMessages(res.messages)));
   },
 );

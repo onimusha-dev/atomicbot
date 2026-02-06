@@ -16,6 +16,7 @@ import { ObsidianConnectPage } from "./onboarding/ObsidianConnectPage";
 import { GitHubConnectPage } from "./onboarding/GitHubConnectPage";
 import { ProviderSelectPage } from "./onboarding/ProviderSelectPage";
 import { SkillsSetupPage } from "./onboarding/SkillsSetupPage";
+import { SlackConnectPage } from "./onboarding/SlackConnectPage";
 import { TrelloConnectPage } from "./onboarding/TrelloConnectPage";
 import { TelegramTokenPage } from "./onboarding/TelegramTokenPage";
 import { TelegramUserPage } from "./onboarding/TelegramUserPage";
@@ -63,7 +64,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
 
   React.useEffect(() => {
     if (onboarded) {
-      navigate("/chat", { replace: true });
+      void navigate("/chat", { replace: true });
     }
   }, [navigate, onboarded]);
 
@@ -172,6 +173,8 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             onObsidianConnect={welcome.goObsidian}
             githubStatus={welcome.skills.github}
             onGitHubConnect={welcome.goGitHub}
+            slackStatus={welcome.skills.slack}
+            onSlackConnect={welcome.goSlack}
             onBack={welcome.goModelSelect}
             onSkip={welcome.goTelegramToken}
             onContinue={welcome.goTelegramToken}
@@ -231,6 +234,19 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             error={welcome.error}
             busy={welcome.githubBusy}
             onSubmit={(pat) => void welcome.onGitHubConnect(pat)}
+            onBack={welcome.goSkills}
+          />
+        }
+      />
+
+      <Route
+        path="slack"
+        element={
+          <SlackConnectPage
+            status={welcome.status}
+            error={welcome.error}
+            busy={welcome.slackBusy}
+            onSubmit={(settings) => void welcome.onSlackConnect(settings)}
             onBack={welcome.goSkills}
           />
         }

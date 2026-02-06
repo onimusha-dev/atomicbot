@@ -52,21 +52,31 @@ function normalizeTierMatchText(text: string): string {
 
 function getModelTier(model: ModelEntry): ModelTier | null {
   const providerTiers = MODEL_TIERS[model.provider];
-  if (!providerTiers) return null;
+  if (!providerTiers) {
+    return null;
+  }
 
   const haystack = normalizeTierMatchText(`${model.id} ${model.name}`);
 
   if (model.provider === "openrouter") {
     // OpenRouter model IDs can vary by sub-provider; match by stable name/ID fragments.
-    if (haystack.includes("trinity large preview")) return "ultra";
-    if (haystack.includes("kimi") && (haystack.includes("2.5") || haystack.includes("k2.5"))) return "pro";
+    if (haystack.includes("trinity large preview")) {
+      return "ultra";
+    }
+    if (haystack.includes("kimi") && (haystack.includes("2.5") || haystack.includes("k2.5"))) {
+      return "pro";
+    }
     // OpenRouter can prefix IDs with sub-provider (e.g. "google/gemini-3-flash-preview").
-    if (haystack.includes("gemini 3 flash") && haystack.includes("preview")) return "fast";
+    if (haystack.includes("gemini 3 flash") && haystack.includes("preview")) {
+      return "fast";
+    }
   }
 
   if (model.provider === "google") {
     // "Gemini 3 Flash Preview" should always show as FAST, even if the UI name varies slightly.
-    if (haystack.includes("gemini 3 flash") && haystack.includes("preview")) return "fast";
+    if (haystack.includes("gemini 3 flash") && haystack.includes("preview")) {
+      return "fast";
+    }
   }
 
   for (const tier of TIER_ORDER) {
@@ -79,16 +89,26 @@ function getModelTier(model: ModelEntry): ModelTier | null {
 }
 
 function formatContextWindow(ctx: number | undefined): string {
-  if (!ctx) return "";
-  if (ctx >= 1_000_000) return `${(ctx / 1_000_000).toFixed(1)}M`;
-  if (ctx >= 1_000) return `${Math.round(ctx / 1_000)}K`;
+  if (!ctx) {
+    return "";
+  }
+  if (ctx >= 1_000_000) {
+    return `${(ctx / 1_000_000).toFixed(1)}M`;
+  }
+  if (ctx >= 1_000) {
+    return `${Math.round(ctx / 1_000)}K`;
+  }
   return String(ctx);
 }
 
 function formatModelMeta(model: ModelEntry): string | null {
   const parts: string[] = [];
-  if (model.contextWindow) parts.push(`ctx ${formatContextWindow(model.contextWindow)}`);
-  if (model.reasoning) parts.push("reasoning");
+  if (model.contextWindow) {
+    parts.push(`ctx ${formatContextWindow(model.contextWindow)}`);
+  }
+  if (model.reasoning) {
+    parts.push("reasoning");
+  }
   return parts.length ? parts.join(" · ") : null;
 }
 
@@ -113,7 +133,7 @@ export function ModelSelectPage(props: {
     }
 
     // Sort: tiered models first (ultra → pro → fast), then the rest alphabetically
-    return models.slice().sort((a: ModelEntry, b: ModelEntry) => {
+    return models.toSorted((a: ModelEntry, b: ModelEntry) => {
       const tierA = getModelTier(a);
       const tierB = getModelTier(b);
 
@@ -122,9 +142,13 @@ export function ModelSelectPage(props: {
         return TIER_PRIORITY[tierA] - TIER_PRIORITY[tierB];
       }
       // Only A has tier - A comes first
-      if (tierA) return -1;
+      if (tierA) {
+        return -1;
+      }
       // Only B has tier - B comes first
-      if (tierB) return 1;
+      if (tierB) {
+        return 1;
+      }
       // Neither has tier - sort alphabetically by name
       return (a.name || a.id).localeCompare(b.name || b.id);
     });

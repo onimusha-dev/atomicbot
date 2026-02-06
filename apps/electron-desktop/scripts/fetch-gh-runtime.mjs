@@ -112,7 +112,9 @@ function findFileRecursive(rootDir, matcher) {
   const queue = [rootDir];
   while (queue.length > 0) {
     const dir = queue.shift();
-    if (!dir) continue;
+    if (!dir) {
+      continue;
+    }
     for (const entry of listDirSafe(dir)) {
       const full = path.join(dir, entry);
       let st;

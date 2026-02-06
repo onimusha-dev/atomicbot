@@ -180,7 +180,7 @@ app.on("before-quit", async () => {
   await stopGatewayChild();
 });
 
-app.whenReady().then(async () => {
+void app.whenReady().then(async () => {
   const userData = app.getPath("userData");
   const stateDir = path.join(userData, "openclaw");
   const logsDir = path.join(userData, "logs");

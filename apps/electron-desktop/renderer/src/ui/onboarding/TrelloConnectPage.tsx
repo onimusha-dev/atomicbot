@@ -46,7 +46,7 @@ export function TrelloConnectPage(props: {
             className="UiLink"
             onClick={(e) => {
               e.preventDefault();
-              window.openclawDesktop?.openExternal("https://trello.com/app-key");
+              void window.openclawDesktop?.openExternal("https://trello.com/app-key");
             }}
           >
             trello.com/app-key ↗

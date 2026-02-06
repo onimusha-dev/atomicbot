@@ -14,7 +14,7 @@ export function useWelcomeConfig({ gw, state, setError, setStatus }: UseWelcomeC
   const [configPath, setConfigPath] = React.useState<string | null>(null);
 
   const loadConfig = React.useCallback(async () => {
-    const snap = (await gw.request("config.get", {})) as ConfigSnapshot;
+    const snap = await gw.request<ConfigSnapshot>("config.get", {});
     setConfigPath(typeof snap.path === "string" ? snap.path : null);
     return snap;
   }, [gw]);

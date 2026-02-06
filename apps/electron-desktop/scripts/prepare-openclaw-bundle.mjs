@@ -19,7 +19,9 @@ function run(cmd, args, opts = {}) {
 }
 
 function rmrfStrict(p) {
-  if (!fs.existsSync(p)) return;
+  if (!fs.existsSync(p)) {
+    return;
+  }
   fs.rmSync(p, { recursive: true, force: true });
   if (fs.existsSync(p)) {
     throw new Error(`[electron-desktop] Failed to remove deploy dir: ${p}`);

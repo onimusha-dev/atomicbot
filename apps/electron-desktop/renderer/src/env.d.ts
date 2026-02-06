@@ -1,8 +1,6 @@
 import type { GogExecResult } from "../../src/main/gog/types";
 import type { GatewayState, ResetAndCloseResult } from "../../src/main/types";
 
-export {};
-
 type MemoExecResult = {
   ok: boolean;
   code: number | null;

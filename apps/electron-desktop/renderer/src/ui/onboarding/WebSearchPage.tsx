@@ -13,7 +13,7 @@ type ProviderMeta = {
   helpText?: string;
 };
 
-const PROVIDERS: ProviderMeta[] = [
+const PROVIDERS: [ProviderMeta, ...ProviderMeta[]] = [
   {
     id: "brave",
     name: "Brave Search",
@@ -42,7 +42,7 @@ export function WebSearchPage(props: {
 }) {
   const [provider, setProvider] = React.useState<WebSearchProvider>("brave");
   const [apiKey, setApiKey] = React.useState("");
-  const meta = PROVIDERS.find((p) => p.id === provider) ?? PROVIDERS[0]!;
+  const meta = PROVIDERS.find((p) => p.id === provider) ?? PROVIDERS[0];
   const totalSteps = 5;
   const activeStep = 3;
 
@@ -107,7 +107,11 @@ export function WebSearchPage(props: {
               className="UiLink"
               onClick={(e) => {
                 e.preventDefault();
-                window.openclawDesktop?.openExternal(meta.helpUrl!);
+                const url = meta.helpUrl;
+                if (!url) {
+                  return;
+                }
+                void window.openclawDesktop?.openExternal(url);
               }}
             >
               Learn more ↗

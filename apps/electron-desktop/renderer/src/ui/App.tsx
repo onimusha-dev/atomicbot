@@ -164,19 +164,6 @@ function LegacyScreen({ state }: { state: Extract<GatewayState, { kind: "ready" 
   );
 }
 
-function BootstrapRoutes({ state }: { state: GatewayState | null }) {
-  return (
-    <Routes>
-      <Route path={routes.loading} element={<LoadingScreen state={state} />} />
-      <Route
-        path={routes.error}
-        element={state?.kind === "failed" ? <ErrorScreen state={state} /> : <Navigate to={routes.loading} replace />}
-      />
-      <Route path="*" element={<Navigate to={routes.loading} replace />} />
-    </Routes>
-  );
-}
-
 function ReadyRoutes({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
   return (
     <GatewayRpcProvider url={state.url} token={state.token}>
@@ -210,7 +197,7 @@ export function App() {
   React.useEffect(() => {
     const api = window.openclawDesktop as ConsentDesktopApi | undefined;
     let alive = true;
-    (async () => {
+    void (async () => {
       try {
         const info = await api?.getConsentInfo();
         const accepted = info?.accepted === true;
@@ -246,15 +233,15 @@ export function App() {
       const isBootstrap = isBootstrapPath(path);
       if (isBootstrap) {
         didAutoNavRef.current = true;
-        navigate(onboarded ? routes.chat : routes.welcome, { replace: true });
+        void navigate(onboarded ? routes.chat : routes.welcome, { replace: true });
       }
       return;
     }
     if (state.kind === "failed") {
-      navigate(routes.error, { replace: true });
+      void navigate(routes.error, { replace: true });
     }
     if (state.kind === "starting") {
-      navigate(routes.loading, { replace: true });
+      void navigate(routes.loading, { replace: true });
     }
   }, [state, consent, onboarded, navigate, location.pathname]);
 
@@ -269,14 +256,14 @@ export function App() {
           setConsent("accepted");
           // Avoid getting stuck on /loading when gateway is already ready.
           if (state?.kind === "ready") {
-            navigate(onboarded ? routes.chat : routes.welcome, { replace: true });
+            void navigate(onboarded ? routes.chat : routes.welcome, { replace: true });
             return;
           }
           if (state?.kind === "failed") {
-            navigate(routes.error, { replace: true });
+            void navigate(routes.error, { replace: true });
             return;
           }
-          navigate(routes.loading, { replace: true });
+          void navigate(routes.loading, { replace: true });
         }}
       />
     );

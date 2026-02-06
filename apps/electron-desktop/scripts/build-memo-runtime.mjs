@@ -31,15 +31,6 @@ function run(cmd, args, opts = {}) {
   return { stdout: String(res.stdout || ""), stderr: String(res.stderr || "") };
 }
 
-function existsFile(p) {
-  try {
-    const st = fs.statSync(p);
-    return st.isFile();
-  } catch {
-    return false;
-  }
-}
-
 function parsePythonVersion(raw) {
   const text = String(raw || "").trim();
   const m = text.match(/^(\d+)\.(\d+)\.(\d+)/);
@@ -128,31 +119,8 @@ function resolveMemoSourceDir() {
       return { name, src, mtimeMs };
     })
     .filter((e) => fs.existsSync(e.src))
-    .sort((a, b) => b.mtimeMs - a.mtimeMs);
+    .toSorted((a, b) => b.mtimeMs - a.mtimeMs);
   return entries[0]?.src ?? null;
-}
-
-function resolveMainScript(srcDir) {
-  // Prefer a real CLI entrypoint. memo declares:
-  // [project.scripts] memo = "memo.memo:cli"
-  const candidates = [
-    path.join(srcDir, "src", "memo", "memo.py"),
-    path.join(srcDir, "src", "memo", "__main__.py"),
-    path.join(srcDir, "memo", "__main__.py"),
-  ];
-  for (const c of candidates) {
-    if (existsFile(c)) {
-      return c;
-    }
-  }
-  // Fall back to module file. PyInstaller can take a .py file entrypoint.
-  const fallback = [path.join(srcDir, "src", "memo", "__init__.py"), path.join(srcDir, "memo", "__init__.py")];
-  for (const c of fallback) {
-    if (existsFile(c)) {
-      return c;
-    }
-  }
-  return null;
 }
 
 async function main() {

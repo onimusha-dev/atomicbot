@@ -118,7 +118,7 @@ export function useWelcomeGitHub({ gw, loadConfig, setError, setStatus }: UseWel
 
       try {
         setStatus("Allowing gh (exec approvals)…");
-        const approvals = (await gw.request("exec.approvals.get", {})) as ExecApprovalsSnapshot;
+        const approvals = await gw.request<ExecApprovalsSnapshot>("exec.approvals.get", {});
         const file = approvals.file ?? { version: 1 };
         const agents = file.agents ?? {};
 

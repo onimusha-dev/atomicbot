@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ButtonRow, GlassCard, HeroPageLayout, InlineError, PrimaryButton } from "../kit";
+import { GlassCard, HeroPageLayout, InlineError, PrimaryButton } from "../kit";
 
 export type Provider = "anthropic" | "google" | "openai" | "openrouter" | "zai" | "minimax";
 

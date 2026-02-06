@@ -127,7 +127,9 @@ function findFileRecursive(rootDir, matcher) {
   const queue = [rootDir];
   while (queue.length > 0) {
     const dir = queue.shift();
-    if (!dir) continue;
+    if (!dir) {
+      continue;
+    }
     for (const entry of listDirSafe(dir)) {
       const full = path.join(dir, entry);
       let st;
@@ -155,8 +157,12 @@ function copyExecutable(src, dest) {
 }
 
 function normalizeArch(arch) {
-  if (arch === "arm64") return "arm64";
-  if (arch === "x64") return "amd64";
+  if (arch === "arm64") {
+    return "arm64";
+  }
+  if (arch === "x64") {
+    return "amd64";
+  }
   return arch;
 }
 
@@ -182,15 +188,23 @@ function pickAsset(assets, arch) {
         score += 10;
       }
       // Archive type.
-      if (lower.endsWith(".zip")) score += 5;
-      if (lower.endsWith(".tar.gz") || lower.endsWith(".tgz")) score += 5;
+      if (lower.endsWith(".zip")) {
+        score += 5;
+      }
+      if (lower.endsWith(".tar.gz") || lower.endsWith(".tgz")) {
+        score += 5;
+      }
       // Prefer smaller/more specific artifacts.
-      if (lower.includes("checksums") || lower.includes("sha256")) score -= 100;
-      if (lower.includes("source") || lower.endsWith(".txt")) score -= 50;
+      if (lower.includes("checksums") || lower.includes("sha256")) {
+        score -= 100;
+      }
+      if (lower.includes("source") || lower.endsWith(".txt")) {
+        score -= 50;
+      }
       return { name, score };
     })
     .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score);
+    .toSorted((a, b) => b.score - a.score);
 
   const best = scored[0]?.name || "";
   if (!best) {

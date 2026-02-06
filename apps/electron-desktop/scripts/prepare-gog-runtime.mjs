@@ -20,15 +20,6 @@ function ensureDir(p) {
   fs.mkdirSync(p, { recursive: true });
 }
 
-function which(bin) {
-  const res = spawnSync("which", [bin], { encoding: "utf-8" });
-  if (res.status !== 0) {
-    return null;
-  }
-  const value = String(res.stdout || "").trim();
-  return value ? value : null;
-}
-
 function copyExecutable(src, dest) {
   ensureDir(path.dirname(dest));
   fs.copyFileSync(src, dest);
