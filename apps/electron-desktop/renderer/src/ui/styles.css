@@ -1556,6 +1556,30 @@ pre {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.20), rgba(194, 255, 64, 0.12));
 }
 
+.UiSkillIcon--discord {
+  background: linear-gradient(135deg, rgba(88, 101, 242, 0.26), rgba(87, 242, 135, 0.10));
+}
+
+.UiSkillIcon--whatsapp {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.22), rgba(18, 140, 126, 0.14));
+}
+
+.UiSkillIcon--signal {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.20), rgba(255, 255, 255, 0.06));
+}
+
+.UiSkillIcon--imessage {
+  background: linear-gradient(135deg, rgba(52, 199, 89, 0.22), rgba(48, 176, 199, 0.12));
+}
+
+.UiSkillIcon--matrix {
+  background: linear-gradient(135deg, rgba(11, 189, 139, 0.22), rgba(230, 237, 243, 0.06));
+}
+
+.UiSkillIcon--msteams {
+  background: linear-gradient(135deg, rgba(98, 100, 167, 0.22), rgba(80, 180, 232, 0.14));
+}
+
 .UiSkillIcon--sag {
   background: rgba(230, 237, 243, 0.06);
 }
@@ -2901,4 +2925,240 @@ pre {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* ── Skill modal content (settings) ──────────────────── */
+
+.UiSkillModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.UiSkillModalField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.UiSkillModalLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(230, 237, 243, 0.65);
+  letter-spacing: 0.02em;
+}
+
+.UiSkillModalActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.UiSkillModalStatus {
+  font-size: 13px;
+  color: rgba(230, 237, 243, 0.55);
+  line-height: 1.4;
+}
+
+.UiSkillModalOutput {
+  font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(230, 237, 243, 0.60);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 12px;
+  max-height: 140px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+}
+
+.UiSkillModalSelect {
+  appearance: none;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(230, 237, 243, 0.88);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
+}
+
+.UiSkillModalSelect:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.UiSkillModalSelect:focus {
+  outline: none;
+  border-color: var(--accent-color, #a3e635);
+}
+
+.UiSkillModalProviderSelect {
+  display: flex;
+  gap: 8px;
+}
+
+.UiSkillModalProviderOption {
+  appearance: none;
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(230, 237, 243, 0.60);
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.UiSkillModalProviderOption:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(230, 237, 243, 0.88);
+}
+
+.UiSkillModalProviderOption--active {
+  border-color: var(--accent-color, #a3e635);
+  background: rgba(163, 230, 53, 0.10);
+  color: rgba(230, 237, 243, 0.95);
+}
+
+.UiSkillModalProviderOption--active:hover {
+  background: rgba(163, 230, 53, 0.16);
+}
+
+/* ── Disabled skill tile ─────────────────────────────── */
+
+.UiSkillCard--disabled {
+  border-color: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.12);
+  opacity: 0.6;
+}
+
+.UiSkillCard--disabled:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  background-color: rgba(255, 255, 255, 0.02);
+  opacity: 0.75;
+}
+
+/* ── Clickable status badges ─────────────────────────── */
+
+.UiSkillStatus--clickable {
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.UiSkillStatus--clickable:hover {
+  opacity: 0.82;
+}
+
+.UiSkillStatus--disabled {
+  border-color: rgba(230, 237, 243, 0.12);
+  background: rgba(230, 237, 243, 0.06);
+  color: rgba(230, 237, 243, 0.50);
+}
+
+/* ── Disable button (danger zone in modals) ──────────── */
+
+.UiSkillModalDangerZone {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.UiSkillModalDisableButton {
+  appearance: none;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.08);
+  color: rgba(248, 113, 113, 0.90);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
+}
+
+.UiSkillModalDisableButton:hover {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.14);
+}
+
+.UiSkillModalDisableButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ── Allowlist entries (Telegram, etc.) ──────────────── */
+
+.UiAllowlistEntries {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.UiAllowlistEntry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.UiAllowlistId {
+  font-size: 12px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  color: rgba(230, 237, 243, 0.80);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.UiAllowlistRemove {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: rgba(239, 68, 68, 0.70);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 120ms ease, background 120ms ease;
+  flex-shrink: 0;
+}
+
+.UiAllowlistRemove:hover {
+  color: rgba(248, 113, 113, 0.95);
+  background: rgba(239, 68, 68, 0.10);
+}
+
+.UiAllowlistRemove:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
