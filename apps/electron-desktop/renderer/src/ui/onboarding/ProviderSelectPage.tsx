@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { GlassCard, HeroPageLayout, PrimaryButton } from "../kit";
 
@@ -13,6 +13,11 @@ export function ProviderSelectPage(props: {
   const [selected, setSelected] = React.useState<Provider | null>(null);
   const totalSteps = 5;
   const activeStep = 0;
+
+
+  useEffect(() => {
+    setSelected(MODEL_PROVIDERS[0].id);
+  }, [])
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Provider selection">

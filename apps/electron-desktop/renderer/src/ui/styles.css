@@ -659,7 +659,9 @@ button:disabled {
 }
 
 .UiConsentAgreement a.UiLink {
-  color: rgba(230, 237, 243, 0.6);
+  color: #ffffff;
+  text-decoration: underline;
+  transition: color 0.2s ease;
 }
 
 .UiConsentAgreement a.UiLink:hover {
@@ -1322,10 +1324,11 @@ pre {
 }
 
 .UiContentWrapper {
-  max-height: 270px;
+  flex: 1;
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: #ffffff26 transparent;
+  margin-bottom: 10px;
 }
 
 .UiContentWrapper::-webkit-scrollbar {
@@ -1436,7 +1439,7 @@ pre {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: 286px;
+  flex: 1;
   overflow-y: auto;
   padding-right: 4px;
   scrollbar-width: thin;
@@ -1539,7 +1542,7 @@ pre {
 .UiProviderHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
   flex-wrap: wrap;
 }
 
@@ -1560,7 +1563,6 @@ pre {
   font-size: 11px;
   line-height: 14px;
   color: #4e95ff;
-  margin-right: 2px;
 }
 
 .UiProviderDescription {

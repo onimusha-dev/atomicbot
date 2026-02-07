@@ -150,7 +150,7 @@ export function SlackConnectPage(props: {
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Slack setup">
       <GlassCard className="UiApiKeyCard UiGlassCardOnbording">
-        <div>
+
           <div className="UiOnboardingDots" aria-label="Onboarding progress">
             {Array.from({ length: totalSteps }).map((_, idx) => (
               <span
@@ -164,12 +164,13 @@ export function SlackConnectPage(props: {
 
           <div className="UiApiKeyTitle">Connect Slack</div>
 
-          <div className="UiApiKeySubtitle">
-            Configure Slack Socket Mode tokens and access policies. We'll store settings under{" "}
-            <code>channels.slack</code>.
-          </div>
-
           <div className="UiContentWrapper">
+
+            <div className="UiApiKeySubtitle">
+              Configure Slack Socket Mode tokens and access policies. We'll store settings under{" "}
+              <code>channels.slack</code>.
+            </div>
+
             <div className="UiSectionSubtitle">
               Steps:
               <ol>
@@ -200,7 +201,7 @@ export function SlackConnectPage(props: {
 
             <details
               className="UiGoogleWorkspaceDetails"
-              style={{ marginTop: 10, marginBottom: 10 }}
+              style={{ marginTop: 14, marginBottom: 14 }}
             >
               <summary className="UiGoogleWorkspaceDetailsSummary">
                 Where to find the tokens
@@ -386,7 +387,7 @@ export function SlackConnectPage(props: {
 
             <div className="UiApiKeySpacer" aria-hidden="true" />
           </div>
-        </div>
+
 
         <div className="UiApiKeyButtonRow">
           <button

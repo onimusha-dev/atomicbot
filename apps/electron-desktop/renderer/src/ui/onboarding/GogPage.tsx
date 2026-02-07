@@ -141,6 +141,13 @@ export function GogPage(props: {
           </div>
         </div>
 
+        {props.gogOutput ? (
+          <details className="UiGoogleWorkspaceDetails">
+            <summary className="UiGoogleWorkspaceDetailsSummary">Details</summary>
+            <pre className="UiGoogleWorkspaceDetailsPre">{props.gogOutput}</pre>
+          </details>
+        ) : null}
+
         <div className="UiGoogleWorkspaceBottomRow">
           <button className="UiTextButton" onClick={skip} type="button" disabled={props.gogBusy}>
             {skipText}
@@ -163,13 +170,6 @@ export function GogPage(props: {
             </PrimaryButton>
           </div>
         </div>
-
-        {props.gogOutput ? (
-          <details className="UiGoogleWorkspaceDetails">
-            <summary className="UiGoogleWorkspaceDetailsSummary">Details</summary>
-            <pre className="UiGoogleWorkspaceDetailsPre">{props.gogOutput}</pre>
-          </details>
-        ) : null}
 
         {/*<div className="UiGoogleWorkspaceFooterRow">*/}
         {/*  <button className="UiTextButton" onClick={props.onFinish} type="button" disabled={props.gogBusy}>*/}

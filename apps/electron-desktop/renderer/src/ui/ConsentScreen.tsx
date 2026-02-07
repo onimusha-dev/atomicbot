@@ -15,7 +15,7 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
   const [checked, setChecked] = React.useState(false);
   const [agreeRequired, setAgreeRequired] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
-  const termsUrl = "https://atomicbot.ai/terms";
+  const termsUrl = "https://atomicbot.ai/terms-of-service";
   const appVersion = api?.version?.trim() ? api.version.trim() : "0.0.0";
 
   const accept = React.useCallback(async () => {
