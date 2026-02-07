@@ -16,17 +16,17 @@ export function ApiKeyPage(props: {
   const meta = MODEL_PROVIDER_BY_ID[props.provider];
   const totalSteps = 5;
   const activeStep = 1;
-  const [errorText, setErrorText ] = useState('')
+  const [errorText, setErrorText] = useState("");
 
   const handleSubmit = () => {
-    if(errorText) {
-      setErrorText('')
+    if (errorText) {
+      setErrorText("");
     }
     const trimmed = apiKey.trim();
     if (trimmed) {
       props.onSubmit(trimmed);
     } else {
-      setErrorText('Please enter your API key to continue')
+      setErrorText("Please enter your API key to continue");
     }
   };
 

@@ -25,11 +25,11 @@ export function TrelloConnectPage(props: {
     const nextErrors: typeof errors = {};
 
     if (!trimmedKey) {
-      nextErrors.apiKey = 'Please enter your Trello API key';
+      nextErrors.apiKey = "Please enter your Trello API key";
     }
 
     if (!trimmedToken) {
-      nextErrors.token = 'Please enter your Trello token';
+      nextErrors.token = "Please enter your Trello token";
     }
 
     if (Object.keys(nextErrors).length > 0) {
@@ -123,11 +123,7 @@ export function TrelloConnectPage(props: {
           >
             Back
           </button>
-          <PrimaryButton
-            size={"sm"}
-            disabled={props.busy}
-            onClick={handleSubmit}
-          >
+          <PrimaryButton size={"sm"} disabled={props.busy} onClick={handleSubmit}>
             {props.busy ? "Saving..." : "Save & return"}
           </PrimaryButton>
         </div>

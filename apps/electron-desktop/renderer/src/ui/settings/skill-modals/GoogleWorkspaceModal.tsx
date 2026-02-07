@@ -20,7 +20,7 @@ export function GoogleWorkspaceModalContent(props: {
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [output, setOutput] = React.useState<string | null>(null);
-  const [errorText, setErrorText ] = React.useState('')
+  const [errorText, setErrorText] = React.useState("");
 
   // Auto-check connected accounts on mount when already connected.
   React.useEffect(() => {
@@ -72,7 +72,6 @@ export function GoogleWorkspaceModalContent(props: {
   }, []);
 
   const handleConnect = React.useCallback(async () => {
-
     const api = window.openclawDesktop;
     if (!api) {
       setError("Desktop API not available");
@@ -91,15 +90,14 @@ export function GoogleWorkspaceModalContent(props: {
   }, [account, props, runGog]);
 
   const handleCheck = React.useCallback(async () => {
-
-    if(errorText) {
-      setErrorText('')
+    if (errorText) {
+      setErrorText("");
     }
 
     const trimmed = account.trim();
     if (!trimmed) {
-      setErrorText('Please enter your API key to continue')
-      return
+      setErrorText("Please enter your API key to continue");
+      return;
     }
 
     const api = window.openclawDesktop;
@@ -133,16 +131,11 @@ export function GoogleWorkspaceModalContent(props: {
           autoCapitalize="none"
           autoCorrect="off"
           spellCheck={false}
-
         />
       </div>
 
       <div className="UiSkillModalActions">
-        <ActionButton
-          variant="primary"
-          disabled={busy}
-          onClick={() => void handleConnect()}
-        >
+        <ActionButton variant="primary" disabled={busy} onClick={() => void handleConnect()}>
           {busy ? "Connecting…" : "Connect"}
         </ActionButton>
         <ActionButton disabled={busy} onClick={() => void handleCheck()}>

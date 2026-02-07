@@ -150,7 +150,7 @@ export function TextInput(props: {
   type?: "text" | "password";
   disabled?: boolean;
   autoCapitalize?: string;
-  isError?: string
+  isError?: string;
   autoCorrect?: string;
   spellCheck?: boolean;
   className?: string;
@@ -162,7 +162,7 @@ export function TextInput(props: {
   return (
     <div>
       {props.label && <label className={"UiInputLabel"}>{props.label}</label>}
-      <div className={`UiInputWrap ${props.isError && 'UiInputWrapError'}`}>
+      <div className={`UiInputWrap ${props.isError && "UiInputWrapError"}`}>
         <input
           ref={props.inputRef}
           className={className}

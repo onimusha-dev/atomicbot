@@ -25,11 +25,7 @@ export type ChatAttachmentCardProps = {
 };
 
 /** File attachment card: icon + filename + file type (non-image). */
-export function ChatAttachmentCard({
-  fileName,
-  mimeType,
-  onRemove,
-}: ChatAttachmentCardProps) {
+export function ChatAttachmentCard({ fileName, mimeType, onRemove }: ChatAttachmentCardProps) {
   const fileTypeLabel = getFileTypeLabel(mimeType);
 
   return (

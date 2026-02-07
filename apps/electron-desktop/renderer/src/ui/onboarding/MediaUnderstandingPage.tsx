@@ -38,7 +38,7 @@ export function MediaUnderstandingPage(props: {
   const [addError, setAddError] = React.useState<string | null>(null);
   const [addHighlight, setAddHighlight] = React.useState(false);
   const addInputRef = React.useRef<HTMLInputElement | null>(null);
-  const [errorText, setErrorText ] = React.useState('')
+  const [errorText, setErrorText] = React.useState("");
 
   const canContinue = settings.image || settings.audio;
   const hasMissing = canContinue && !props.hasOpenAiProvider;
@@ -72,7 +72,7 @@ export function MediaUnderstandingPage(props: {
         </div>
         <div className="UiSectionTitle">Media Understanding</div>
 
-        <div className='UiContentWrapper'>
+        <div className="UiContentWrapper">
           <div className="UiSectionSubtitle">
             Let OpenClaw understand images, voice notes, and videos you send. It automatically picks
             a compatible provider based on the API keys you already configured.
@@ -151,16 +151,16 @@ export function MediaUnderstandingPage(props: {
           <div className="UiGoogleWorkspaceActions">
             <PrimaryButton
               size={"sm"}
-              disabled={props.busy || addBusy }
+              disabled={props.busy || addBusy}
               onClick={() => {
                 void (async () => {
-                  if(errorText) {
-                    setErrorText('')
+                  if (errorText) {
+                    setErrorText("");
                   }
                   const trimmed = addKey.trim();
 
-                  if(!trimmed) {
-                    setErrorText('Please enter your API key to continue')
+                  if (!trimmed) {
+                    setErrorText("Please enter your API key to continue");
                     return;
                   }
 

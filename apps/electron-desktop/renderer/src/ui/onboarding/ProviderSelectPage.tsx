@@ -11,16 +11,17 @@ export function ProviderSelectPage(props: {
   onSelect: (provider: Provider) => void;
   selectedProvider: Provider | null;
 }) {
-  const [selected, setSelected] = React.useState<Provider | null>(props.selectedProvider ? props.selectedProvider : null);
+  const [selected, setSelected] = React.useState<Provider | null>(
+    props.selectedProvider ? props.selectedProvider : null
+  );
   const totalSteps = 5;
   const activeStep = 0;
 
-
   useEffect(() => {
-    if(!selected) {
+    if (!selected) {
       setSelected(MODEL_PROVIDERS[0].id);
     }
-  }, [])
+  }, []);
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Provider selection">

@@ -12,21 +12,20 @@ export function TelegramTokenPage(props: {
 }) {
   const totalSteps = 5;
   const activeStep = 4;
-  const [errorText, setErrorText ] = React.useState('')
+  const [errorText, setErrorText] = React.useState("");
   const token = props.telegramToken.trim();
 
   const handleSubmit = () => {
-    if(errorText) {
-      setErrorText('')
+    if (errorText) {
+      setErrorText("");
     }
 
     if (token) {
       props.onNext();
     } else {
-      setErrorText('Please enter your token to continue')
+      setErrorText("Please enter your token to continue");
     }
-  }
-
+  };
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Telegram token setup">

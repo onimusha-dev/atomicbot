@@ -25,11 +25,12 @@ body {
   height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui,
-  -apple-system,
-  BlinkMacSystemFont,
-  "Segoe UI",
-  sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 * {
@@ -135,8 +136,9 @@ button:disabled {
   height: 100%;
   display: grid;
   place-items: center;
-  background: radial-gradient(900px 520px at 50% 35%, rgba(194, 255, 64, 0.1), transparent 55%),
-  radial-gradient(800px 500px at 50% 60%, rgba(0, 229, 204, 0.05), transparent 60%), var(--bg);
+  background:
+    radial-gradient(900px 520px at 50% 35%, rgba(194, 255, 64, 0.1), transparent 55%),
+    radial-gradient(800px 500px at 50% 60%, rgba(0, 229, 204, 0.05), transparent 60%), var(--bg);
 }
 
 .GatewaySplashInner {
@@ -245,8 +247,9 @@ button:disabled {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.12), transparent 58%),
-  radial-gradient(900px 520px at 50% 60%, rgba(194, 255, 64, 0.06), transparent 62%), var(--bg);
+  background:
+    radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.12), transparent 58%),
+    radial-gradient(900px 520px at 50% 60%, rgba(194, 255, 64, 0.06), transparent 62%), var(--bg);
 }
 
 .ConsentTopbar {
@@ -404,7 +407,8 @@ button:disabled {
   height: 18px;
   border-radius: 6px;
   object-fit: contain;
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35)) drop-shadow(0 0 16px rgba(194, 255, 64, 0.16));
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 0 16px rgba(194, 255, 64, 0.16));
 }
 
 .UiBrandMark {
@@ -696,19 +700,19 @@ button:disabled {
   border-radius: 12px;
   padding: 1px;
   background-image: linear-gradient(
-          173deg,
-          rgba(255, 255, 255, 0.24),
-          rgba(255, 255, 255, 0),
-          rgba(255, 255, 255, 0.24)
+    173deg,
+    rgba(255, 255, 255, 0.24),
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.24)
   );
 }
 
 .UiInputWrapError {
   background-image: linear-gradient(
-          173deg,
-          rgba(255, 59, 48, 0.24),
-          rgba(255, 59, 48, 0),
-          rgba(255, 59, 48, 0.24)
+    173deg,
+    rgba(255, 59, 48, 0.24),
+    rgba(255, 59, 48, 0),
+    rgba(255, 59, 48, 0.24)
   );
 }
 
@@ -716,7 +720,7 @@ button:disabled {
   font-size: 13px;
   line-height: 16px;
   margin-top: 8px;
-  color: #FF3B30;
+  color: #ff3b30;
 }
 
 .UiInput {
@@ -750,9 +754,10 @@ button:disabled {
   padding: 10px 12px;
   font-size: 13px;
   cursor: pointer;
-  transition: background 120ms ease,
-  border-color 120ms ease,
-  transform 120ms ease;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease;
 }
 
 .UiActionButton:hover:enabled {
@@ -819,8 +824,9 @@ button:disabled {
   display: block;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(0deg, #aeff00, #aeff00),
-  linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.2) 100%);
+  background:
+    linear-gradient(0deg, #aeff00, #aeff00),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.2) 100%);
   color: #121212;
   padding: 9px 14px;
   font-weight: 500;
@@ -934,8 +940,9 @@ button:disabled {
   border-radius: 999px;
   border: 1px solid rgba(230, 237, 243, 0.12);
   background: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35),
-  inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .UiTab {
@@ -951,9 +958,10 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   user-select: none;
-  transition: background 140ms ease,
-  color 140ms ease,
-  transform 140ms ease;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
 }
 
 .UiTab:hover {
@@ -976,8 +984,9 @@ button:disabled {
   padding: 8px 10px;
   font-size: 13px;
   cursor: pointer;
-  transition: background 120ms ease,
-  border-color 120ms ease;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
 }
 
 .UiToolbarButton-primary {
@@ -1100,8 +1109,9 @@ pre {
   overflow: auto;
   white-space: pre-wrap;
   word-break: break-word;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-  monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
   font-size: 12px;
   line-height: 1.45;
   color: #d2dbe6;
@@ -1434,8 +1444,9 @@ pre {
   flex-shrink: 0;
   cursor: pointer;
   background-color: #343434;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
   position: relative;
 }
 
@@ -1503,8 +1514,9 @@ pre {
   flex-shrink: 0;
   cursor: pointer;
   background-color: #343434;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
   position: relative;
 }
 
@@ -1617,13 +1629,15 @@ pre {
   border-radius: 16px;
   padding: 12px 12px;
   transition: border-color 0.15s ease;
-  background: linear-gradient(#2c2c2c, #2c2c2c) padding-box,
-  linear-gradient(
-          150deg,
-          rgba(255, 255, 255, 0.24) 0%,
-          rgba(255, 255, 255, 0) 50%,
-          rgba(255, 255, 255, 0.24) 100%
-  ) border-box;
+  background:
+    linear-gradient(#2c2c2c, #2c2c2c) padding-box,
+    linear-gradient(
+        150deg,
+        rgba(255, 255, 255, 0.24) 0%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0.24) 100%
+      )
+      border-box;
 
   border: 1px solid transparent;
 }
@@ -1905,8 +1919,9 @@ pre {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   cursor: pointer;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .UiModelOption:hover {
@@ -1929,8 +1944,9 @@ pre {
   margin: 0;
   flex-shrink: 0;
   cursor: pointer;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .UiModelRadio:checked {
@@ -2066,8 +2082,9 @@ pre {
   align-items: center;
   justify-content: center;
   cursor: help;
-  transition: border-color 0.15s,
-  color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .UiTierHelp:hover .UiTierHelpIcon {
@@ -2090,8 +2107,9 @@ pre {
   z-index: 100;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s,
-  visibility 0.15s;
+  transition:
+    opacity 0.15s,
+    visibility 0.15s;
 }
 
 .UiTierHelp:hover .UiTierHelpTooltip {
@@ -2155,8 +2173,9 @@ pre {
   font-weight: 600;
   letter-spacing: 0.01em;
   position: relative;
-  transition: background 120ms ease,
-  color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiSettingsNavItem:hover {
@@ -2531,8 +2550,9 @@ pre {
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 8px;
-  transition: color 120ms ease,
-  background 120ms ease;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
 }
 
 .UiModalClose:hover {
@@ -2555,8 +2575,9 @@ pre {
   background: rgba(0, 0, 0, 0.18);
   padding: 14px 14px 12px;
   cursor: pointer;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
   position: relative;
 }
 
@@ -2706,9 +2727,10 @@ pre {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease,
-  color 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiProviderFilterChip:hover {
@@ -2928,8 +2950,9 @@ pre {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
 }
 
 .UiSkillModalSelect:hover {
@@ -2958,9 +2981,10 @@ pre {
   border-radius: 10px;
   cursor: pointer;
   text-align: center;
-  transition: border-color 120ms ease,
-  background 120ms ease,
-  color 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiSkillModalProviderOption:hover {
@@ -2997,9 +3021,10 @@ pre {
 
 .UiSkillStatus--clickable {
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease,
-  opacity 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
 }
 
 .UiSkillStatus--clickable:hover {
@@ -3030,8 +3055,9 @@ pre {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
 }
 
 .UiSkillModalDisableButton:hover {
@@ -3086,8 +3112,9 @@ pre {
   padding: 0 4px;
   cursor: pointer;
   border-radius: 4px;
-  transition: color 120ms ease,
-  background 120ms ease;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
   flex-shrink: 0;
 }
 
@@ -3155,8 +3182,9 @@ pre {
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 120ms ease,
-  color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UpdateBanner-btn--primary {

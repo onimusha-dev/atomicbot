@@ -104,7 +104,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "💎",
     iconVariant: "obsidian",
-    image: obsidianIcon
+    image: obsidianIcon,
   },
   {
     id: "github",
@@ -113,7 +113,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "🐙",
     iconVariant: "github",
-    image: githubIcon
+    image: githubIcon,
   },
   {
     id: "slack",

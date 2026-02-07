@@ -33,11 +33,11 @@ export function ModelSelectPage(props: {
   }, [props.models, props.filterProvider]);
 
   useEffect(() => {
-    if(filteredModels.length > 0) {
-      const model = filteredModels[0]
+    if (filteredModels.length > 0) {
+      const model = filteredModels[0];
       setSelected(`${model.provider}/${model.id}`);
     }
-  }, [filteredModels])
+  }, [filteredModels]);
 
   if (props.loading) {
     return (

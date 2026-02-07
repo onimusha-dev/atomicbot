@@ -67,7 +67,7 @@ export function GogPage(props: {
   const finishText = props.finishText ?? "Continue";
   const skipText = props.skipText ?? "Skip";
   const [connected, setConnected] = React.useState(false);
-  const [errorText, setErrorText ] = React.useState('')
+  const [errorText, setErrorText] = React.useState("");
   const [services, setServices] = React.useState<Record<string, boolean>>(() => {
     const defaults = new Set(parseDefaultServicesCsv());
     return Object.fromEntries(SERVICE_OPTIONS.map((s) => [s.id, defaults.has(s.id)]));
@@ -80,13 +80,13 @@ export function GogPage(props: {
   const servicesCsv = selectedServices.join(",");
 
   const onConnect = React.useCallback(async () => {
-    if(errorText) {
-      setErrorText('')
+    if (errorText) {
+      setErrorText("");
     }
     const account = props.gogAccount.trim();
     if (!account) {
-      setErrorText('Please enter your account to continue')
-      return
+      setErrorText("Please enter your account to continue");
+      return;
     }
     if (!servicesCsv) {
       return;
@@ -101,7 +101,7 @@ export function GogPage(props: {
     <HeroPageLayout variant="compact" align="center" aria-label="Google Workspace setup">
       <GlassCard className="UiGoogleWorkspaceCard UiGlassCardOnboarding">
         <div className="UiSectionTitle">Google Workspace</div>
-        <div className='UiContentWrapper'>
+        <div className="UiContentWrapper">
           <div>
             <div className="UiSectionSubtitle">
               Optional: connect your Google account to enable skills like email and calendar. This
