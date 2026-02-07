@@ -1,6 +1,12 @@
 import React from "react";
 
 import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../kit";
+import googleIcon from '../../../../assets/set-up-skills/Google.png';
+import notionIcon from '../../../../assets/set-up-skills/Notion.png';
+import trelloIcon from '../../../../assets/set-up-skills/Trello.png';
+import nanoBababonIcon from '../../../../assets/set-up-skills/banana-icon.png';
+import slackIcon from '../../../../assets/set-up-skills/Slack.png';
+import sagIcon from '../../../../assets/set-up-skills/Sag.png';
 
 type SkillStatus = "connect" | "connected" | "coming-soon";
 
@@ -10,6 +16,7 @@ type SkillEntry = {
   description: string;
   status: SkillStatus;
   iconText: string;
+  image?: string
   iconVariant:
     | "google"
     | "notion"
@@ -32,6 +39,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "G",
     iconVariant: "google",
+    image: googleIcon
   },
   {
     id: "media-understanding",
@@ -56,6 +64,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "N",
     iconVariant: "notion",
+    image: notionIcon
   },
   {
     id: "trello",
@@ -64,6 +73,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "T",
     iconVariant: "trello",
+    image: trelloIcon
   },
   {
     id: "apple-notes",
@@ -104,6 +114,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "S",
     iconVariant: "slack",
+    image: slackIcon
   },
   {
     id: "gemini",
@@ -120,6 +131,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "NB",
     iconVariant: "nano-banana",
+    image: nanoBababonIcon
   },
   {
     id: "sag",
@@ -128,6 +140,7 @@ const SKILLS: SkillEntry[] = [
     status: "coming-soon",
     iconText: "Ⅱ",
     iconVariant: "sag",
+    image: sagIcon
   },
 ];
 
@@ -262,7 +275,9 @@ export function SkillsSetupPage(props: {
                 >
                 <div className="UiSkillTopRow">
                   <span className={`UiSkillIcon`} aria-hidden="true">
-                    {skill.iconText}
+                    {
+                      skill.image ? <img src={skill.image} alt=""/> : skill.iconText
+                    }
                   </span>
                   <div className="UiSkillTopRight">
                     <SkillCta status={effectiveStatus} onConnect={onConnect} />

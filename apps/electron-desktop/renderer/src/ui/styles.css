@@ -194,7 +194,6 @@ button:disabled {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 18px;
 }
 
 .UiSkillsBottomActions {
@@ -764,7 +763,7 @@ button:disabled {
 .UiSectionTitle {
   font-size: 26px;
   line-height: 32px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   font-weight: 700;
 }
 
@@ -793,7 +792,6 @@ button:disabled {
 }
 
 .UiPrimaryButton {
-  width: min(250px, 100%);
   display: block;
   border: 0;
   border-radius: 999px;
@@ -808,8 +806,7 @@ button:disabled {
 }
 
 .UiPrimaryButtonSm {
-  padding: 8px;
-  width: 84px;
+  padding: 8px 16px;
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
@@ -838,8 +835,7 @@ button:disabled {
 }
 
 .UiSecondaryButtonSm {
-  padding: 8px;
-  width: 84px;
+  padding: 8px 16px;
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
@@ -1282,6 +1278,7 @@ pre {
   display: flex;
   flex-direction: column;
   height: 472px;
+  justify-content: space-between;
 }
 
 .UiProviderCard {
@@ -1309,7 +1306,7 @@ pre {
 }
 
 .UiContentWrapper {
-  max-width: 286px;
+  max-height: 270px;
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: #FFFFFF26 transparent;
@@ -1346,7 +1343,6 @@ pre {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 18px;
 }
 
 .UiTextButton {
@@ -1424,7 +1420,6 @@ pre {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin: 18px 0;
   height: 286px;
   overflow-y: auto;
   padding-right: 4px;
@@ -1453,239 +1448,238 @@ pre {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
 
-  .UiProviderOption {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-  }
+.UiProviderOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
 
-  .UiProviderRadio {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    margin: 0;
-    flex-shrink: 0;
-    cursor: pointer;
-    background-color: #343434;
-    transition: border-color 0.15s ease,
-    background-color 0.15s ease;
-    position: relative;
-  }
+.UiProviderRadio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  background-color: #343434;
+  transition: border-color 0.15s ease,
+  background-color 0.15s ease;
+  position: relative;
+}
 
-  .UiProviderRadio:checked {
-    background-color: #C3FF44;
-  }
+.UiProviderRadio:checked {
+  background-color: #C3FF44;
+}
 
-  .UiProviderRadio:checked::after {
-    content: "";
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    background-color: #1E1E1E;
-    border-radius: 50%;
-  }
+.UiProviderRadio:checked::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  background-color: #1E1E1E;
+  border-radius: 50%;
+}
 
-  .UiProviderIconWrap {
-    width: 26px;
-    height: 26px;
-    border-radius: 8px;
-    background: #343434;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
+.UiProviderIconWrap {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: #343434;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
 
-  .UiProviderIcon {
-    width: 18px;
-    height: 18px;
-    display: block;
-  }
+.UiProviderIcon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
 
-  .UiProviderContent {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-  }
+.UiProviderContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
 
-  .UiProviderHeader {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
+.UiProviderHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-  .UiProviderName {
-    color: #fff;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 16px;
-    margin-bottom: 2px;
-  }
+.UiProviderName {
+  color: #fff;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  margin-bottom: 2px;
+}
 
-  .UiProviderBadge {
-    opacity: 1;
-    border-radius: 4px;
-    padding: 1px 4px;
-    background-color:#4E95FF26;
-    font-weight: 400;
-    font-size: 11px;
-    line-height: 14px;
-    color: #4E95FF;
-    margin-right: 2px;
-  }
+.UiProviderBadge {
+  opacity: 1;
+  border-radius: 4px;
+  padding: 1px 4px;
+  background-color: #4E95FF26;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #4E95FF;
+  margin-right: 2px;
+}
 
-  .UiProviderDescription {
-    font-weight: 400;
-    font-size: 11px;
-    line-height: 14px;
-    color: #8E8E8E;
-  }
+.UiProviderDescription {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #8E8E8E;
+}
 
-  /* Model selection styles */
+/* Model selection styles */
 
-  .UiModelCard {
-    display: flex;
-    flex-direction: column;
-    min-height: 635px;
-  }
+.UiModelCard {
+  display: flex;
+  flex-direction: column;
+}
 
-  .UiModelCard .UiModelList {
-    flex: 1;
-    min-height: 0;
-  }
+.UiModelCard .UiModelList {
+  flex: 1;
+  min-height: 0;
+}
 
-  /* Skills setup styles */
+/* Skills setup styles */
 
-  .UiSkillsCard {
-    display: flex;
-    flex-direction: column;
-    min-height: 635px;
-  }
+.UiSkillsCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 472px;
+}
 
-  .UiSkillsScroll {
-    flex: 1;
-    min-height: 0;
-    margin: 18px 0;
-    max-height: 440px;
-    overflow-y: auto;
-    padding-right: 4px;
-  }
+.UiSkillsScroll {
+  flex: 1;
+  min-height: 0;
+  margin: 18px 0;
+  max-height: 440px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
 
-  .UiSkillsGrid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
+.UiSkillsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
 
-  .UiSkillCard {
-    border-radius: 16px;
-    padding: 12px 12px;
-    transition: border-color 0.15s ease;
-    background:
-            linear-gradient(#2C2C2C, #2C2C2C) padding-box,
-            linear-gradient(
-                    150deg,
-                    rgba(255, 255, 255, 0.24) 0%,
-                    rgba(255, 255, 255, 0) 50%,
-                    rgba(255, 255, 255, 0.24) 100%
-            ) border-box;
+.UiSkillCard {
+  border-radius: 16px;
+  padding: 12px 12px;
+  transition: border-color 0.15s ease;
+  background: linear-gradient(#2C2C2C, #2C2C2C) padding-box,
+  linear-gradient(
+          150deg,
+          rgba(255, 255, 255, 0.24) 0%,
+          rgba(255, 255, 255, 0) 50%,
+          rgba(255, 255, 255, 0.24) 100%
+  ) border-box;
 
-    border: 1px solid transparent;
-  }
+  border: 1px solid transparent;
+}
 
-  .UiSkillCard--connected {
-    border-color: rgba(34, 197, 94, 0.45);
-    background: rgba(34, 197, 94, 0.06);
-    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.10) inset;
-  }
+.UiSkillCard--connected {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.06);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.10) inset;
+}
 
-  .UiSkillCard--connected:hover {
-    border-color: rgba(34, 197, 94, 0.62);
-    background: rgba(34, 197, 94, 0.08);
-  }
+.UiSkillCard--connected:hover {
+  border-color: rgba(34, 197, 94, 0.62);
+  background: rgba(34, 197, 94, 0.08);
+}
 
-  .UiSkillTopRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
-  }
+.UiSkillTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
 
-  .UiSkillTopRight {
-    display: flex;
-    justify-content: flex-end;
-    flex: 1;
-  }
+.UiSkillTopRight {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+}
 
-  .UiSkillIcon {
-    width: 26px;
-    height: 26px;
-    border-radius: 6px;
-    background: #343434;
-    display: grid;
-    place-items: center;
-    font-weight: 850;
-    font-size: 12px;
-    color: rgba(230, 237, 243, 0.92);
-    flex-shrink: 0;
-    letter-spacing: 0.02em;
-  }
+.UiSkillIcon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #343434;
+  display: grid;
+  place-items: center;
+  font-weight: 850;
+  font-size: 12px;
+  color: rgba(230, 237, 243, 0.92);
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
 
-  .UiSkillIcon--google {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.28), rgba(16, 185, 129, 0.18));
-  }
+.UiSkillIcon--google {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.28), rgba(16, 185, 129, 0.18));
+}
 
-  .UiSkillIcon--notion {
-    background: rgba(255, 255, 255, 0.10);
-  }
+.UiSkillIcon--notion {
+  background: rgba(255, 255, 255, 0.10);
+}
 
-  .UiSkillIcon--trello {
-    background: rgba(59, 130, 246, 0.22);
-  }
+.UiSkillIcon--trello {
+  background: rgba(59, 130, 246, 0.22);
+}
 
-  .UiSkillIcon--apple {
-    background: linear-gradient(135deg, rgba(230, 237, 243, 0.16), rgba(230, 237, 243, 0.06));
-  }
+.UiSkillIcon--apple {
+  background: linear-gradient(135deg, rgba(230, 237, 243, 0.16), rgba(230, 237, 243, 0.06));
+}
 
-  .UiSkillIcon--reminders {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(34, 197, 94, 0.12));
-  }
+.UiSkillIcon--reminders {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(34, 197, 94, 0.12));
+}
 
-  .UiSkillIcon--obsidian {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(99, 102, 241, 0.14));
-  }
+.UiSkillIcon--obsidian {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(99, 102, 241, 0.14));
+}
 
-  .UiSkillIcon--github {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(34, 197, 94, 0.10));
-  }
+.UiSkillIcon--github {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(34, 197, 94, 0.10));
+}
 
-  .UiSkillIcon--slack {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.20), rgba(34, 197, 94, 0.12));
-  }
+.UiSkillIcon--slack {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.20), rgba(34, 197, 94, 0.12));
+}
 
-  .UiSkillIcon--telegram {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(34, 197, 94, 0.10));
-  }
+.UiSkillIcon--telegram {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(34, 197, 94, 0.10));
+}
 
-  .UiSkillIcon--gemini {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(59, 130, 246, 0.18));
-  }
+.UiSkillIcon--gemini {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(59, 130, 246, 0.18));
+}
 
-  .UiSkillIcon--nano-banana {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.20), rgba(194, 255, 64, 0.12));
-  }
+.UiSkillIcon--nano-banana {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.20), rgba(194, 255, 64, 0.12));
+}
 
-  .UiSkillIcon--discord {
+.UiSkillIcon--discord {
   background: linear-gradient(135deg, rgba(88, 101, 242, 0.26), rgba(87, 242, 135, 0.10));
 }
 
@@ -1710,356 +1704,356 @@ pre {
 }
 
 .UiSkillIcon--sag {
-    background: rgba(230, 237, 243, 0.06);
-  }
+  background: rgba(230, 237, 243, 0.06);
+}
 
-  .UiSkillName {
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 16px;
-    color: #ffffff;
-    margin-bottom: 2px;
-  }
+.UiSkillName {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
 
-  .UiSkillDescription {
-    font-weight: 400;
-    font-size: 11px;
-    line-height: 14px;
-    color: #8E8E8E;
-  }
+.UiSkillDescription {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #8E8E8E;
+}
 
-  .UiSkillConnectButton {
-    appearance: none;
-    background: #FFFFFF;
-    color: #292929;
-    border-radius: 999px;
-    padding: 2px 6px;
-    font-size: 11px;
-    line-height: 14px;
-    font-weight: 500;
-    cursor: pointer;
-  }
+.UiSkillConnectButton {
+  appearance: none;
+  background: #FFFFFF;
+  color: #292929;
+  border-radius: 999px;
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
 
-  .UiSkillConnectButton:disabled {
-    opacity: 0.55;
-    cursor: default;
-  }
+.UiSkillConnectButton:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
 
-  .UiSkillStatus {
-    font-weight: 500;
-    padding: 3px 4px;
-    border-radius: 4px;
-    font-size: 11px;
-    line-height: 14px;
-  }
+.UiSkillStatus {
+  font-weight: 500;
+  padding: 3px 4px;
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 14px;
+}
 
-  .UiSkillStatus--connected {
-    background: #38BB581A;
-    color: #38BB58;
+.UiSkillStatus--connected {
+  background: #38BB581A;
+  color: #38BB58;
 
-  }
+}
 
-  .UiSkillStatus--soon {
-    background: #343434;
-    color: #AEAEAE;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
+.UiSkillStatus--soon {
+  background: #343434;
+  color: #AEAEAE;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
 
-  /* Google Workspace setup */
+/* Google Workspace setup */
 
-  .UiGoogleWorkspaceCard {
-    display: flex;
-    flex-direction: column;
-    min-height: 635px;
-  }
+.UiGoogleWorkspaceCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 472px;
+  justify-content: space-between;
+}
 
-  .UiGoogleWorkspaceConnected {
-    margin-top: 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 750;
-    padding: 6px 12px;
-    border-radius: 999px;
-    border: 1px solid rgba(34, 197, 94, 0.35);
-    background: rgba(34, 197, 94, 0.12);
-    color: rgba(208, 255, 224, 0.98);
-  }
+.UiGoogleWorkspaceConnected {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 750;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
+  color: rgba(208, 255, 224, 0.98);
+}
 
-  .UiGoogleWorkspaceForm {
-    flex: 1;
-    min-height: 0;
-    margin-top: 12px;
-    display: flex;
-    flex-direction: column;
-  }
+.UiGoogleWorkspaceForm {
+  flex: 1;
+  min-height: 0;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+}
 
-  .UiGoogleWorkspaceServices {
-    margin-top: 6px;
-  }
+.UiGoogleWorkspaceServices {
+  margin-top: 6px;
+}
 
-  .UiGoogleWorkspaceBottomRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 16px;
-  }
+.UiGoogleWorkspaceBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
 
-  .UiGoogleWorkspaceActions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.UiGoogleWorkspaceActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-  .UiGoogleWorkspaceSecondary {
-    margin-top: 0;
-    width: auto;
-    min-width: 110px;
-    padding: 10px 16px;
-  }
+.UiGoogleWorkspaceSecondary {
+  margin-top: 0;
+  width: auto;
+  min-width: 110px;
+  padding: 8px 16px;
+}
 
-  .UiGoogleWorkspaceActions .UiPrimaryButton {
-    margin-top: 0;
-    width: auto;
-    min-width: 140px;
-    padding: 10px 16px;
-  }
+.UiGoogleWorkspaceActions .UiPrimaryButton {
+  margin-top: 0;
+  width: auto;
+  padding: 8px 16px;
+}
 
-  .UiGoogleWorkspaceDetails {
-    margin-top: 10px;
-    border-radius: 14px;
-    border: 1px solid rgba(230, 237, 243, 0.10);
-    background: rgba(0, 0, 0, 0.20);
-    padding: 10px 12px;
-  }
+.UiGoogleWorkspaceDetails {
+  margin-top: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(230, 237, 243, 0.10);
+  background: rgba(0, 0, 0, 0.20);
+  padding: 10px 12px;
+}
 
-  .UiGoogleWorkspaceDetailsSummary {
-    cursor: pointer;
-    font-size: 12px;
-    color: rgba(230, 237, 243, 0.72);
-  }
+.UiGoogleWorkspaceDetailsSummary {
+  cursor: pointer;
+  font-size: 12px;
+  color: rgba(230, 237, 243, 0.72);
+}
 
-  .UiGoogleWorkspaceDetailsPre {
-    margin-top: 10px;
-    white-space: pre-wrap;
-    font-size: 12px;
-    color: rgba(230, 237, 243, 0.86);
-  }
+.UiGoogleWorkspaceDetailsPre {
+  margin-top: 10px;
+  white-space: pre-wrap;
+  font-size: 12px;
+  color: rgba(230, 237, 243, 0.86);
+}
 
-  .UiGoogleWorkspaceFooterRow {
-    margin-top: 14px;
-    display: flex;
-    justify-content: flex-end;
-  }
+.UiGoogleWorkspaceFooterRow {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
 
-  .UiModelGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+.UiModelGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  .UiModelGroupTitle {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.5);
-    padding: 0 4px;
-  }
+.UiModelGroupTitle {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0 4px;
+}
 
-  .UiModelContent {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-    gap: 2px;
-  }
+.UiModelContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
 
-  .UiModelName {
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.UiModelName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .UiModelMeta {
-    font-size: 13px;
-    color: rgba(230, 237, 243, 0.70);
-    line-height: 1.35;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.UiModelMeta {
+  font-size: 13px;
+  color: rgba(230, 237, 243, 0.70);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .UiModelHints {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-  }
+.UiModelHints {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
 
-  .UiModelHint {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.45);
-    background: rgba(255, 255, 255, 0.08);
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
+.UiModelHint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
 
-  .UiModelNameRow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    min-width: 0;
-  }
+.UiModelNameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
 
-  .UiModelTierBadge {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.80);
-    flex-shrink: 0;
-  }
+.UiModelTierBadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.80);
+  flex-shrink: 0;
+}
 
-  .UiModelTierBadge--fast {
-    border-color: rgba(245, 158, 11, 0.30);
-    background: rgba(245, 158, 11, 0.14);
-    color: rgba(253, 230, 138, 0.95);
-  }
+.UiModelTierBadge--fast {
+  border-color: rgba(245, 158, 11, 0.30);
+  background: rgba(245, 158, 11, 0.14);
+  color: rgba(253, 230, 138, 0.95);
+}
 
-  .UiModelTierBadge--pro {
-    border-color: rgba(34, 211, 238, 0.30);
-    background: rgba(34, 211, 238, 0.12);
-    color: rgba(165, 243, 252, 0.95);
-  }
+.UiModelTierBadge--pro {
+  border-color: rgba(34, 211, 238, 0.30);
+  background: rgba(34, 211, 238, 0.12);
+  color: rgba(165, 243, 252, 0.95);
+}
 
-  .UiModelTierBadge--ultra {
-    border-color: rgba(168, 85, 247, 0.30);
-    background: rgba(168, 85, 247, 0.12);
-    color: rgba(233, 213, 255, 0.95);
-  }
+.UiModelTierBadge--ultra {
+  border-color: rgba(168, 85, 247, 0.30);
+  background: rgba(168, 85, 247, 0.12);
+  color: rgba(233, 213, 255, 0.95);
+}
 
-  .UiModelTier {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 2px 0;
-    border-radius: 4px;
-    background-color: var(--accent-color, #a3e635);
-    color: #0b0f14;
-    flex-shrink: 0;
-    width: 46px;
-    text-align: center;
-  }
+.UiModelTier {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 0;
+  border-radius: 4px;
+  background-color: var(--accent-color, #a3e635);
+  color: #0b0f14;
+  flex-shrink: 0;
+  width: 46px;
+  text-align: center;
+}
 
-  .UiModelBottomRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: auto;
-    padding-top: 18px;
-  }
+.UiModelBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+}
 
-  .UiModelBottomRow .UiPrimaryButton {
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-    width: auto;
-    min-width: 140px;
-  }
+.UiModelBottomRow .UiPrimaryButton {
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+  width: auto;
+  min-width: 140px;
+}
 
-  .UiSectionTitleRow {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+.UiSectionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  .UiTierHelp {
-    position: relative;
-    display: inline-flex;
-  }
+.UiTierHelp {
+  position: relative;
+  display: inline-flex;
+}
 
-  .UiTierHelpIcon {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: help;
-    transition: border-color 0.15s, color 0.15s;
-  }
+.UiTierHelpIcon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  transition: border-color 0.15s, color 0.15s;
+}
 
-  .UiTierHelp:hover .UiTierHelpIcon {
-    border-color: var(--accent-color, #a3e635);
-    color: var(--accent-color, #a3e635);
-  }
+.UiTierHelp:hover .UiTierHelpIcon {
+  border-color: var(--accent-color, #a3e635);
+  color: var(--accent-color, #a3e635);
+}
 
-  .UiTierHelpTooltip {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 8px;
-    background: rgba(20, 24, 28, 0.98);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-    padding: 12px;
-    width: 280px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    z-index: 100;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s, visibility 0.15s;
-  }
+.UiTierHelpTooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  background: rgba(20, 24, 28, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+  width: 280px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+}
 
-  .UiTierHelp:hover .UiTierHelpTooltip {
-    opacity: 1;
-    visibility: visible;
-  }
+.UiTierHelp:hover .UiTierHelpTooltip {
+  opacity: 1;
+  visibility: visible;
+}
 
-  .UiTierHelpItem {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.4;
-  }
+.UiTierHelpItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
 
-  .UiTierHelpItem:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
+.UiTierHelpItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
 
-  .UiTierHelpItem:first-child {
-    padding-top: 0;
-  }
+.UiTierHelpItem:first-child {
+  padding-top: 0;
+}
 
-  .UiTierHelpItem .UiModelTier {
-    flex-shrink: 0;
-  }
+.UiTierHelpItem .UiModelTier {
+  flex-shrink: 0;
+}
 
-  /* Settings page styles */
+/* Settings page styles */
 
-  .UiSettingsShell {
+.UiSettingsShell {
   display: flex;
   gap: 18px;
 }
@@ -2089,9 +2083,8 @@ pre {
   font-weight: 600;
   letter-spacing: 0.01em;
   position: relative;
-  transition:
-    background 120ms ease,
-    color 120ms ease;
+  transition: background 120ms ease,
+  color 120ms ease;
 }
 
 .UiSettingsNavItem:hover {
@@ -2106,6 +2099,7 @@ pre {
 }
 
 /* Left accent bar on active item */
+
 .UiSettingsNavItem-active::before {
   content: "";
   position: absolute;
@@ -2136,57 +2130,59 @@ pre {
 }
 
 .UiSettingsSection {
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(230, 237, 243, 0.08);
-  }
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(230, 237, 243, 0.08);
+}
 
-  .UiSettingsSection:first-of-type {
-    padding-top: 0;
-  }
+.UiSettingsSection:first-of-type {
+  padding-top: 0;
+}
 
-  .UiSettingsSection:last-of-type {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
+.UiSettingsSection:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
 
-  .UiSettingsSection--danger {
-    border-top: 1px solid rgba(255, 122, 0, 0.25);
-    margin-top: 8px;
-    padding-top: 20px;
-  }
+.UiSettingsSection--danger {
+  border-top: 1px solid rgba(255, 122, 0, 0.25);
+  margin-top: 8px;
+  padding-top: 20px;
+}
 
-  .UiSettingsSection--danger .UiSectionTitle {
-    color: rgba(255, 122, 0, 0.95);
-  }
+.UiSettingsSection--danger .UiSectionTitle {
+  color: rgba(255, 122, 0, 0.95);
+}
 
-  .UiSettingsSubsection {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.18);
-    border: 1px solid rgba(230, 237, 243, 0.08);
-  }
+.UiSettingsSubsection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(230, 237, 243, 0.08);
+}
 
-  .UiInputRow {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
+.UiInputRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 
-  .UiInputRow .UiInput {
-    flex: 1 1 auto;
-  }
+.UiInputRow .UiInput {
+  flex: 1 1 auto;
+}
 
-  @media (max-width: 860px) {
+@media (max-width: 860px) {
   .UiSettingsShell {
     flex-direction: column;
   }
+
   .UiSettingsSidebar {
     width: 100%;
   }
+
   .UiSettingsNav {
     position: static;
     top: auto;
@@ -2195,11 +2191,13 @@ pre {
     gap: 4px;
     margin-bottom: 6px;
   }
+
   .UiSettingsNavItem {
     flex: 1 1 auto;
     text-align: center;
     padding: 8px 12px;
   }
+
   /* In horizontal layout, use bottom accent instead of left */
   .UiSettingsNavItem-active::before {
     left: 8px;
@@ -2209,166 +2207,167 @@ pre {
     width: auto;
     height: 3px;
   }
-}/* New Chat UI styles */
+}
 
-  .UiChatShell {
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-  }
+/* New Chat UI styles */
 
-  .UiChatLayoutMain {
-    flex: 1 1 auto;min-width: 0;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-  }
+.UiChatShell {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.UiChatLayoutMain {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
 
+.UiChatLayout {
+  flex: 1 1 auto;
 
-  .UiChatLayout {
-    flex: 1 1 auto;
-
-   min-height: 0;
+  min-height: 0;
 
   overflow: hidden;
-    display: flex;
-    flex-direction: row;
-  }
+  display: flex;
+  flex-direction: row;
+}
 
 
+/* Markdown styles (chat and elsewhere)*/
 
-  /* Markdown styles (chat and elsewhere)*/
+.UiMarkdown {
+  white-space: normal;
+}
 
-  .UiMarkdown {
-    white-space: normal;
-  }
+.UiMarkdown p {
+  margin: 0 0 12px;
+}
 
-  .UiMarkdown p {
-    margin: 0 0 12px;
-  }
+.UiMarkdown p:last-child {
+  margin-bottom: 0;
+}
 
-  .UiMarkdown p:last-child {
-    margin-bottom: 0;
-  }
+.UiMarkdown h1,
+.UiMarkdown h2,
+.UiMarkdown h3,
+.UiMarkdown h4,
+.UiMarkdown h5,
+.UiMarkdown h6 {
+  margin: 16px 0 8px;
+  font-weight: 700;
+  line-height: 1.3;
+}
 
-  .UiMarkdown h1,
-  .UiMarkdown h2,
-  .UiMarkdown h3,
-  .UiMarkdown h4,
-  .UiMarkdown h5,
-  .UiMarkdown h6 {
-    margin: 16px 0 8px;
-    font-weight: 700;
-    line-height: 1.3;
-  }
+.UiMarkdown h1:first-child,
+.UiMarkdown h2:first-child,
+.UiMarkdown h3:first-child {
+  margin-top: 0;
+}
 
-  .UiMarkdown h1:first-child,
-  .UiMarkdown h2:first-child,
-  .UiMarkdown h3:first-child {
-    margin-top: 0;
-  }
+.UiMarkdown h1 {
+  font-size: 1.4em;
+}
 
-  .UiMarkdown h1 {
-    font-size: 1.4em;
-  }
+.UiMarkdown h2 {
+  font-size: 1.25em;
+}
 
-  .UiMarkdown h2 {
-    font-size: 1.25em;
-  }
+.UiMarkdown h3 {
+  font-size: 1.1em;
+}
 
-  .UiMarkdown h3 {
-    font-size: 1.1em;
-  }
+.UiMarkdown ul,
+.UiMarkdown ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
 
-  .UiMarkdown ul,
-  .UiMarkdown ol {
-    margin: 8px 0;
-    padding-left: 20px;
-  }
+.UiMarkdown li {
+  margin: 4px 0;
+}
 
-  .UiMarkdown li {
-    margin: 4px 0;
-  }
+.UiMarkdown code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
 
-  .UiMarkdown code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.9em;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
+.UiMarkdown pre {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
+}
 
-  .UiMarkdown pre {
-    margin: 12px 0;
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.35);
-    overflow-x: auto;
-  }
+.UiMarkdown pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
 
-  .UiMarkdown pre code {
-    background: none;
-    padding: 0;
-    font-size: 13px;
-    line-height: 1.5;
-  }
+.UiMarkdown blockquote {
+  margin: 12px 0;
+  padding: 8px 14px;
+  border-left: 3px solid var(--lime);
+  background: rgba(194, 255, 64, 0.06);
+  border-radius: 0 8px 8px 0;
+}
 
-  .UiMarkdown blockquote {
-    margin: 12px 0;
-    padding: 8px 14px;
-    border-left: 3px solid var(--lime);
-    background: rgba(194, 255, 64, 0.06);
-    border-radius: 0 8px 8px 0;
-  }
+.UiMarkdown blockquote p {
+  margin: 0;
+}
 
-  .UiMarkdown blockquote p {
-    margin: 0;
-  }
+.UiMarkdown a {
+  color: var(--lime);
+  text-decoration: none;
+}
 
-  .UiMarkdown a {
-    color: var(--lime);
-    text-decoration: none;
-  }
+.UiMarkdown a:hover {
+  text-decoration: underline;
+}
 
-  .UiMarkdown a:hover {
-    text-decoration: underline;
-  }
+.UiMarkdown hr {
+  border: none;
+  border-top: 1px solid rgba(230, 237, 243, 0.15);
+  margin: 16px 0;
+}
 
-  .UiMarkdown hr {
-    border: none;
-    border-top: 1px solid rgba(230, 237, 243, 0.15);
-    margin: 16px 0;
-  }
+.UiMarkdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13px;
+}
 
-  .UiMarkdown table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 12px 0;
-    font-size: 13px;
-  }
+.UiMarkdown th,
+.UiMarkdown td {
+  padding: 8px 10px;
+  border: 1px solid rgba(230, 237, 243, 0.12);
+  text-align: left;
+}
 
-  .UiMarkdown th,
-  .UiMarkdown td {
-    padding: 8px 10px;
-    border: 1px solid rgba(230, 237, 243, 0.12);
-    text-align: left;
-  }
+.UiMarkdown th {
+  background: rgba(230, 237, 243, 0.06);
+  font-weight: 600;
+}
 
-  .UiMarkdown th {
-    background: rgba(230, 237, 243, 0.06);
-    font-weight: 600;
-  }
+.UiMarkdown strong {
+  font-weight: 700;
+}
 
-  .UiMarkdown strong {
-    font-weight: 700;
-  }
-
-  .UiMarkdown em {
-    font-style: italic;
-  }
+.UiMarkdown em {
+  font-style: italic;
+}
 
 .UiChatComposer {
   padding: 16px 24px 20px;
@@ -2394,9 +2393,8 @@ pre {
   line-height: 1.5;
   min-height: 48px;
   max-height: 180px;
-  transition:
-    border-color 120ms ease,
-    background 120ms ease;
+  transition: border-color 120ms ease,
+  background 120ms ease;
 }
 
 .UiChatInput:focus {
@@ -2417,9 +2415,11 @@ pre {
   .UiChatRow {
     animation: none;
   }
+
   .UiChatEmpty {
     animation: none;
   }
+
   .UiChatTypingDots span {
     animation: none;
   }
@@ -2441,8 +2441,12 @@ pre {
 }
 
 @keyframes uiModalFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .UiModalCard {
@@ -2460,8 +2464,14 @@ pre {
 }
 
 @keyframes uiModalSlideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .UiModalClose {
@@ -2500,9 +2510,8 @@ pre {
   background: rgba(0, 0, 0, 0.18);
   padding: 14px 14px 12px;
   cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
+  transition: border-color 0.15s ease,
+  background-color 0.15s ease;
   position: relative;
 }
 
@@ -2575,6 +2584,7 @@ pre {
 }
 
 /* Modal inner layout for API key entry */
+
 .UiModalProviderHeader {
   display: flex;
   align-items: center;
@@ -2651,10 +2661,9 @@ pre {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    border-color 120ms ease,
-    background 120ms ease,
-    color 120ms ease;
+  transition: border-color 120ms ease,
+  background 120ms ease,
+  color 120ms ease;
 }
 
 .UiProviderFilterChip:hover {
@@ -2701,8 +2710,7 @@ pre {
   padding: 10px 16px;
   cursor: pointer;
   position: relative;
-  transition:
-    color 120ms ease;
+  transition: color 120ms ease;
 }
 
 .UiInnerTab:hover {
@@ -2725,6 +2733,7 @@ pre {
 }
 
 /* Inline link button (styled as text link) */
+
 .UiLinkButton {
   appearance: none;
   border: none;
@@ -2744,6 +2753,7 @@ pre {
 }
 
 /* "Add Provider" chip variant */
+
 .UiProviderFilterChip--add {
   border-style: dashed;
   border-color: rgba(255, 255, 255, 0.18);
@@ -2873,9 +2883,8 @@ pre {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   cursor: pointer;
-  transition:
-    border-color 120ms ease,
-    background 120ms ease;
+  transition: border-color 120ms ease,
+  background 120ms ease;
 }
 
 .UiSkillModalSelect:hover {
@@ -2904,10 +2913,9 @@ pre {
   border-radius: 10px;
   cursor: pointer;
   text-align: center;
-  transition:
-    border-color 120ms ease,
-    background 120ms ease,
-    color 120ms ease;
+  transition: border-color 120ms ease,
+  background 120ms ease,
+  color 120ms ease;
 }
 
 .UiSkillModalProviderOption:hover {
@@ -2944,10 +2952,9 @@ pre {
 
 .UiSkillStatus--clickable {
   cursor: pointer;
-  transition:
-    border-color 120ms ease,
-    background 120ms ease,
-    opacity 120ms ease;
+  transition: border-color 120ms ease,
+  background 120ms ease,
+  opacity 120ms ease;
 }
 
 .UiSkillStatus--clickable:hover {
@@ -2978,9 +2985,8 @@ pre {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    border-color 120ms ease,
-    background 120ms ease;
+  transition: border-color 120ms ease,
+  background 120ms ease;
 }
 
 .UiSkillModalDisableButton:hover {

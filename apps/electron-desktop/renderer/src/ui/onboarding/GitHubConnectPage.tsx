@@ -68,7 +68,7 @@ export function GitHubConnectPage(props: {
           <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
             Back
           </button>
-          <PrimaryButton disabled={!pat.trim() || props.busy} onClick={handleSubmit}>
+          <PrimaryButton size={'sm'} disabled={!pat.trim() || props.busy} onClick={handleSubmit}>
             {props.busy ? "Connecting..." : "Connect"}
           </PrimaryButton>
         </div>

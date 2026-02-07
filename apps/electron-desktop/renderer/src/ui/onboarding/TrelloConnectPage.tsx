@@ -94,7 +94,7 @@ export function TrelloConnectPage(props: {
           <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
             Back
           </button>
-          <PrimaryButton disabled={!apiKey.trim() || !token.trim() || props.busy} onClick={handleSubmit}>
+          <PrimaryButton size={'sm'} disabled={!apiKey.trim() || !token.trim() || props.busy} onClick={handleSubmit}>
             {props.busy ? "Saving..." : "Save & return"}
           </PrimaryButton>
         </div>

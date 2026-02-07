@@ -47,12 +47,14 @@ export function AppleNotesConnectPage(props: {
           <button className="UiTextButton" disabled={props.busy} onClick={props.onBack} type="button">
             Back
           </button>
-          <SecondaryButton disabled={props.busy} onClick={props.onCheckAndEnable}>
-            {props.busy ? "Checking..." : "Check & enable"}
-          </SecondaryButton>
-          <PrimaryButton disabled={props.busy} onClick={props.onBack}>
-            Done
-          </PrimaryButton>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <SecondaryButton size={'sm'} disabled={props.busy} onClick={props.onCheckAndEnable}>
+              {props.busy ? "Checking..." : "Check & enable"}
+            </SecondaryButton>
+            <PrimaryButton size={'sm'} disabled={props.busy} onClick={props.onBack}>
+              Done
+            </PrimaryButton>
+          </div>
         </div>
       </GlassCard>
     </HeroPageLayout>

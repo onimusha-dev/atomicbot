@@ -344,7 +344,6 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             onRunAuthList={() => welcome.onGogAuthList()}
             onFinish={welcome.goSkills}
             onSkip={welcome.goSkills}
-            finishText="Back to skills"
             skipText="Back"
           />
         }
