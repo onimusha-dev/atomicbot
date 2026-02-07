@@ -12,8 +12,21 @@ export function TelegramTokenPage(props: {
 }) {
   const totalSteps = 5;
   const activeStep = 4;
-
+  const [errorText, setErrorText ] = React.useState('')
   const token = props.telegramToken.trim();
+
+  const handleSubmit = () => {
+    if(errorText) {
+      setErrorText('')
+    }
+
+    if (token) {
+      props.onNext();
+    } else {
+      setErrorText('Please enter your token to continue')
+    }
+  }
+
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Telegram token setup">
@@ -71,6 +84,7 @@ export function TelegramTokenPage(props: {
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
+              isError={errorText}
             />
           </div>
 
@@ -81,7 +95,7 @@ export function TelegramTokenPage(props: {
           <button className="UiTextButton" onClick={props.onSkip} type="button">
             Back
           </button>
-          <PrimaryButton size={"sm"} disabled={!token} onClick={props.onNext}>
+          <PrimaryButton size={"sm"} onClick={handleSubmit}>
             Save & continue
           </PrimaryButton>
         </div>

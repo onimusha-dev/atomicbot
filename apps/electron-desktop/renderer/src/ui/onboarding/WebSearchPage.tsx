@@ -52,7 +52,7 @@ export function WebSearchPage(props: {
       setErrorText('')
     }
     const trimmed = apiKey.trim();
-    if (trimmed && trimmed.length > 4) {
+    if (trimmed) {
       props.onSubmit(provider, trimmed);
     } else {
       setErrorText('Please enter your API key to continue')
@@ -161,7 +161,7 @@ export function WebSearchPage(props: {
             </SecondaryButton>
             <PrimaryButton
               size={"sm"}
-              disabled={!apiKey.trim() || props.busy}
+              disabled={props.busy}
               onClick={handleSubmit}
             >
               {props.busy ? "Saving..." : "Continue"}

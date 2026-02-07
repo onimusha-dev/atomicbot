@@ -97,7 +97,7 @@ export function GoogleWorkspaceModalContent(props: {
     }
 
     const trimmed = account.trim();
-    if (!trimmed && trimmed.length < 4) {
+    if (!trimmed) {
       setErrorText('Please enter your API key to continue')
       return
     }

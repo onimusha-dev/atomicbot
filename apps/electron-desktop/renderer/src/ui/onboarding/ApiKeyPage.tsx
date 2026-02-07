@@ -23,7 +23,7 @@ export function ApiKeyPage(props: {
       setErrorText('')
     }
     const trimmed = apiKey.trim();
-    if (trimmed && trimmed.length > 4) {
+    if (trimmed) {
       props.onSubmit(trimmed);
     } else {
       setErrorText('Please enter your API key to continue')

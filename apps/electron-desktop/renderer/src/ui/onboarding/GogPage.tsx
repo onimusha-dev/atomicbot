@@ -84,7 +84,7 @@ export function GogPage(props: {
       setErrorText('')
     }
     const account = props.gogAccount.trim();
-    if (!account || account.length < 4) {
+    if (!account) {
       setErrorText('Please enter your account to continue')
       return
     }

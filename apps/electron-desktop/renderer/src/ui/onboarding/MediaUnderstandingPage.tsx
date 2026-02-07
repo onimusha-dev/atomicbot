@@ -163,11 +163,6 @@ export function MediaUnderstandingPage(props: {
                     setErrorText('Please enter your API key to continue')
                     return;
                   }
-                  if(!/sk-[a-zA-Z0-9]{32}/.test(trimmed)) {
-                    setErrorText('Invalid API key')
-                    focusKey();
-                    return;
-                  }
 
                   setAddError(null);
                   setAddHighlight(false);

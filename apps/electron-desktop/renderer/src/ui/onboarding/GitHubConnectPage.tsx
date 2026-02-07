@@ -19,7 +19,7 @@ export function GitHubConnectPage(props: {
       setErrorText('')
     }
     const trimmed = pat.trim();
-    if (trimmed  && trimmed.length > 4) {
+    if (trimmed) {
       props.onSubmit(trimmed);
     } else {
       setErrorText('Please enter your token to continue')

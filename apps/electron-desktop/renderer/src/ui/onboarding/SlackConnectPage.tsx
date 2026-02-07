@@ -127,9 +127,6 @@ export function SlackConnectPage(props: {
   const manifest = React.useMemo(() => buildSlackManifest(botName), [botName]);
 
   const canSubmit = React.useMemo(() => {
-    if (!botToken.trim() || !appToken.trim()) {
-      return false;
-    }
     if (dmPolicy === "allowlist" && parseList(dmAllowFromRaw).length === 0) {
       return false;
     }
