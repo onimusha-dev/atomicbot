@@ -132,11 +132,14 @@ jobs:
           fi
 
       # Build + publish.
-      # When MACOS_CSC_LINK is not set, CSC_IDENTITY_AUTO_DISCOVERY=false tells both
-      # electron-builder and the custom afterPack hook to skip code signing entirely.
+      # Raise open file limit — electron-builder code signing opens every file in the
+      # .app bundle (including bundled node_modules) and the default macOS limit (256)
+      # is too low.
       - name: Build with electron-builder
         working-directory: apps/electron-desktop
-        run: npx electron-builder --publish ${{ steps.publish-mode.outputs.flag }}
+        run: |
+          ulimit -n 65536
+          npx electron-builder --publish ${{ steps.publish-mode.outputs.flag }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Code signing: when CSC_LINK is empty, disable auto-discovery so the
