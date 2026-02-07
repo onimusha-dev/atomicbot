@@ -1,8 +1,8 @@
 import React from "react";
 
 import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../kit";
-import telegramIcon from '../../../../assets/set-up-skills/Telegram.png';
-import slackIcon from '../../../../assets/set-up-skills/Slack.png';
+import telegramIcon from "../../../../assets/set-up-skills/Telegram.png";
+import slackIcon from "../../../../assets/set-up-skills/Slack.png";
 
 type ConnectionStatus = "connect" | "connected";
 
@@ -12,7 +12,7 @@ type ConnectionEntry = {
   description: string;
   iconText: string;
   iconVariant: "telegram" | "slack";
-  image: string
+  image: string;
 };
 
 const CONNECTIONS: ConnectionEntry[] = [
@@ -22,7 +22,7 @@ const CONNECTIONS: ConnectionEntry[] = [
     description: "Talk to OpenClaw from Telegram DMs (bot token + allowlist)",
     iconText: "TG",
     iconVariant: "telegram",
-    image: telegramIcon
+    image: telegramIcon,
   },
   {
     id: "slack",
@@ -30,7 +30,7 @@ const CONNECTIONS: ConnectionEntry[] = [
     description: "Send messages, react, and manage pins in your Slack workspace",
     iconText: "S",
     iconVariant: "slack",
-    image: slackIcon
+    image: slackIcon,
   },
 ];
 
@@ -98,17 +98,10 @@ export function ConnectionsSetupPage(props: {
                 conn.id === "telegram" ? props.onTelegramConnect : props.onSlackConnect;
               const connected = status === "connected";
               return (
-                <div
-                  key={conn.id}
-                  className={`UiSkillCard`}
-                  role="group"
-                  aria-label={conn.name}
-                >
+                <div key={conn.id} className={`UiSkillCard`} role="group" aria-label={conn.name}>
                   <div className="UiSkillTopRow">
                     <span className={`UiSkillIcon`} aria-hidden="true">
-                        {
-                          conn.image ? <img src={conn.image} alt="" /> : conn.iconText
-                        }
+                      {conn.image ? <img src={conn.image} alt="" /> : conn.iconText}
                     </span>
                     <div className="UiSkillTopRight">
                       <ConnectionCta status={status} onConnect={onConnect} />
@@ -127,8 +120,12 @@ export function ConnectionsSetupPage(props: {
             Back
           </button>
           <div className="UiSkillsBottomActions">
-            <SecondaryButton size={'sm'} onClick={props.onSkip}>Skip</SecondaryButton>
-            <PrimaryButton size={'sm'} onClick={props.onContinue}>Continue</PrimaryButton>
+            <SecondaryButton size={"sm"} onClick={props.onSkip}>
+              Skip
+            </SecondaryButton>
+            <PrimaryButton size={"sm"} onClick={props.onContinue}>
+              Continue
+            </PrimaryButton>
           </div>
         </div>
       </GlassCard>

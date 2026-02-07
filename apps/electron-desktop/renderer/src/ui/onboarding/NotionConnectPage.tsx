@@ -38,8 +38,8 @@ export function NotionConnectPage(props: {
           <div className="UiApiKeyTitle">Connect Notion</div>
 
           <div className="UiApiKeySubtitle">
-            Create a Notion integration, copy its API key, then share the target pages/databases with the
-            integration.{" "}
+            Create a Notion integration, copy its API key, then share the target pages/databases
+            with the integration.{" "}
             <a
               href="https://notion.so/my-integrations"
               target="_blank"
@@ -58,7 +58,9 @@ export function NotionConnectPage(props: {
             Steps:
             <ol>
               <li>Create an integration.</li>
-              <li>Copy the API key (usually starts with <code>ntn_</code> or <code>secret_</code>).</li>
+              <li>
+                Copy the API key (usually starts with <code>ntn_</code> or <code>secret_</code>).
+              </li>
               <li>Share the pages/databases you want to use with the integration.</li>
             </ol>
           </div>
@@ -75,7 +77,7 @@ export function NotionConnectPage(props: {
               autoCorrect="off"
               spellCheck={false}
               disabled={props.busy}
-              label={'Notion API key'}
+              label={"Notion API key"}
             />
           </div>
 
@@ -91,7 +93,7 @@ export function NotionConnectPage(props: {
           >
             Back
           </button>
-          <PrimaryButton size={'sm'} disabled={!apiKey.trim() || props.busy} onClick={handleSubmit}>
+          <PrimaryButton size={"sm"} disabled={!apiKey.trim() || props.busy} onClick={handleSubmit}>
             {props.busy ? "Saving..." : "Save & return"}
           </PrimaryButton>
         </div>
@@ -99,4 +101,3 @@ export function NotionConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

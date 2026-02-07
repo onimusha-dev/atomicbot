@@ -148,10 +148,14 @@ export function WebSearchPage(props: {
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <SecondaryButton size={'sm'} disabled={props.busy} onClick={props.onSkip}>
+            <SecondaryButton size={"sm"} disabled={props.busy} onClick={props.onSkip}>
               Skip
             </SecondaryButton>
-            <PrimaryButton size={'sm'} disabled={!apiKey.trim() || props.busy} onClick={handleSubmit}>
+            <PrimaryButton
+              size={"sm"}
+              disabled={!apiKey.trim() || props.busy}
+              onClick={handleSubmit}
+            >
               {props.busy ? "Saving..." : "Continue"}
             </PrimaryButton>
           </div>

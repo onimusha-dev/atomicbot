@@ -63,7 +63,6 @@ export function ApiKeyPage(props: {
 
         {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
 
-
         <div className="UiApiKeyInputRow">
           <TextInput
             type="password"
@@ -74,7 +73,7 @@ export function ApiKeyPage(props: {
             autoCorrect="off"
             spellCheck={false}
             disabled={props.busy}
-            label={meta.name + ' API key'}
+            label={meta.name + " API key"}
           />
         </div>
 
@@ -89,7 +88,7 @@ export function ApiKeyPage(props: {
           >
             Back
           </button>
-          <PrimaryButton size={'sm'} disabled={!apiKey.trim() || props.busy} onClick={handleSubmit}>
+          <PrimaryButton size={"sm"} disabled={!apiKey.trim() || props.busy} onClick={handleSubmit}>
             {props.busy ? "Saving..." : "Continue"}
           </PrimaryButton>
         </div>

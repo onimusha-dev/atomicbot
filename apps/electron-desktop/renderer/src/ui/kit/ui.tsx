@@ -1,10 +1,10 @@
 import React from "react";
 
 export function Brand({
-                        text = "ATOMIC BOT",
-                        iconSrc,
-                        iconAlt = "",
-                      }: {
+  text = "ATOMIC BOT",
+  iconSrc,
+  iconAlt = "",
+}: {
   text?: string;
   iconSrc?: string;
   iconAlt?: string;
@@ -50,9 +50,9 @@ export function SplashLogo({ iconAlt = "", size = 64 }: { iconAlt?: string; size
 }
 
 export function SpinningSplashLogo({
-                                     iconAlt = "",
-                                     className,
-                                   }: {
+  iconAlt = "",
+  className,
+}: {
   iconAlt?: string;
   className?: string;
 }) {
@@ -126,10 +126,10 @@ export function HeroPageLayout(props: {
 }
 
 export function GlassCard({
-                            children,
-                            size = "default",
-                            className,
-                          }: {
+  children,
+  size = "default",
+  className,
+}: {
   children: React.ReactNode;
   size?: "default" | "wide";
   className?: string;
@@ -160,7 +160,7 @@ export function TextInput(props: {
   const className = `UiInput${props.error ? " UiInput--error" : ""}${props.className ? ` ${props.className}` : ""}`;
   return (
     <>
-      {props.label && <label className={'UiInputLabel'}>{props.label}</label>}
+      {props.label && <label className={"UiInputLabel"}>{props.label}</label>}
       <div className="UiInputWrap">
         <input
           ref={props.inputRef}
@@ -212,13 +212,16 @@ export function FooterText({ children }: { children: React.ReactNode }) {
 
 export function PrimaryButton(props: {
   children: React.ReactNode;
-  size?: 'sm';
+  size?: "sm";
   disabled?: boolean;
   onClick: () => void;
 }) {
   return (
-    <button className={`UiPrimaryButton ${props.size === 'sm' && 'UiPrimaryButtonSm'}`} disabled={props.disabled}
-            onClick={props.onClick}>
+    <button
+      className={`UiPrimaryButton ${props.size === "sm" && "UiPrimaryButtonSm"}`}
+      disabled={props.disabled}
+      onClick={props.onClick}
+    >
       {props.children}
     </button>
   );
@@ -227,11 +230,15 @@ export function PrimaryButton(props: {
 export function SecondaryButton(props: {
   children: React.ReactNode;
   disabled?: boolean;
-  size?: 'sm';
+  size?: "sm";
   onClick: () => void;
 }) {
   return (
-    <button className={`UiSecondaryButton ${props.size === 'sm' && 'UiSecondaryButtonSm'}`} disabled={props.disabled} onClick={props.onClick}>
+    <button
+      className={`UiSecondaryButton ${props.size === "sm" && "UiSecondaryButtonSm"}`}
+      disabled={props.disabled}
+      onClick={props.onClick}
+    >
       {props.children}
     </button>
   );

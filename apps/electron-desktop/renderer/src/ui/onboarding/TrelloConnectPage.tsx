@@ -99,7 +99,11 @@ export function TrelloConnectPage(props: {
           >
             Back
           </button>
-          <PrimaryButton size={'sm'} disabled={!apiKey.trim() || !token.trim() || props.busy} onClick={handleSubmit}>
+          <PrimaryButton
+            size={"sm"}
+            disabled={!apiKey.trim() || !token.trim() || props.busy}
+            onClick={handleSubmit}
+          >
             {props.busy ? "Saving..." : "Save & return"}
           </PrimaryButton>
         </div>
@@ -107,4 +111,3 @@ export function TrelloConnectPage(props: {
     </HeroPageLayout>
   );
 }
-

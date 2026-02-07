@@ -55,10 +55,10 @@ export function AppleNotesConnectPage(props: {
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <SecondaryButton size={'sm'} disabled={props.busy} onClick={props.onCheckAndEnable}>
+            <SecondaryButton size={"sm"} disabled={props.busy} onClick={props.onCheckAndEnable}>
               {props.busy ? "Checking..." : "Check & enable"}
             </SecondaryButton>
-            <PrimaryButton size={'sm'} disabled={props.busy} onClick={props.onBack}>
+            <PrimaryButton size={"sm"} disabled={props.busy} onClick={props.onBack}>
               Done
             </PrimaryButton>
           </div>

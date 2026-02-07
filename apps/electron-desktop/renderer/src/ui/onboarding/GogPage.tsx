@@ -98,8 +98,8 @@ export function GogPage(props: {
         <div>
           <div className="UiSectionTitle">Google Workspace</div>
           <div className="UiSectionSubtitle">
-            Optional: connect your Google account to enable skills like email and calendar. This will open a browser for
-            consent.
+            Optional: connect your Google account to enable skills like email and calendar. This
+            will open a browser for consent.
           </div>
           {connected ? (
             <div className="UiGoogleWorkspaceConnected" aria-label="Connected">
@@ -118,7 +118,7 @@ export function GogPage(props: {
               autoCorrect="off"
               spellCheck={false}
               disabled={props.gogBusy}
-              label={'Account'}
+              label={"Account"}
             />
 
             <div className="UiSectionSubtitle" style={{ margin: "14px 0 0" }}>
@@ -155,7 +155,7 @@ export function GogPage(props: {
               {props.gogBusy ? "Checking…" : "Check"}
             </button>
             <PrimaryButton
-              size={'sm'}
+              size={"sm"}
               disabled={props.gogBusy || !props.gogAccount.trim() || selectedServices.length === 0}
               onClick={() => void onConnect()}
             >
@@ -180,4 +180,3 @@ export function GogPage(props: {
     </HeroPageLayout>
   );
 }
-

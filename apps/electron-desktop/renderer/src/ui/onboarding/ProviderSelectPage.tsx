@@ -59,11 +59,13 @@ export function ProviderSelectPage(props: {
           ))}
         </div>
         <div className="UiProviderContinueRow">
+          <div></div>
           <div>
-
-          </div>
-          <div>
-            <PrimaryButton size={'sm'} disabled={!selected} onClick={() => selected && props.onSelect(selected)}>
+            <PrimaryButton
+              size={"sm"}
+              disabled={!selected}
+              onClick={() => selected && props.onSelect(selected)}
+            >
               Continue
             </PrimaryButton>
           </div>

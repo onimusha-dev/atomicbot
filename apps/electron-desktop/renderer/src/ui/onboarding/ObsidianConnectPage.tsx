@@ -103,20 +103,24 @@ export function ObsidianConnectPage(props: {
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
             <SecondaryButton
-              size={'sm'}
+              size={"sm"}
               disabled={props.busy || props.vaultsLoading || !selected}
               onClick={() => props.onSetDefaultAndEnable(selected)}
             >
               {props.busy ? "Setting..." : "Set default & enable"}
             </SecondaryButton>
-            <SecondaryButton disabled={props.busy || props.vaultsLoading} onClick={props.onRecheck} size={'sm'}>
+            <SecondaryButton
+              disabled={props.busy || props.vaultsLoading}
+              onClick={props.onRecheck}
+              size={"sm"}
+            >
               {props.busy ? "Checking..." : "Re-check"}
             </SecondaryButton>
-            <PrimaryButton disabled={props.busy} onClick={props.onBack} size={'sm'}>
+            <PrimaryButton disabled={props.busy} onClick={props.onBack} size={"sm"}>
               Done
             </PrimaryButton>
           </div>
-          </div>
+        </div>
       </GlassCard>
     </HeroPageLayout>
   );

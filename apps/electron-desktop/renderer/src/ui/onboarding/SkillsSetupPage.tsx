@@ -1,12 +1,12 @@
 import React from "react";
 
 import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../kit";
-import googleIcon from '../../../../assets/set-up-skills/Google.png';
-import notionIcon from '../../../../assets/set-up-skills/Notion.png';
-import trelloIcon from '../../../../assets/set-up-skills/Trello.png';
-import nanoBababonIcon from '../../../../assets/set-up-skills/banana-icon.png';
-import slackIcon from '../../../../assets/set-up-skills/Slack.png';
-import sagIcon from '../../../../assets/set-up-skills/Sag.png';
+import googleIcon from "../../../../assets/set-up-skills/Google.png";
+import notionIcon from "../../../../assets/set-up-skills/Notion.png";
+import trelloIcon from "../../../../assets/set-up-skills/Trello.png";
+import nanoBababonIcon from "../../../../assets/set-up-skills/banana-icon.png";
+import slackIcon from "../../../../assets/set-up-skills/Slack.png";
+import sagIcon from "../../../../assets/set-up-skills/Sag.png";
 
 type SkillStatus = "connect" | "connected" | "coming-soon";
 
@@ -16,7 +16,7 @@ type SkillEntry = {
   description: string;
   status: SkillStatus;
   iconText: string;
-  image?: string
+  image?: string;
   iconVariant:
     | "google"
     | "notion"
@@ -39,7 +39,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "G",
     iconVariant: "google",
-    image: googleIcon
+    image: googleIcon,
   },
   {
     id: "media-understanding",
@@ -64,7 +64,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "N",
     iconVariant: "notion",
-    image: notionIcon
+    image: notionIcon,
   },
   {
     id: "trello",
@@ -73,7 +73,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "T",
     iconVariant: "trello",
-    image: trelloIcon
+    image: trelloIcon,
   },
   {
     id: "apple-notes",
@@ -114,7 +114,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "S",
     iconVariant: "slack",
-    image: slackIcon
+    image: slackIcon,
   },
   {
     id: "gemini",
@@ -131,7 +131,7 @@ const SKILLS: SkillEntry[] = [
     status: "connect",
     iconText: "NB",
     iconVariant: "nano-banana",
-    image: nanoBababonIcon
+    image: nanoBababonIcon,
   },
   {
     id: "sag",
@@ -140,7 +140,7 @@ const SKILLS: SkillEntry[] = [
     status: "coming-soon",
     iconText: "Ⅱ",
     iconVariant: "sag",
-    image: sagIcon
+    image: sagIcon,
   },
 ];
 
@@ -155,7 +155,21 @@ function SkillCta({ status, onConnect }: { status: SkillStatus; onConnect?: () =
   if (status === "coming-soon") {
     return (
       <span className="UiSkillStatus UiSkillStatus--soon" aria-label="Coming soon">
-        <svg xmlns="http://www.w3.org/2000/svg" width='14' height='14' fill="none" viewBox="0 0 13 13"><path stroke="#aeaeae" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.17" d="M6.42 2.92v3.5l2.33 1.16m3.5-1.16a5.83 5.83 0 1 1-11.67 0 5.83 5.83 0 0 1 11.67 0"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          fill="none"
+          viewBox="0 0 13 13"
+        >
+          <path
+            stroke="#aeaeae"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.17"
+            d="M6.42 2.92v3.5l2.33 1.16m3.5-1.16a5.83 5.83 0 1 1-11.67 0 5.83 5.83 0 0 1 11.67 0"
+          />
+        </svg>
         Coming Soon
       </span>
     );
@@ -269,25 +283,18 @@ export function SkillsSetupPage(props: {
                 onConnect || status === "connected" ? status : "coming-soon";
               const connected = effectiveStatus === "connected";
               return (
-                <div
-                  key={skill.id}
-                  className={`UiSkillCard`}
-                  role="group"
-                  aria-label={skill.name}
-                >
-                <div className="UiSkillTopRow">
-                  <span className={`UiSkillIcon`} aria-hidden="true">
-                    {
-                      skill.image ? <img src={skill.image} alt=""/> : skill.iconText
-                    }
-                  </span>
-                  <div className="UiSkillTopRight">
-                    <SkillCta status={effectiveStatus} onConnect={onConnect} />
+                <div key={skill.id} className={`UiSkillCard`} role="group" aria-label={skill.name}>
+                  <div className="UiSkillTopRow">
+                    <span className={`UiSkillIcon`} aria-hidden="true">
+                      {skill.image ? <img src={skill.image} alt="" /> : skill.iconText}
+                    </span>
+                    <div className="UiSkillTopRight">
+                      <SkillCta status={effectiveStatus} onConnect={onConnect} />
+                    </div>
                   </div>
+                  <div className="UiSkillName">{skill.name}</div>
+                  <div className="UiSkillDescription">{skill.description}</div>
                 </div>
-                <div className="UiSkillName">{skill.name}</div>
-                <div className="UiSkillDescription">{skill.description}</div>
-              </div>
               );
             })}
           </div>
@@ -298,8 +305,12 @@ export function SkillsSetupPage(props: {
             Back
           </button>
           <div className="UiSkillsBottomActions">
-            <SecondaryButton size={'sm'} onClick={props.onSkip}>Skip</SecondaryButton>
-            <PrimaryButton size={'sm'} onClick={props.onContinue}>Continue</PrimaryButton>
+            <SecondaryButton size={"sm"} onClick={props.onSkip}>
+              Skip
+            </SecondaryButton>
+            <PrimaryButton size={"sm"} onClick={props.onContinue}>
+              Continue
+            </PrimaryButton>
           </div>
         </div>
       </GlassCard>

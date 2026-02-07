@@ -56,10 +56,10 @@ export function AppleRemindersConnectPage(props: {
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <SecondaryButton size={'sm'} disabled={props.busy} onClick={props.onAuthorizeAndEnable}>
+            <SecondaryButton size={"sm"} disabled={props.busy} onClick={props.onAuthorizeAndEnable}>
               {props.busy ? "Authorizing..." : "Authorize & enable"}
             </SecondaryButton>
-            <PrimaryButton size={'sm'} disabled={props.busy} onClick={props.onBack}>
+            <PrimaryButton size={"sm"} disabled={props.busy} onClick={props.onBack}>
               Done
             </PrimaryButton>
           </div>

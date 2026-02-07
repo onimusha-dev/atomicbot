@@ -7,7 +7,7 @@
   --muted: rgba(230, 237, 243, 0.82);
   --muted2: rgba(230, 237, 243, 0.65);
   --accent: #ff7a00;
-  --lime: #AEFF00;
+  --lime: #aeff00;
 }
 
 html,
@@ -25,11 +25,12 @@ body {
   height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui,
-  -apple-system,
-  BlinkMacSystemFont,
-  "Segoe UI",
-  sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 * {
@@ -133,9 +134,9 @@ button:disabled {
   height: 100%;
   display: grid;
   place-items: center;
-  background: radial-gradient(900px 520px at 50% 35%, rgba(194, 255, 64, 0.10), transparent 55%),
-  radial-gradient(800px 500px at 50% 60%, rgba(0, 229, 204, 0.05), transparent 60%),
-  var(--bg);
+  background:
+    radial-gradient(900px 520px at 50% 35%, rgba(194, 255, 64, 0.1), transparent 55%),
+    radial-gradient(800px 500px at 50% 60%, rgba(0, 229, 204, 0.05), transparent 60%), var(--bg);
 }
 
 .GatewaySplashInner {
@@ -244,9 +245,9 @@ button:disabled {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.12), transparent 58%),
-  radial-gradient(900px 520px at 50% 60%, rgba(194, 255, 64, 0.06), transparent 62%),
-  var(--bg);
+  background:
+    radial-gradient(900px 520px at 50% 28%, rgba(194, 255, 64, 0.12), transparent 58%),
+    radial-gradient(900px 520px at 50% 60%, rgba(194, 255, 64, 0.06), transparent 62%), var(--bg);
 }
 
 .ConsentTopbar {
@@ -404,7 +405,8 @@ button:disabled {
   height: 18px;
   border-radius: 6px;
   object-fit: contain;
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35)) drop-shadow(0 0 16px rgba(194, 255, 64, 0.16));
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 0 16px rgba(194, 255, 64, 0.16));
 }
 
 .UiBrandMark {
@@ -459,7 +461,7 @@ button:disabled {
   font-size: 26px;
   line-height: 32px;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .UiHero {
@@ -512,7 +514,7 @@ button:disabled {
 .UiGlassCard {
   box-sizing: border-box;
   border-radius: 16px;
-  background: #1E1E1E;
+  background: #1e1e1e;
   padding: 24px 24px 16px;
   animation: gatewaySplashEnter 260ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
 }
@@ -574,7 +576,7 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 3px;
-  color: rgba(230, 237, 243, 0.90);
+  color: rgba(230, 237, 243, 0.9);
   font-size: 13px;
   cursor: pointer;
   user-select: none;
@@ -594,7 +596,7 @@ button:disabled {
 }
 
 .UiCheckRow input:checked {
-  background-color: #0D6FFF !important;
+  background-color: #0d6fff !important;
 }
 
 .UiCheckRow input:checked::after {
@@ -610,8 +612,8 @@ button:disabled {
 }
 
 .UiCheckRow.UiCheckRow--error input {
-  border-color: #FF3939;
-  background-color: #FFDFDF !important;
+  border-color: #ff3939;
+  background-color: #ffdfdf !important;
 }
 
 .UiConsentStage {
@@ -643,13 +645,13 @@ button:disabled {
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
-  color: #A0A0A0;
+  color: #a0a0a0;
   margin-bottom: 32px;
   user-select: none;
 }
 
 .UiConsentAgreement {
-  color: #A0A0A0;
+  color: #a0a0a0;
   font-weight: 400;
   font-size: 10px;
   line-height: 13px;
@@ -681,7 +683,7 @@ button:disabled {
 }
 
 .UiInputLabel {
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
@@ -693,7 +695,12 @@ button:disabled {
   position: relative;
   border-radius: 12px;
   padding: 1px;
-  background-image: linear-gradient(173deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.24))
+  background-image: linear-gradient(
+    173deg,
+    rgba(255, 255, 255, 0.24),
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.24)
+  );
 }
 
 .UiInput {
@@ -727,9 +734,10 @@ button:disabled {
   padding: 10px 12px;
   font-size: 13px;
   cursor: pointer;
-  transition: background 120ms ease,
-  border-color 120ms ease,
-  transform 120ms ease;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease;
 }
 
 .UiActionButton:hover:enabled {
@@ -771,7 +779,7 @@ button:disabled {
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
-  color: #A0A0A0;
+  color: #a0a0a0;
   margin-bottom: 24px;
 }
 
@@ -796,8 +804,9 @@ button:disabled {
   display: block;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(0deg, #AEFF00, #AEFF00),
-  linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.2) 100%);
+  background:
+    linear-gradient(0deg, #aeff00, #aeff00),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.2) 100%);
   color: #121212;
   padding: 9px 14px;
   font-weight: 500;
@@ -820,9 +829,9 @@ button:disabled {
 }
 
 .UiPrimaryButton:disabled {
-  background: #FFFFFF12;
+  background: #ffffff12;
   cursor: default;
-  color: #FFFFFF80;
+  color: #ffffff80;
 }
 
 .UiSecondaryButton {
@@ -831,7 +840,7 @@ button:disabled {
   border: 1px solid transparent;
   border-radius: 999px;
   background: #343434;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 750;
   padding: 8px;
   transition: opacity 0.2s ease;
@@ -911,8 +920,9 @@ button:disabled {
   border-radius: 999px;
   border: 1px solid rgba(230, 237, 243, 0.12);
   background: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35),
-  inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .UiTab {
@@ -928,9 +938,10 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   user-select: none;
-  transition: background 140ms ease,
-  color 140ms ease,
-  transform 140ms ease;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
 }
 
 .UiTab:hover {
@@ -953,8 +964,9 @@ button:disabled {
   padding: 8px 10px;
   font-size: 13px;
   cursor: pointer;
-  transition: background 120ms ease,
-  border-color 120ms ease;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
 }
 
 .UiToolbarButton-primary {
@@ -1077,8 +1089,9 @@ pre {
   overflow: auto;
   white-space: pre-wrap;
   word-break: break-word;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-  "Courier New", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
   font-size: 12px;
   line-height: 1.45;
   color: #d2dbe6;
@@ -1304,7 +1317,7 @@ pre {
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
-  color: #A0A0A0;
+  color: #a0a0a0;
   margin-bottom: 24px;
 }
 
@@ -1312,7 +1325,7 @@ pre {
   max-height: 270px;
   overflow: auto;
   scrollbar-width: thin;
-  scrollbar-color: #FFFFFF26 transparent;
+  scrollbar-color: #ffffff26 transparent;
 }
 
 .UiContentWrapper::-webkit-scrollbar {
@@ -1324,12 +1337,12 @@ pre {
 }
 
 .UiContentWrapper::-webkit-scrollbar-thumb {
-  background: #FFFFFF26;
+  background: #ffffff26;
   border-radius: 1000px;
 }
 
 .UiContentWrapper::-webkit-scrollbar-thumb:hover {
-  background: #FFFFFF40;
+  background: #ffffff40;
 }
 
 .UiApiKeyInputRow .UiInput {
@@ -1376,7 +1389,7 @@ pre {
 /* Link styles */
 
 .UiLink {
-  color: #C3FF44;
+  color: #c3ff44;
   text-decoration: none;
   cursor: pointer;
   transition: opacity 0.2s ease;
@@ -1393,7 +1406,6 @@ pre {
   cursor: pointer;
 }
 
-
 .UiModelOption--selected {
   border-color: var(--accent-color, #a3e635);
   background-color: rgba(163, 230, 53, 0.06);
@@ -1409,8 +1421,9 @@ pre {
   flex-shrink: 0;
   cursor: pointer;
   background-color: #343434;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
   position: relative;
 }
 
@@ -1418,7 +1431,6 @@ pre {
   border-color: var(--accent-color, #a3e635);
   background: radial-gradient(circle, var(--accent-color, #a3e635) 40%, transparent 45%);
 }
-
 
 .UiListWithScroll {
   display: flex;
@@ -1428,7 +1440,7 @@ pre {
   overflow-y: auto;
   padding-right: 4px;
   scrollbar-width: thin;
-  scrollbar-color: #FFFFFF26 transparent;
+  scrollbar-color: #ffffff26 transparent;
 }
 
 .UiListWithScroll::-webkit-scrollbar {
@@ -1440,12 +1452,12 @@ pre {
 }
 
 .UiListWithScroll::-webkit-scrollbar-thumb {
-  background: #FFFFFF26;
+  background: #ffffff26;
   border-radius: 1000px;
 }
 
 .UiListWithScroll::-webkit-scrollbar-thumb:hover {
-  background: #FFFFFF40;
+  background: #ffffff40;
 }
 
 .UiProviderList {
@@ -1479,13 +1491,14 @@ pre {
   flex-shrink: 0;
   cursor: pointer;
   background-color: #343434;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
   position: relative;
 }
 
 .UiProviderRadio:checked {
-  background-color: #C3FF44;
+  background-color: #c3ff44;
 }
 
 .UiProviderRadio:checked::after {
@@ -1496,7 +1509,7 @@ pre {
   top: 50%;
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
   border-radius: 50%;
 }
 
@@ -1542,11 +1555,11 @@ pre {
   opacity: 1;
   border-radius: 4px;
   padding: 1px 4px;
-  background-color: #4E95FF26;
+  background-color: #4e95ff26;
   font-weight: 400;
   font-size: 11px;
   line-height: 14px;
-  color: #4E95FF;
+  color: #4e95ff;
   margin-right: 2px;
 }
 
@@ -1554,7 +1567,7 @@ pre {
   font-weight: 400;
   font-size: 11px;
   line-height: 14px;
-  color: #8E8E8E;
+  color: #8e8e8e;
 }
 
 /* Model selection styles */
@@ -1596,13 +1609,15 @@ pre {
   border-radius: 16px;
   padding: 12px 12px;
   transition: border-color 0.15s ease;
-  background: linear-gradient(#2C2C2C, #2C2C2C) padding-box,
-  linear-gradient(
-          150deg,
-          rgba(255, 255, 255, 0.24) 0%,
-          rgba(255, 255, 255, 0) 50%,
-          rgba(255, 255, 255, 0.24) 100%
-  ) border-box;
+  background:
+    linear-gradient(#2c2c2c, #2c2c2c) padding-box,
+    linear-gradient(
+        150deg,
+        rgba(255, 255, 255, 0.24) 0%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0.24) 100%
+      )
+      border-box;
 
   border: 1px solid transparent;
 }
@@ -1730,12 +1745,12 @@ pre {
   font-weight: 400;
   font-size: 11px;
   line-height: 14px;
-  color: #8E8E8E;
+  color: #8e8e8e;
 }
 
 .UiSkillConnectButton {
   appearance: none;
-  background: #FFFFFF;
+  background: #ffffff;
   color: #292929;
   border-radius: 999px;
   padding: 2px 6px;
@@ -1764,14 +1779,13 @@ pre {
 }
 
 .UiSkillStatus--connected {
-  background: #38BB581A;
-  color: #38BB58;
-
+  background: #38bb581a;
+  color: #38bb58;
 }
 
 .UiSkillStatus--soon {
   background: #343434;
-  color: #AEAEAE;
+  color: #aeaeae;
   display: flex;
   align-items: center;
   gap: 2px;
@@ -1886,7 +1900,7 @@ pre {
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   cursor: pointer;
   transition:
@@ -1984,18 +1998,18 @@ pre {
 }
 
 .UiModelTierBadge--fast {
-  background: #FFE24E26;
-  color: #FFE24E;
+  background: #ffe24e26;
+  color: #ffe24e;
 }
 
 .UiModelTierBadge--pro {
-  background: #4EFFF326;
-  color: #4EFFF3;
+  background: #4efff326;
+  color: #4efff3;
 }
 
 .UiModelTierBadge--ultra {
-  background: #F34EFF26;
-  color: #F34EFF;
+  background: #f34eff26;
+  color: #f34eff;
 }
 
 .UiModelTier {
@@ -2143,8 +2157,9 @@ pre {
   font-weight: 600;
   letter-spacing: 0.01em;
   position: relative;
-  transition: background 120ms ease,
-  color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiSettingsNavItem:hover {
@@ -2287,7 +2302,6 @@ pre {
   flex-direction: column;
 }
 
-
 .UiChatLayout {
   flex: 1 1 auto;
 
@@ -2297,7 +2311,6 @@ pre {
   display: flex;
   flex-direction: row;
 }
-
 
 /* Markdown styles (chat and elsewhere)*/
 
@@ -2453,8 +2466,9 @@ pre {
   line-height: 1.5;
   min-height: 48px;
   max-height: 180px;
-  transition: border-color 120ms ease,
-  background 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
 }
 
 .UiChatInput:focus {
@@ -2572,8 +2586,9 @@ pre {
   background: rgba(0, 0, 0, 0.18);
   padding: 14px 14px 12px;
   cursor: pointer;
-  transition: border-color 0.15s ease,
-  background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
   position: relative;
 }
 
@@ -2723,9 +2738,10 @@ pre {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease,
-  color 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiProviderFilterChip:hover {
@@ -2945,8 +2961,9 @@ pre {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
 }
 
 .UiSkillModalSelect:hover {
@@ -2975,9 +2992,10 @@ pre {
   border-radius: 10px;
   cursor: pointer;
   text-align: center;
-  transition: border-color 120ms ease,
-  background 120ms ease,
-  color 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .UiSkillModalProviderOption:hover {
@@ -3014,9 +3032,10 @@ pre {
 
 .UiSkillStatus--clickable {
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease,
-  opacity 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
 }
 
 .UiSkillStatus--clickable:hover {
@@ -3047,8 +3066,9 @@ pre {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 120ms ease,
-  background 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
 }
 
 .UiSkillModalDisableButton:hover {

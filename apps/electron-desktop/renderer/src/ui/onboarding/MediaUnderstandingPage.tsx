@@ -73,9 +73,8 @@ export function MediaUnderstandingPage(props: {
           </div>
           <div className="UiSectionTitle">Media Understanding</div>
           <div className="UiSectionSubtitle">
-            Let OpenClaw understand images, voice notes, and videos you send. It automatically picks a compatible
-            provider
-            based on the API keys you already configured.
+            Let OpenClaw understand images, voice notes, and videos you send. It automatically picks
+            a compatible provider based on the API keys you already configured.
           </div>
 
           {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
@@ -100,16 +99,16 @@ export function MediaUnderstandingPage(props: {
           {hasMissing ? (
             <div style={{ marginTop: 12 }}>
               <InlineError>
-                OpenAI is not configured yet. Add an OpenAI API key below to enable image + audio understanding
-                reliably.
+                OpenAI is not configured yet. Add an OpenAI API key below to enable image + audio
+                understanding reliably.
               </InlineError>
               <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
                 Add provider key
               </div>
               <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 6 }}>
-              <span className="UiPill" aria-label="Provider">
-                OpenAI
-              </span>
+                <span className="UiPill" aria-label="Provider">
+                  OpenAI
+                </span>
               </div>
               {addError ? <InlineError>{addError}</InlineError> : null}
               <div className="UiApiKeyInputRow" style={{ marginTop: 8 }}>
@@ -139,31 +138,37 @@ export function MediaUnderstandingPage(props: {
         </div>
 
         <div className="UiGoogleWorkspaceBottomRow" style={{ marginTop: 14 }}>
-          <button className="UiTextButton" onClick={props.onBack} type="button" disabled={props.busy}>
+          <button
+            className="UiTextButton"
+            onClick={props.onBack}
+            type="button"
+            disabled={props.busy}
+          >
             Back
           </button>
           <div className="UiGoogleWorkspaceActions">
-            <PrimaryButton size={'sm'}
-                           disabled={props.busy || addBusy || !addKey.trim()}
-                           onClick={() => {
-                             void (async () => {
-                               setAddError(null);
-                               setAddHighlight(false);
-                               setAddBusy(true);
-                               try {
-                                 const ok = await props.onAddProviderKey("openai", addKey);
-                                 if (ok) {
-                                   setAddKey("");
-                                 }
-                               } catch (err) {
-                                 addToastError(String(err));
-                                 setAddHighlight(true);
-                                 focusKey();
-                               } finally {
-                                 setAddBusy(false);
-                               }
-                             })();
-                           }}
+            <PrimaryButton
+              size={"sm"}
+              disabled={props.busy || addBusy || !addKey.trim()}
+              onClick={() => {
+                void (async () => {
+                  setAddError(null);
+                  setAddHighlight(false);
+                  setAddBusy(true);
+                  try {
+                    const ok = await props.onAddProviderKey("openai", addKey);
+                    if (ok) {
+                      setAddKey("");
+                    }
+                  } catch (err) {
+                    addToastError(String(err));
+                    setAddHighlight(true);
+                    focusKey();
+                  } finally {
+                    setAddBusy(false);
+                  }
+                })();
+              }}
             >
               {addBusy ? "Saving…" : "Save key"}
             </PrimaryButton>
@@ -173,4 +178,3 @@ export function MediaUnderstandingPage(props: {
     </HeroPageLayout>
   );
 }
-

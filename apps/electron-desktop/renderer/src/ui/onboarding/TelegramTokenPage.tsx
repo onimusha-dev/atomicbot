@@ -78,7 +78,7 @@ export function TelegramTokenPage(props: {
           <button className="UiTextButton" onClick={props.onSkip} type="button">
             Back
           </button>
-          <PrimaryButton size={'sm'} disabled={!token} onClick={props.onNext}>
+          <PrimaryButton size={"sm"} disabled={!token} onClick={props.onNext}>
             Save & continue
           </PrimaryButton>
         </div>

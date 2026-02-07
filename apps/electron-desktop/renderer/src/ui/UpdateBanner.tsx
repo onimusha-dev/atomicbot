@@ -93,10 +93,7 @@ export function UpdateBanner() {
         <>
           <span className="UpdateBanner-text">Downloading update... {phase.percent}%</span>
           <div className="UpdateBanner-progress">
-            <div
-              className="UpdateBanner-progressBar"
-              style={{ width: `${phase.percent}%` }}
-            />
+            <div className="UpdateBanner-progressBar" style={{ width: `${phase.percent}%` }} />
           </div>
         </>
       )}
