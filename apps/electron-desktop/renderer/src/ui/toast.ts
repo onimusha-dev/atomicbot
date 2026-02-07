@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 
-const defaultDuration = 300000;
+const defaultDuration = 3000;
 
 export const toastStyles = {
   fontSize: 15,
@@ -12,5 +12,6 @@ export const toastStyles = {
 
 /** Show an error toast. Use for API failures, gateway errors, etc. */
 export function addToastError(message: string): void {
+  console.error(message);
   toast.error(message, { duration: defaultDuration, style: toastStyles });
 }

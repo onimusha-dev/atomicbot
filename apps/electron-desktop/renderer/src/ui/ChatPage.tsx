@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Markdown from "react-markdown";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useGatewayRpc } from "../gateway/context";
@@ -17,18 +17,56 @@ import { addToastError } from "./toast";
 
 function CopyIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path
+        d="M12 9.675V12.825C12 15.45 10.95 16.5 8.325 16.5H5.175C2.55 16.5 1.5 15.45 1.5 12.825V9.675C1.5 7.05 2.55 6 5.175 6H8.325C10.95 6 12 7.05 12 9.675Z"
+        stroke="#8B8B8B"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M16.5 5.175V8.325C16.5 10.95 15.45 12 12.825 12H12V9.675C12 7.05 10.95 6 8.325 6H6V5.175C6 2.55 7.05 1.5 9.675 1.5H12.825C15.45 1.5 16.5 2.55 16.5 5.175Z"
+        stroke="#8B8B8B"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M19.1333 7L8.59292 17.6L5 13.9867"
+        stroke="#8B8B8B"
+        stroke-opacity="1"
+        stroke-width="2.06111"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Copy button with local state so only this message's icon toggles on copy. */
+function CopyMessageButton({ text }: { text: string }) {
+  const [isCopied, setIsCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      className="UiChatMessageActionBtn"
+      onClick={() => {
+        void navigator.clipboard.writeText(text);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 1500);
+      }}
+      aria-label={isCopied ? "Copied" : "Copy"}
+    >
+      {isCopied ? <CheckIcon /> : <CopyIcon />}
+    </button>
   );
 }
 
@@ -60,6 +98,13 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
 
   const gw = useGatewayRpc();
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
+
+  /** First user message in history that matches optimistic text; used for seamless handoff. */
+  const matchingFirstUserFromHistory = React.useMemo(() => {
+    if (optimisticFirstMessage == null) return null;
+    const userMsg = messages.find((m) => m.role === "user" && m.text === optimisticFirstMessage);
+    return userMsg ?? null;
+  }, [messages, optimisticFirstMessage]);
 
   React.useEffect(() => {
     return gw.onEvent((evt) => {
@@ -103,11 +148,12 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     refresh();
   }, [refresh]);
 
+  // Clear optimistic first message only when history has the matching user message (seamless handoff).
   React.useEffect(() => {
-    if (messages.length > 0 && optimisticFirstMessage != null) {
+    if (matchingFirstUserFromHistory != null && optimisticFirstMessage != null) {
       setOptimisticFirstMessage(null);
     }
-  }, [messages.length, optimisticFirstMessage]);
+  }, [matchingFirstUserFromHistory, optimisticFirstMessage]);
 
   React.useEffect(() => {
     const el = scrollRef.current;
@@ -138,18 +184,28 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     );
   }, [dispatch, gw.request, input, sessionKey, attachments]);
 
+  // Show optimistic first user until history contains the same message; then use history only (no duplicate, no flicker).
   const allMessages =
-    optimisticFirstMessage != null
-      ? [{ id: "opt-first", role: "user" as const, text: optimisticFirstMessage }, ...messages]
-      : messages;
+    matchingFirstUserFromHistory != null
+      ? messages
+      : optimisticFirstMessage != null
+        ? [{ id: "opt-first", role: "user" as const, text: optimisticFirstMessage }, ...messages]
+        : messages;
 
   const displayMessages = allMessages.filter((m) => m.role === "user" || m.role === "assistant");
+
+  /** Stable key for the first user message so React doesn't remount when switching from optimistic to history. */
+  const getMessageKey = (m: (typeof displayMessages)[number]) =>
+    (optimisticFirstMessage != null && m.id === "opt-first") ||
+    (matchingFirstUserFromHistory != null && m.id === matchingFirstUserFromHistory.id)
+      ? "first-user"
+      : m.id;
 
   return (
     <div className="UiChatShell">
       <div className="UiChatTranscript" ref={scrollRef}>
         {displayMessages.map((m) => (
-          <div key={m.id} className={`UiChatRow UiChatRow-${m.role}`}>
+          <div key={getMessageKey(m)} className={`UiChatRow UiChatRow-${m.role}`}>
             <div className={`UiChatBubble UiChatBubble-${m.role}`}>
               {m.pending && (
                 <div className="UiChatBubbleMeta">
@@ -176,16 +232,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
               </div>
               {m.role === "assistant" && (
                 <div className="UiChatMessageActions">
-                  <button
-                    type="button"
-                    className="UiChatMessageActionBtn"
-                    onClick={() => {
-                      void navigator.clipboard.writeText(m.text);
-                    }}
-                    aria-label="Copy"
-                  >
-                    <CopyIcon />
-                  </button>
+                  <CopyMessageButton text={m.text} />
                 </div>
               )}
             </div>

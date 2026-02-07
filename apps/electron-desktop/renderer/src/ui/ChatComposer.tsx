@@ -100,44 +100,45 @@ export function ChatComposer({
     [onAttachmentsChange]
   );
 
-  const canSend = value.trim().length > 0 || attachments.length > 0;
+  const canSend = value.trim().length > 0;
 
   return (
     <div className="UiChatComposer">
-      {attachments.length > 0 && (
-        <div className="UiChatAttachments">
-          {attachments.map((att) => {
-            const isImage = att.mimeType.startsWith("image/");
-            return (
-              <div key={att.id} className="UiChatAttachment">
-                {isImage ? (
-                  <img src={att.dataUrl} alt="" className="UiChatAttachmentImg" />
-                ) : (
-                  <div className="UiChatAttachmentFile" title={att.mimeType}>
-                    <span className="UiChatAttachmentFileIcon" aria-hidden="true">
-                      📎
-                    </span>
-                    <span className="UiChatAttachmentFileLabel">
-                      {att.mimeType === "application/pdf"
-                        ? "PDF"
-                        : att.mimeType.split("/")[0] || "File"}
-                    </span>
-                  </div>
-                )}
-                <button
-                  type="button"
-                  className="UiChatAttachmentRemove"
-                  onClick={() => removeAttachment(att.id)}
-                  aria-label="Remove attachment"
-                >
-                  ×
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
       <div className="UiChatComposerInner">
+        {attachments.length > 0 && (
+          <div className="UiChatAttachments">
+            {attachments.map((att) => {
+              const isImage = att.mimeType.startsWith("image/");
+              return (
+                <div key={att.id} className="UiChatAttachment">
+                  {isImage ? (
+                    <img src={att.dataUrl} alt="" className="UiChatAttachmentImg" />
+                  ) : (
+                    <div className="UiChatAttachmentFile" title={att.mimeType}>
+                      <span className="UiChatAttachmentFileIcon" aria-hidden="true">
+                        📎
+                      </span>
+                      <span className="UiChatAttachmentFileLabel">
+                        {att.mimeType === "application/pdf"
+                          ? "PDF"
+                          : att.mimeType.split("/")[0] || "File"}
+                      </span>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    className="UiChatAttachmentRemove"
+                    onClick={() => removeAttachment(att.id)}
+                    aria-label="Remove attachment"
+                  >
+                    ×
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <input
           ref={fileInputRef}
           type="file"

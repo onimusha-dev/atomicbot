@@ -41,8 +41,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .UiChatAttachment {
@@ -148,7 +150,10 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  max-width: 680px;
+  width: 100%;
+  min-width: 616px;
+  max-width: 692px;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 12px 8px 8px 8px;
   gap: 2px;
