@@ -10,13 +10,19 @@ export function GitHubConnectPage(props: {
   onBack: () => void;
 }) {
   const [pat, setPat] = React.useState("");
+  const [errorText, setErrorText ] = React.useState('')
   const totalSteps = 5;
   const activeStep = 3;
 
   const handleSubmit = () => {
+    if(errorText) {
+      setErrorText('')
+    }
     const trimmed = pat.trim();
-    if (trimmed) {
+    if (trimmed  && trimmed.length > 4) {
       props.onSubmit(trimmed);
+    } else {
+      setErrorText('Please enter your token to continue')
     }
   };
 

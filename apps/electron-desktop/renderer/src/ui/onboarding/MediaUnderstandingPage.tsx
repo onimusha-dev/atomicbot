@@ -38,6 +38,7 @@ export function MediaUnderstandingPage(props: {
   const [addError, setAddError] = React.useState<string | null>(null);
   const [addHighlight, setAddHighlight] = React.useState(false);
   const addInputRef = React.useRef<HTMLInputElement | null>(null);
+  const [errorText, setErrorText ] = React.useState('')
 
   const canContinue = settings.image || settings.audio;
   const hasMissing = canContinue && !props.hasOpenAiProvider;
@@ -131,6 +132,7 @@ export function MediaUnderstandingPage(props: {
                   disabled={props.busy || addBusy}
                   error={addHighlight || Boolean(addError)}
                   inputRef={addInputRef}
+                  isError={errorText}
                 />
               </div>
             </div>
@@ -149,9 +151,24 @@ export function MediaUnderstandingPage(props: {
           <div className="UiGoogleWorkspaceActions">
             <PrimaryButton
               size={"sm"}
-              disabled={props.busy || addBusy || !addKey.trim()}
+              disabled={props.busy || addBusy }
               onClick={() => {
                 void (async () => {
+                  if(errorText) {
+                    setErrorText('')
+                  }
+                  const trimmed = addKey.trim();
+
+                  if(!trimmed) {
+                    setErrorText('Please enter your API key to continue')
+                    return;
+                  }
+                  if(!/sk-[a-zA-Z0-9]{32}/.test(trimmed)) {
+                    setErrorText('Invalid API key')
+                    focusKey();
+                    return;
+                  }
+
                   setAddError(null);
                   setAddHighlight(false);
                   setAddBusy(true);

@@ -67,6 +67,7 @@ export function GogPage(props: {
   const finishText = props.finishText ?? "Continue";
   const skipText = props.skipText ?? "Skip";
   const [connected, setConnected] = React.useState(false);
+  const [errorText, setErrorText ] = React.useState('')
   const [services, setServices] = React.useState<Record<string, boolean>>(() => {
     const defaults = new Set(parseDefaultServicesCsv());
     return Object.fromEntries(SERVICE_OPTIONS.map((s) => [s.id, defaults.has(s.id)]));
@@ -79,9 +80,13 @@ export function GogPage(props: {
   const servicesCsv = selectedServices.join(",");
 
   const onConnect = React.useCallback(async () => {
+    if(errorText) {
+      setErrorText('')
+    }
     const account = props.gogAccount.trim();
-    if (!account) {
-      return;
+    if (!account || account.length < 4) {
+      setErrorText('Please enter your account to continue')
+      return
     }
     if (!servicesCsv) {
       return;
@@ -120,6 +125,7 @@ export function GogPage(props: {
                 spellCheck={false}
                 disabled={props.gogBusy}
                 label={"Account"}
+                isError={errorText}
               />
 
               <div className="UiSectionSubtitle" style={{ margin: "14px 0 0" }}>
@@ -165,7 +171,7 @@ export function GogPage(props: {
             </button>
             <PrimaryButton
               size={"sm"}
-              disabled={props.gogBusy || !props.gogAccount.trim() || selectedServices.length === 0}
+              disabled={props.gogBusy || selectedServices.length === 0}
               onClick={() => void onConnect()}
             >
               {props.gogBusy ? "Connecting…" : "Connect"}

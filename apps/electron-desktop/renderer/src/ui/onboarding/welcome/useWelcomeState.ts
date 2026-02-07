@@ -300,6 +300,7 @@ export function useWelcomeState({ state, navigate }: WelcomeStateInput) {
       setError(null);
       try {
         const ok = await saveApiKey(selectedProvider, apiKey);
+        console.log(ok);
         if (ok) {
           // Load models after saving API key
           await loadModels();

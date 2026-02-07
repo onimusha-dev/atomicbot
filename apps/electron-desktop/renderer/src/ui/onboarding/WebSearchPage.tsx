@@ -43,13 +43,19 @@ export function WebSearchPage(props: {
   const [provider, setProvider] = React.useState<WebSearchProvider>("brave");
   const [apiKey, setApiKey] = React.useState("");
   const meta = PROVIDERS.find((p) => p.id === provider) ?? PROVIDERS[0];
+  const [errorText, setErrorText ] = React.useState('')
   const totalSteps = 5;
   const activeStep = 3;
 
   const handleSubmit = () => {
+    if(errorText) {
+      setErrorText('')
+    }
     const trimmed = apiKey.trim();
-    if (trimmed) {
+    if (trimmed && trimmed.length > 4) {
       props.onSubmit(provider, trimmed);
+    } else {
+      setErrorText('Please enter your API key to continue')
     }
   };
 
@@ -133,6 +139,7 @@ export function WebSearchPage(props: {
                 autoCorrect="off"
                 spellCheck={false}
                 disabled={props.busy}
+                isError={errorText}
               />
             </div>
 

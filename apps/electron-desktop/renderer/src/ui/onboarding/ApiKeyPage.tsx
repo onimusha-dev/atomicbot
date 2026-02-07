@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../kit";
 import type { Provider } from "./ProviderSelectPage";
@@ -16,11 +16,17 @@ export function ApiKeyPage(props: {
   const meta = MODEL_PROVIDER_BY_ID[props.provider];
   const totalSteps = 5;
   const activeStep = 1;
+  const [errorText, setErrorText ] = useState('')
 
   const handleSubmit = () => {
+    if(errorText) {
+      setErrorText('')
+    }
     const trimmed = apiKey.trim();
-    if (trimmed) {
+    if (trimmed && trimmed.length > 4) {
       props.onSubmit(trimmed);
+    } else {
+      setErrorText('Please enter your API key to continue')
     }
   };
 
@@ -61,8 +67,6 @@ export function ApiKeyPage(props: {
           ) : null}
         </div>
 
-        {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-
         <div className="UiApiKeyInputRow">
           <TextInput
             type="password"
@@ -74,6 +78,7 @@ export function ApiKeyPage(props: {
             spellCheck={false}
             disabled={props.busy}
             label={meta.name + " API key"}
+            isError={errorText}
           />
         </div>
 
@@ -88,7 +93,7 @@ export function ApiKeyPage(props: {
           >
             Back
           </button>
-          <PrimaryButton size={"sm"} disabled={!apiKey.trim() || props.busy} onClick={handleSubmit}>
+          <PrimaryButton size={"sm"} disabled={props.busy} onClick={handleSubmit}>
             {props.busy ? "Saving..." : "Continue"}
           </PrimaryButton>
         </div>

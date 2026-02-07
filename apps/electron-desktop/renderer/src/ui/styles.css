@@ -703,6 +703,22 @@ button:disabled {
   );
 }
 
+.UiInputWrapError {
+  background-image: linear-gradient(
+          173deg,
+          rgba(255, 59, 48, 0.24),
+          rgba(255, 59, 48, 0),
+          rgba(255, 59, 48, 0.24)
+  );
+}
+
+.InputErrorMessage {
+  font-size: 13px;
+  line-height: 16px;
+  margin-top: 8px;
+  color: #FF3B30;
+}
+
 .UiInput {
   width: 100%;
   border: none;

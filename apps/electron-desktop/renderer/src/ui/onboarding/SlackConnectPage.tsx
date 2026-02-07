@@ -118,6 +118,12 @@ export function SlackConnectPage(props: {
   const [dmPolicy, setDmPolicy] = React.useState<DmPolicy>("pairing");
   const [dmAllowFromRaw, setDmAllowFromRaw] = React.useState("");
 
+  const [errors, setErrors] = React.useState<{
+    botToken?: string;
+    appToken?: string;
+    dmAllowFrom?: string;
+  }>({});
+
   const manifest = React.useMemo(() => buildSlackManifest(botName), [botName]);
 
   const canSubmit = React.useMemo(() => {
@@ -133,9 +139,27 @@ export function SlackConnectPage(props: {
   const handleSubmit = () => {
     const trimmedBotToken = botToken.trim();
     const trimmedAppToken = appToken.trim();
-    if (!trimmedBotToken || !trimmedAppToken) {
+
+    const nextErrors: typeof errors = {};
+
+    if (!trimmedBotToken) {
+      nextErrors.botToken = "Please enter your Slack bot token (xoxb-...)";
+    }
+
+    if (!trimmedAppToken) {
+      nextErrors.appToken = "Please enter your Slack app token (xapp-...)";
+    }
+
+    if (dmPolicy === "allowlist" && parseList(dmAllowFromRaw).length === 0) {
+      nextErrors.dmAllowFrom = "At least one allowFrom entry is required for DM allowlist.";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
       return;
     }
+
+    setErrors({});
     props.onSubmit({
       botName: botName.trim() || "OpenClaw",
       botToken: trimmedBotToken,
@@ -260,6 +284,7 @@ export function SlackConnectPage(props: {
                 autoCorrect="off"
                 spellCheck={false}
                 disabled={props.busy}
+                isError={errors.dmAllowFrom}
               />
             </div>
 
@@ -277,6 +302,7 @@ export function SlackConnectPage(props: {
                 spellCheck={false}
                 disabled={props.busy}
                 error={!props.busy && !botToken.trim()}
+                isError={errors.botToken}
               />
             </div>
 
@@ -294,6 +320,7 @@ export function SlackConnectPage(props: {
                 spellCheck={false}
                 disabled={props.busy}
                 error={!props.busy && !appToken.trim()}
+                isError={errors.appToken}
               />
             </div>
 
@@ -398,7 +425,7 @@ export function SlackConnectPage(props: {
           >
             Back
           </button>
-          <PrimaryButton size={"sm"} disabled={!canSubmit || props.busy} onClick={handleSubmit}>
+          <PrimaryButton size={"sm"} disabled={!canSubmit} onClick={handleSubmit}>
             {props.busy ? "Saving..." : "Save & return"}
           </PrimaryButton>
         </div>
