@@ -89,7 +89,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
 
       <Route
         path="provider-select"
-        element={<ProviderSelectPage error={welcome.error} onSelect={welcome.onProviderSelect} />}
+        element={<ProviderSelectPage selectedProvider={welcome.selectedProvider} error={welcome.error} onSelect={welcome.onProviderSelect} />}
       />
 
       <Route

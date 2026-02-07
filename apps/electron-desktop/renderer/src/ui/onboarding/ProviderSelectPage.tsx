@@ -9,14 +9,17 @@ export type Provider = ModelProvider;
 export function ProviderSelectPage(props: {
   error: string | null;
   onSelect: (provider: Provider) => void;
+  selectedProvider: Provider | null;
 }) {
-  const [selected, setSelected] = React.useState<Provider | null>(null);
+  const [selected, setSelected] = React.useState<Provider | null>(props.selectedProvider ? props.selectedProvider : null);
   const totalSteps = 5;
   const activeStep = 0;
 
 
   useEffect(() => {
-    setSelected(MODEL_PROVIDERS[0].id);
+    if(!selected) {
+      setSelected(MODEL_PROVIDERS[0].id);
+    }
   }, [])
 
   return (
