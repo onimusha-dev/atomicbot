@@ -102,7 +102,6 @@ export function GitHubModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">GitHub</div>
       <div className="UiSectionSubtitle">
         Work with issues, pull requests, and workflows via the bundled gh CLI.
         {ghUser && (

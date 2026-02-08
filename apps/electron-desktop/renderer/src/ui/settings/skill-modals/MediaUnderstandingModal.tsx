@@ -132,7 +132,6 @@ export function MediaUnderstandingModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Media Understanding</div>
       <div className="UiSectionSubtitle">
         Transcribe voice messages, describe images, and summarize videos you send. Automatically
         picks a compatible provider based on your configured API keys.

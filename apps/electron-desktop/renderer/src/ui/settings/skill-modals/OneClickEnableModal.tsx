@@ -50,7 +50,6 @@ export function AppleNotesModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Apple Notes</div>
       <div className="UiSectionSubtitle">
         Create, search and organize notes without leaving your keyboard. This will check the bundled
         memo binary and enable the skill.
@@ -137,7 +136,6 @@ export function AppleRemindersModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Apple Reminders</div>
       <div className="UiSectionSubtitle">
         Add, list and complete reminders without opening the Reminders app. This will authorize
         remindctl and enable the skill.

@@ -119,7 +119,6 @@ export function ObsidianModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Obsidian</div>
       <div className="UiSectionSubtitle">
         Work with your Obsidian vaults from the terminal (search, create, move, delete).
       </div>

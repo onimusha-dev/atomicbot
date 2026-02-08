@@ -27,6 +27,7 @@ import obsidianImage from "../../../../assets/set-up-skills/Obsidian.svg";
 import githubImage from "../../../../assets/set-up-skills/GitHub.svg";
 import slackImage from "../../../../assets/set-up-skills/Slack.svg";
 import notesIcon from "../../../../assets/set-up-skills/Notes.svg";
+import mediaImage from "../../../../assets/set-up-skills/Media.svg";
 
 type GatewayRpc = {
   request: <T = unknown>(method: string, params?: unknown) => Promise<T>;
@@ -77,7 +78,7 @@ const SKILLS: SkillDefinition[] = [
     description: "Transcribe voice messages, describe images, and summarize videos you send",
     iconText: "M",
     iconVariant: "nano-banana",
-    image: nanoBananaImage,
+    image: mediaImage,
   },
   {
     id: "web-search",
@@ -338,6 +339,7 @@ export function SkillsIntegrationsTab(props: {
         open={activeModal === "google-workspace"}
         onClose={closeModal}
         aria-label="Google Workspace settings"
+        header={'Google Workspace'}
       >
         <GoogleWorkspaceModalContent
           isConnected={statuses["google-workspace"] === "connected"}
@@ -346,7 +348,7 @@ export function SkillsIntegrationsTab(props: {
         />
       </Modal>
 
-      <Modal open={activeModal === "notion"} onClose={closeModal} aria-label="Notion settings">
+      <Modal open={activeModal === "notion"} header={'Notion'} onClose={closeModal} aria-label="Notion settings">
         <NotionModalContent
           gw={props.gw}
           loadConfig={loadConfig}
@@ -356,7 +358,7 @@ export function SkillsIntegrationsTab(props: {
         />
       </Modal>
 
-      <Modal open={activeModal === "trello"} onClose={closeModal} aria-label="Trello settings">
+      <Modal open={activeModal === "trello"} header={'Trello'} onClose={closeModal} aria-label="Trello settings">
         <TrelloModalContent
           gw={props.gw}
           loadConfig={loadConfig}
@@ -366,7 +368,7 @@ export function SkillsIntegrationsTab(props: {
         />
       </Modal>
 
-      <Modal open={activeModal === "github"} onClose={closeModal} aria-label="GitHub settings">
+      <Modal open={activeModal === "github"} header={'GitHub'} onClose={closeModal} aria-label="GitHub settings">
         <GitHubModalContent
           gw={props.gw}
           loadConfig={loadConfig}
@@ -380,6 +382,7 @@ export function SkillsIntegrationsTab(props: {
         open={activeModal === "web-search"}
         onClose={closeModal}
         aria-label="Web Search settings"
+        header={'Web Search'}
       >
         <WebSearchModalContent
           gw={props.gw}
@@ -394,6 +397,7 @@ export function SkillsIntegrationsTab(props: {
         open={activeModal === "media-understanding"}
         onClose={closeModal}
         aria-label="Media Understanding settings"
+        header={'Media Understanding'}
       >
         <MediaUnderstandingModalContent
           gw={props.gw}
@@ -404,7 +408,7 @@ export function SkillsIntegrationsTab(props: {
         />
       </Modal>
 
-      <Modal open={activeModal === "slack"} onClose={closeModal} aria-label="Slack settings">
+      <Modal open={activeModal === "slack"} onClose={closeModal} aria-label="Slack settings" header={'Slack'}>
         <SlackModalContent
           gw={props.gw}
           loadConfig={loadConfig}
@@ -414,7 +418,7 @@ export function SkillsIntegrationsTab(props: {
         />
       </Modal>
 
-      <Modal open={activeModal === "obsidian"} onClose={closeModal} aria-label="Obsidian settings">
+      <Modal open={activeModal === "obsidian"} header={'Obsidian'} onClose={closeModal} aria-label="Obsidian settings">
         <ObsidianModalContent
           gw={props.gw}
           loadConfig={loadConfig}
@@ -428,6 +432,7 @@ export function SkillsIntegrationsTab(props: {
         open={activeModal === "apple-notes"}
         onClose={closeModal}
         aria-label="Apple Notes settings"
+        header={'Apple Notes'}
       >
         <AppleNotesModalContent
           gw={props.gw}
@@ -442,6 +447,7 @@ export function SkillsIntegrationsTab(props: {
         open={activeModal === "apple-reminders"}
         onClose={closeModal}
         aria-label="Apple Reminders settings"
+        header={'Apple Reminders'}
       >
         <AppleRemindersModalContent
           gw={props.gw}

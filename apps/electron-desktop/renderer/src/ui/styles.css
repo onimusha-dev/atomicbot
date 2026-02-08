@@ -2289,12 +2289,24 @@ pre {
   width: 420px;
   max-width: 92vw;
   max-height: 85vh;
-  overflow-y: auto;
   border-radius: 24px;
   border: 1px solid #FFFFFF1A;
   background: #1D1D1D;
   padding: 16px 20px;
   animation: uiModalSlideUp 200ms ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.UiModalHeader {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.UiModalContent {
+  overflow-y: auto;
+  flex:1;
 }
 
 @keyframes uiModalSlideUp {
@@ -2310,14 +2322,13 @@ pre {
 
 .UiModalClose {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  width: 24px;
+  height: 24px;
+  top: 1px;
+  right: 1px;
   appearance: none;
   border: none;
   background: transparent;
-  color: rgba(230, 237, 243, 0.55);
-  font-size: 22px;
-  line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;

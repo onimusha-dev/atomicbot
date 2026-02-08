@@ -42,7 +42,6 @@ export function TrelloModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Trello</div>
       <div className="UiSectionSubtitle">
         Track tasks, update boards and manage projects without opening Trello.
       </div>

@@ -71,7 +71,6 @@ export function NotionModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Notion</div>
       <div className="UiSectionSubtitle">
         Create, search, update and organize your notes, docs, and knowledge base. Enter your Notion
         Integration API key below.

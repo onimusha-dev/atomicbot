@@ -183,7 +183,6 @@ export function TelegramModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Telegram</div>
       <div className="UiSectionSubtitle">
         Connect your Telegram bot. Get a token from{" "}
         <a href="https://t.me/BotFather" target="_blank" rel="noopener noreferrer">

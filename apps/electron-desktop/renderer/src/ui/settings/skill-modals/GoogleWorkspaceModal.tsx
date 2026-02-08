@@ -114,7 +114,6 @@ export function GoogleWorkspaceModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Google Workspace</div>
       <div className="UiSectionSubtitle">
         Connects your Google account locally to enable email and calendar skills. This opens a
         browser for consent. Secrets are stored locally.

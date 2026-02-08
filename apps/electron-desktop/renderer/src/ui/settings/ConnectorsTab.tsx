@@ -17,6 +17,7 @@ import whatsappImage from '../../../../assets/messangers/WhatsApp.svg'
 import imessageImage from '../../../../assets/messangers/iMessage.svg'
 import matrixImage from '../../../../assets/messangers/Matrix.svg'
 import msteamsImage from '../../../../assets/messangers/Microsoft-Teams.svg'
+import Slack from "../../../../vendor/openclaw/extensions/slack";
 
 type GatewayRpc = {
   request: <T = unknown>(method: string, params?: unknown) => Promise<T>;
@@ -270,7 +271,7 @@ export function ConnectorsTab(props: {
       </div>
 
       {/* ── Connector configuration modals (only TG + Slack are configurable) ── */}
-      <Modal open={activeModal === "telegram"} onClose={closeModal} aria-label="Telegram settings">
+      <Modal open={activeModal === "telegram"} header={'Telegram'} onClose={closeModal} aria-label="Telegram settings">
         <TelegramModalContent
           gw={props.gw}
           loadConfig={loadConfig}
@@ -280,7 +281,7 @@ export function ConnectorsTab(props: {
         />
       </Modal>
 
-      <Modal open={activeModal === "slack"} onClose={closeModal} aria-label="Slack settings">
+      <Modal open={activeModal === "slack"} header={'Slack'} onClose={closeModal} aria-label="Slack settings">
         <SlackConnectorModalContent
           gw={props.gw}
           loadConfig={loadConfig}

@@ -51,7 +51,6 @@ export function SlackModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Slack</div>
       <div className="UiSectionSubtitle">
         Send messages, react, and manage pins in your Slack workspace. Enter your Slack bot
         credentials below.

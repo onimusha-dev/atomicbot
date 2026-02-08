@@ -75,7 +75,6 @@ export function WebSearchModalContent(props: {
 
   return (
     <div className="UiSkillModalContent">
-      <div className="UiSectionTitle">Web Search</div>
       <div className="UiSectionSubtitle">
         Enable the web_search tool via Brave Search or Perplexity Sonar.
       </div>
