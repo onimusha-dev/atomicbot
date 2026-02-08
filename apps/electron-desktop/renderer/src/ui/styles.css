@@ -1559,10 +1559,7 @@ pre {
 }
 
 .UiSkillIcon {
-  width: 28px;
-  height: 28px;
   border-radius: 6px;
-  background: #343434;
   display: grid;
   place-items: center;
   font-weight: 850;
@@ -1571,6 +1568,11 @@ pre {
   flex-shrink: 0;
   letter-spacing: 0.02em;
   position: relative;
+}
+
+.UiSkillIcon > img {
+  width: 26px;
+  height: 26px;
 }
 
 .UiSkillIcon--google {
