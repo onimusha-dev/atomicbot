@@ -206,6 +206,36 @@ export function CheckboxRow(props: {
   );
 }
 
+type Props = {
+  checked: boolean;
+  label: string;
+  onChange: (next: boolean) => void;
+};
+
+export function UiCheckbox({ checked, label, onChange }: Props) {
+  return (
+    <label className="UiCheckbox">
+      <input
+        type="checkbox"
+        className="UiCheckbox__input"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+
+      <span
+        className={"UiCheckbox__box" + (checked ? " UiCheckbox__box--checked" : "")}
+        aria-hidden
+      >
+        <svg className="UiCheckbox__check" viewBox="0 0 16 16" focusable="false">
+          <path d="M6.6 11.2 3.7 8.3l-1 1 3.9 3.9L13.4 6.4l-1-1z" />
+        </svg>
+      </span>
+
+      <span className="UiCheckbox__label">{label}</span>
+    </label>
+  );
+}
+
 export function InlineError({ children }: { children: React.ReactNode }) {
   return <div className="UiInlineError">{children}</div>;
 }

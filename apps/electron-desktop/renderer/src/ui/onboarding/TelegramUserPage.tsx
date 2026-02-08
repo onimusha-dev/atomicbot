@@ -47,48 +47,47 @@ export function TelegramUserPage(props: {
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Add your Telegram user id to the DM allowlist. This configures{" "}
-            <code>channels.telegram.dmPolicy</code> to <code>allowlist</code> and appends to{" "}
-            <code>channels.telegram.allowFrom</code>.
-          </div>
-
-          <div className="UiSectionSubtitle">
-            Steps:
-            <ol>
-              <li>Send a DM to your bot (so it can see your account).</li>
-              <li>
-                Paste your numeric Telegram user id (<code>message.from.id</code>) below.
-              </li>
-            </ol>
-            Tips:
-            <ul>
-              <li>
-                Accepted forms: <code>123456789</code>, <code>tg:123456789</code>,{" "}
-                <code>telegram:123456789</code>.
-              </li>
-              <li>
-                If you're unsure, you can inspect the probe output (below) after saving, or use a
-                Telegram “user info” bot to read your id.
-              </li>
-            </ul>
-            Docs:{" "}
+            Get your Telegram user id.{" "}
             <a
-              href="https://docs.openclaw.ai/channels/telegram"
+              href="https://t.me/BotFather"
               target="_blank"
               rel="noopener noreferrer"
               className="UiLink"
               onClick={(e) => {
                 e.preventDefault();
-                void window.openclawDesktop?.openExternal(
-                  "https://docs.openclaw.ai/channels/telegram"
-                );
+                void window.openclawDesktop?.openExternal("https://t.me/BotFather");
               }}
             >
-              Telegram setup ↗
+              Open BotFather ↗
             </a>
           </div>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          <div className="UiSectionSubtitle">
+            <div className="UiSectionSubtitleAccent">Follow these steps</div>
+            <ol>
+              <li>Open the bot by clicking on the BotFather message</li>
+              <li>Click the Start button</li>
+              <li>Send a message to your bot</li>
+              <li>Copy your Telegram user id</li>
+              <li>Paste the token in the field below and click Save & Connect</li>
+            </ol>
+
+            {/*{props.channelsProbe ? (*/}
+            {/*  <details className="UiGoogleWorkspaceDetails" style={{ marginTop: 10 }}>*/}
+            {/*    <summary className="UiGoogleWorkspaceDetailsSummary">*/}
+            {/*      Troubleshooting: channels.status (probe)*/}
+            {/*    </summary>*/}
+            {/*    <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>*/}
+            {/*      <div className="UiPill">channels.status (probe)</div>*/}
+            {/*      <pre style={{ maxHeight: 240, overflow: "auto" }}>*/}
+            {/*        {JSON.stringify(props.channelsProbe, null, 2)}*/}
+            {/*      </pre>*/}
+            {/*    </div>*/}
+            {/*  </details>*/}
+            {/*) : null}*/}
+
+            <div className="UiApiKeySpacer" aria-hidden="true" />
+          </div>
 
           <div className="UiApiKeyInputRow" style={{ marginBottom: 6 }}>
             <TextInput
@@ -99,24 +98,9 @@ export function TelegramUserPage(props: {
               autoCorrect="off"
               spellCheck={false}
               isError={errorText}
+              label={"Telegram user id"}
             />
           </div>
-
-          {props.channelsProbe ? (
-            <details className="UiGoogleWorkspaceDetails" style={{ marginTop: 10 }}>
-              <summary className="UiGoogleWorkspaceDetailsSummary">
-                Troubleshooting: channels.status (probe)
-              </summary>
-              <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
-                <div className="UiPill">channels.status (probe)</div>
-                <pre style={{ maxHeight: 240, overflow: "auto" }}>
-                  {JSON.stringify(props.channelsProbe, null, 2)}
-                </pre>
-              </div>
-            </details>
-          ) : null}
-
-          <div className="UiApiKeySpacer" aria-hidden="true" />
         </div>
 
         <div className="UiApiKeyButtonRow">

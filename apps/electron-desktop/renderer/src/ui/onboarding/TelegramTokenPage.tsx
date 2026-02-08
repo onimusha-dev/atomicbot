@@ -45,34 +45,45 @@ export function TelegramTokenPage(props: {
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Paste your bot token from <strong>@BotFather</strong>. We'll store it under{" "}
-            <code>channels.telegram.botToken</code>.
-          </div>
-
-          <div className="UiSectionSubtitle">
-            Steps:
-            <ol>
-              <li>Create a bot with @BotFather and copy the token.</li>
-              <li>Paste the token here and save.</li>
-            </ol>
-            Docs:{" "}
+            Get your bot token from the Telegram.{" "}
             <a
-              href="https://docs.openclaw.ai/channels/telegram"
+              href="https://t.me/BotFather"
               target="_blank"
               rel="noopener noreferrer"
               className="UiLink"
               onClick={(e) => {
                 e.preventDefault();
                 void window.openclawDesktop?.openExternal(
-                  "https://docs.openclaw.ai/channels/telegram"
+                  "https://t.me/BotFather"
                 );
               }}
             >
-              Telegram setup ↗
+              Get bot token ↗
             </a>
           </div>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          <div className="UiSectionSubtitle">
+            <div className="UiSectionSubtitleAccent">How to get your Telegram bot token?</div>
+            <ol>
+              <li>
+                <div>
+                  Open Telegram and go to{" "}
+                  <span className="UiSectionSubtitleAccent">@BotFather</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  Start a chat and type <span className="UiSectionSubtitleAccent">/newbot</span>
+                </div>
+              </li>
+              <li>Follow the prompts to name your bot and choose a username</li>
+              <li>
+                BotFather will send you a message with your bot token. Copy the entire token (it
+                looks like a long string of numbers and letters)
+              </li>
+              <li>Paste the token in the field below and click Continue</li>
+            </ol>
+          </div>
 
           <div className="UiApiKeyInputRow">
             <TextInput
@@ -84,6 +95,7 @@ export function TelegramTokenPage(props: {
               autoCorrect="off"
               spellCheck={false}
               isError={errorText}
+              label={"Telegram bot token"}
             />
           </div>
 

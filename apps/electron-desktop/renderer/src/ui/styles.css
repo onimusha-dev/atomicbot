@@ -622,6 +622,67 @@ button:disabled {
   background-color: #ffdfdf !important;
 }
 
+.UiCheckbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.UiCheckbox__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.UiCheckbox__box {
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
+  background: #414141;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+          background 0.15s ease,
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+}
+
+.UiCheckbox__box--checked {
+  background: #0D6FFF;
+}
+
+.UiCheckbox__check {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  margin-top: -3px;
+}
+
+.UiCheckbox__box--checked .UiCheckbox__check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.UiCheckbox__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.UiCheckbox:hover .UiCheckbox__box {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.UiCheckbox__input:focus-visible + .UiCheckbox__box {
+  box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.35);
+}
+
 .UiConsentStage {
   width: 100%;
   height: 100%;
@@ -799,6 +860,40 @@ button:disabled {
   line-height: 20px;
   color: #a0a0a0;
   margin-bottom: 24px;
+
+
+  ol, ul {
+    margin: 12px 0;
+    padding: 0;
+  }
+
+  ol {
+    counter-reset: item;
+    margin: 12px 0;
+    padding: 0;
+  }
+
+  ol > li {
+    counter-increment: item;
+    display: flex;
+    column-gap: 8px;
+    margin: 6px 0;
+  }
+
+  ol > li::before {
+    content: counter(item) ".";
+    text-align: right;
+    opacity: 0.8;
+  }
+
+  li {
+    margin: 8px 0;
+    padding: 0;
+  }
+}
+
+.UiSectionSubtitleAccent{
+  color: #ffffff;
 }
 
 .UiMetaRow {
@@ -1779,6 +1874,16 @@ pre {
 
 .UiGoogleWorkspaceServices {
   margin-top: 6px;
+}
+
+.UiGoogleWorkspaceServicesCheckboxes {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  border: 1px solid #FFFFFF14;
+  border-radius: 18px;
+  margin-top: 8px;
 }
 
 .UiGoogleWorkspaceBottomRow {

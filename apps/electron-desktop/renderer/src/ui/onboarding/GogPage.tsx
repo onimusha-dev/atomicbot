@@ -2,6 +2,7 @@ import React from "react";
 
 import { CheckboxRow, GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../kit";
 import { DEFAULT_GOG_SERVICES } from "./welcome/constants";
+import { UiCheckbox } from "../kit/ui";
 
 type ServiceOption = {
   id: string;
@@ -104,15 +105,13 @@ export function GogPage(props: {
         <div className="UiContentWrapper">
           <div>
             <div className="UiSectionSubtitle">
-              Optional: connect your Google account to enable skills like email and calendar. This
-              will open a browser for consent.
+              Get your email address from the Google
             </div>
             {connected ? (
               <div className="UiGoogleWorkspaceConnected" aria-label="Connected">
                 ✓ Connected
               </div>
             ) : null}
-            {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
 
             <div className="UiGoogleWorkspaceForm">
               <TextInput
@@ -131,29 +130,28 @@ export function GogPage(props: {
               <div className="UiSectionSubtitle" style={{ margin: "14px 0 0" }}>
                 Enable
               </div>
-              <div className="UiGoogleWorkspaceServices">
+              <div className="UiGoogleWorkspaceServicesCheckboxes">
                 {SERVICE_OPTIONS.map((svc) => (
-                  <CheckboxRow
+                  <UiCheckbox
                     key={svc.id}
                     checked={Boolean(services[svc.id])}
-                    disabled={props.gogBusy}
+                    label={svc.label}
                     onChange={(checked) => {
                       setServices((prev) => ({ ...prev, [svc.id]: checked }));
                     }}
                   >
-                    <strong>{svc.label}</strong> — {svc.description}
-                  </CheckboxRow>
+                  </UiCheckbox>
                 ))}
               </div>
             </div>
           </div>
 
-          {props.gogOutput ? (
-            <details className="UiGoogleWorkspaceDetails">
-              <summary className="UiGoogleWorkspaceDetailsSummary">Details</summary>
-              <pre className="UiGoogleWorkspaceDetailsPre">{props.gogOutput}</pre>
-            </details>
-          ) : null}
+          {/*{props.gogOutput ? (*/}
+          {/*  <details className="UiGoogleWorkspaceDetails">*/}
+          {/*    <summary className="UiGoogleWorkspaceDetailsSummary">Details</summary>*/}
+          {/*    <pre className="UiGoogleWorkspaceDetailsPre">{props.gogOutput}</pre>*/}
+          {/*  </details>*/}
+          {/*) : null}*/}
         </div>
 
         <div className="UiGoogleWorkspaceBottomRow">
