@@ -2976,15 +2976,14 @@ pre {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 4px 8px;
-  border-radius: 6px;
+  padding: 8px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .UiAllowlistId {
-  font-size: 12px;
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 13px;
   color: rgba(230, 237, 243, 0.8);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2995,9 +2994,9 @@ pre {
   appearance: none;
   border: none;
   background: transparent;
-  color: rgba(239, 68, 68, 0.7);
-  font-size: 16px;
-  font-weight: 700;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1;
   padding: 0 4px;
   cursor: pointer;
@@ -3009,8 +3008,7 @@ pre {
 }
 
 .UiAllowlistRemove:hover {
-  color: rgba(248, 113, 113, 0.95);
-  background: rgba(239, 68, 68, 0.1);
+  background: #414141;
 }
 
 .UiAllowlistRemove:disabled {
