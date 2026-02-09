@@ -1445,12 +1445,27 @@ pre {
 
 /* Link styles */
 
+.UiLinkContainer {
+  margin-top: 12px;
+  color: #A0A0A0;
+  text-align: center;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 13px;
+}
+
 .UiLink {
   color: #c3ff44;
   text-decoration: none;
   cursor: pointer;
   transition: opacity 0.2s ease;
   white-space: nowrap;
+}
+
+.UiLinkMainPage {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .UiLink:hover {
@@ -2465,6 +2480,25 @@ pre {
 .UiModalContent {
   overflow-y: auto;
   flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff26 transparent;
+}
+
+.UiModalContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.UiModalContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.UiModalContent::-webkit-scrollbar-thumb {
+  background: #ffffff26;
+  border-radius: 1000px;
+}
+
+.UiModalContent::-webkit-scrollbar-thumb:hover {
+  background: #ffffff40;
 }
 
 @keyframes uiModalSlideUp {
@@ -3087,6 +3121,7 @@ pre {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
   font-size: 13px;
   color: var(--text);
+  min-width: 340px;
   max-width: 440px;
   animation: updateBannerSlideIn 300ms cubic-bezier(0.2, 0.9, 0.2, 1);
 }
@@ -3220,6 +3255,8 @@ pre {
   color: var(--lime);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
+  min-width: 32px;
+  text-align: right;
 }
 
 .UpdateBanner-btn--primary:disabled {
