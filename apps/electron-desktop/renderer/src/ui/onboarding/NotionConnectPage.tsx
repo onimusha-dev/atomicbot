@@ -65,14 +65,12 @@ export function NotionConnectPage(props: {
             Steps:
             <ol>
               <li>Create an integration.</li>
-              <li>
-                Copy the API key (usually starts with <code>ntn_</code> or <code>secret_</code>).
-              </li>
+              <li>Copy the API key (usually starts with ntn_ or secret_).</li>
               <li>Share the pages/databases you want to use with the integration.</li>
             </ol>
           </div>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
           <div className="UiApiKeyInputRow">
             <TextInput
@@ -102,7 +100,7 @@ export function NotionConnectPage(props: {
             Back
           </button>
           <PrimaryButton size={"sm"} disabled={props.busy} onClick={handleSubmit}>
-            {props.busy ? "Saving..." : "Save & return"}
+            Connect
           </PrimaryButton>
         </div>
       </GlassCard>

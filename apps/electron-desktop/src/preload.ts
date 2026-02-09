@@ -67,10 +67,7 @@ type OpenclawDesktopApi = {
   startGateway: () => Promise<{ ok: true }>;
   openExternal: (url: string) => Promise<void>;
   setApiKey: (provider: string, apiKey: string) => Promise<{ ok: true }>;
-  validateApiKey: (
-    provider: string,
-    apiKey: string,
-  ) => Promise<{ valid: boolean; error?: string }>;
+  validateApiKey: (provider: string, apiKey: string) => Promise<{ valid: boolean; error?: string }>;
   authHasApiKey: (provider: string) => Promise<{ configured: boolean }>;
   gogAuthList: () => Promise<GogExecResult>;
   gogAuthAdd: (params: {

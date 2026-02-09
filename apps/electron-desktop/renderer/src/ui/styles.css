@@ -784,9 +784,18 @@ button:disabled {
 
 .InputErrorMessage {
   font-size: 13px;
-  line-height: 16px;
-  margin-top: 8px;
+  line-height: 13px;
   color: #ff3b30;
+  padding-top: 4px;
+  padding-left: 4px;
+}
+
+.InputErrorMessageContainer {
+  height: 17px;
+}
+
+.UiModalCard .InputErrorMessageContainer {
+  height: auto;
 }
 
 .UiInput {
@@ -801,6 +810,15 @@ button:disabled {
   line-height: 22px;
   box-sizing: border-box;
   position: relative;
+}
+
+select.UiInput {
+  appearance: none;
+  cursor: pointer;
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+  background-size: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='white' class='size-6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E%0A");
 }
 
 .UiButtonRow {
@@ -2689,6 +2707,8 @@ pre {
     border-color 0.2s ease,
     background 0.2s ease,
     color 0.2s ease;
+  height: 34px;
+  box-sizing: border-box;
 }
 
 .UiProviderFilterChip:hover {
@@ -3087,7 +3107,8 @@ pre {
   gap: 12px;
   padding: 14px 18px;
   border-radius: 16px;
-  background: linear-gradient(#1d1d1d, #1d1d1d) padding-box,
+  background:
+    linear-gradient(#1d1d1d, #1d1d1d) padding-box,
     linear-gradient(
         150deg,
         rgba(255, 255, 255, 0.18) 0%,
@@ -3258,4 +3279,23 @@ pre {
   to {
     transform: rotate(360deg);
   }
+}
+
+.UiBanner {
+  background: #292929;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.UiBannerTitle {
+  font-weight: 500;
+  font-size: 14px;
+  padding-bottom: 4px;
+}
+
+.UiBannerSubtitle {
+  color: #8e8e8e;
+  font-size: 12px;
 }

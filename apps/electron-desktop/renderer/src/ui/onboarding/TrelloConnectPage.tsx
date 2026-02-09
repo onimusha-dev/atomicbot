@@ -84,13 +84,14 @@ export function TrelloConnectPage(props: {
             </ol>
           </div>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
           <div className="UiApiKeyInputRow" style={{ display: "grid", gap: 10 }}>
             <TextInput
               type="password"
               value={apiKey}
               onChange={setApiKey}
+              label="Trello API key"
               placeholder="Trello API key"
               autoCapitalize="none"
               autoCorrect="off"
@@ -102,6 +103,7 @@ export function TrelloConnectPage(props: {
               type="password"
               value={token}
               onChange={setToken}
+              label="Trello token"
               placeholder="Trello token"
               autoCapitalize="none"
               autoCorrect="off"
@@ -124,7 +126,7 @@ export function TrelloConnectPage(props: {
             Back
           </button>
           <PrimaryButton size={"sm"} disabled={props.busy} onClick={handleSubmit}>
-            {props.busy ? "Saving..." : "Save & return"}
+            Connect
           </PrimaryButton>
         </div>
       </GlassCard>

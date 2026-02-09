@@ -42,7 +42,7 @@ export function ObsidianConnectPage(props: {
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Enable Obsidian vault automation via the bundled <code>obsidian-cli</code>.
+            Enable Obsidian vault automation via the bundled obsidian-cli.
           </div>
 
           <div className="UiSectionSubtitle">
@@ -50,8 +50,8 @@ export function ObsidianConnectPage(props: {
             <ol>
               <li>Select a vault below. We'll set it as the default for future commands.</li>
               <li>
-                Connected means <code>obsidian-cli print-default --path-only</code> returns a vault
-                path that exists.
+                Connected means obsidian-cli print-default --path-only returns a vault path that
+                exists.
               </li>
             </ol>
           </div>
@@ -85,12 +85,12 @@ export function ObsidianConnectPage(props: {
             </select>
             {selected ? (
               <div className="UiSectionSubtitle" style={{ marginTop: 8 }}>
-                Selected: <code>{selected}</code>
+                Selected: {selected}
               </div>
             ) : null}
           </div>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
           <div className="UiApiKeySpacer" aria-hidden="true" />
         </div>

@@ -53,7 +53,7 @@ function buildValidationSpec(provider: string, apiKey: string): ProviderValidati
 
 export async function validateProviderApiKey(
   provider: string,
-  apiKey: string,
+  apiKey: string
 ): Promise<{ valid: boolean; error?: string }> {
   const normalized = provider.trim().toLowerCase();
   const key = apiKey.trim();

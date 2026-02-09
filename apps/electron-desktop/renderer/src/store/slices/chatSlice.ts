@@ -234,14 +234,13 @@ export const sendChatMessage = createAsyncThunk(
     const displayMessage = trimmed || (hasAttachments ? `[${attachments!.length} file(s)]` : "");
 
     // Convert input attachments to UiMessageAttachment[] for optimistic display
-    const uiAttachments: UiMessageAttachment[] | undefined =
-      attachments?.length
-        ? attachments.map((att) => ({
-            type: att.mimeType.startsWith("image/") ? "image" : "file",
-            mimeType: att.mimeType,
-            dataUrl: att.dataUrl,
-          }))
-        : undefined;
+    const uiAttachments: UiMessageAttachment[] | undefined = attachments?.length
+      ? attachments.map((att) => ({
+          type: att.mimeType.startsWith("image/") ? "image" : "file",
+          mimeType: att.mimeType,
+          dataUrl: att.dataUrl,
+        }))
+      : undefined;
 
     thunkApi.dispatch(
       chatActions.userMessageQueued({

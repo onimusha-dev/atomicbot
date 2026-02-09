@@ -179,7 +179,9 @@ export function TextInput(props: {
           aria-invalid={props.error ? true : undefined}
         />
       </div>
-      {props.isError && <div className="InputErrorMessage">{props.isError}</div>}
+      <div className="InputErrorMessageContainer">
+        {props.isError && <div className="InputErrorMessage">{props.isError}</div>}
+      </div>
     </div>
   );
 }
@@ -296,7 +298,11 @@ export function ActionButton(props: {
   const className =
     variant === "primary" ? "UiActionButton UiActionButton-primary" : "UiActionButton";
   return (
-    <button className={className} disabled={props.disabled || props.loading} onClick={props.onClick}>
+    <button
+      className={className}
+      disabled={props.disabled || props.loading}
+      onClick={props.onClick}
+    >
       {props.loading ? <span className="UiButtonSpinner" aria-hidden="true" /> : null}
       {props.children}
     </button>

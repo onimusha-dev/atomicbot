@@ -69,7 +69,7 @@ declare global {
       setApiKey: (provider: string, apiKey: string) => Promise<{ ok: true }>;
       validateApiKey: (
         provider: string,
-        apiKey: string,
+        apiKey: string
       ) => Promise<{ valid: boolean; error?: string }>;
       authHasApiKey: (provider: string) => Promise<{ configured: boolean }>;
       gogAuthList: () => Promise<GogExecResult>;

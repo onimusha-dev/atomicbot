@@ -89,11 +89,7 @@ export function MediaUnderstandingPage(props: {
     props.onSubmit(settings);
   };
 
-  const buttonLabel = validating
-    ? "Validating…"
-    : actionBusy
-      ? "Saving…"
-      : "Continue";
+  const buttonLabel = validating ? "Validating…" : actionBusy ? "Saving…" : "Continue";
 
   return (
     <HeroPageLayout variant="compact" align="center" aria-label="Media understanding setup">
@@ -116,7 +112,7 @@ export function MediaUnderstandingPage(props: {
             a compatible provider based on the API keys you already configured.
           </div>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
           <div className="UiGoogleWorkspaceServices" style={{ marginTop: 10 }}>
             <CheckboxRow
@@ -144,13 +140,6 @@ export function MediaUnderstandingPage(props: {
 
           {needsKey ? (
             <div style={{ marginTop: 12 }}>
-              <InlineError>
-                OpenAI is not configured yet. Add an OpenAI API key below to enable image + audio
-                understanding reliably.
-              </InlineError>
-              <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>
-                OpenAI API key
-              </div>
               <div className="UiApiKeyInputRow" style={{ marginTop: 8 }}>
                 <TextInput
                   type="password"
@@ -165,6 +154,7 @@ export function MediaUnderstandingPage(props: {
                   spellCheck={false}
                   disabled={isBusy}
                   isError={errorText}
+                  label={"OpenAI API key"}
                 />
               </div>
             </div>
@@ -172,12 +162,7 @@ export function MediaUnderstandingPage(props: {
         </div>
 
         <div className="UiGoogleWorkspaceBottomRow">
-          <button
-            className="UiTextButton"
-            onClick={props.onBack}
-            type="button"
-            disabled={isBusy}
-          >
+          <button className="UiTextButton" onClick={props.onBack} type="button" disabled={isBusy}>
             Back
           </button>
           <div className="UiGoogleWorkspaceActions">

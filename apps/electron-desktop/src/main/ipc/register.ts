@@ -318,7 +318,7 @@ export function registerIpcHandlers(params: {
       }
       const { validateProviderApiKey } = await import("../keys/validateApiKey");
       return validateProviderApiKey(provider, apiKey);
-    },
+    }
   );
 
   ipcMain.handle("auth-has-api-key", async (_evt, p: { provider?: unknown }) => {

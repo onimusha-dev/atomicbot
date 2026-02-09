@@ -187,20 +187,15 @@ export function SlackConnectPage(props: {
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
             Configure Slack Socket Mode tokens and access policies. We'll store settings under{" "}
-            <code>channels.slack</code>.
+            channels.slack.
           </div>
 
           <div className="UiSectionSubtitle">
             Steps:
             <ol>
               <li>Slack API → Create App (From scratch).</li>
-              <li>
-                Enable Socket Mode and create an app token (starts with <code>xapp-</code>).
-              </li>
-              <li>
-                Install the app to your workspace to get a bot token (starts with <code>xoxb-</code>
-                ).
-              </li>
+              <li>Enable Socket Mode and create an app token (starts with xapp-).</li>
+              <li>Install the app to your workspace to get a bot token (starts with xoxb-).</li>
               <li>Invite the bot to channels you want it to read.</li>
             </ol>
             Docs:{" "}
@@ -230,19 +225,18 @@ export function SlackConnectPage(props: {
                   Enable Socket Mode: <strong>Socket Mode</strong> → toggle on.
                 </li>
                 <li>
-                  Create the app token (<code>xapp-...</code>): <strong>Basic Information</strong> →{" "}
+                  Create the app token (xapp-...): <strong>Basic Information</strong> →{" "}
                   <strong>App-Level Tokens</strong> → <strong>Generate Token and Scopes</strong> →
-                  scope <code>connections:write</code>.
+                  scope connections:write.
                 </li>
                 <li>
-                  Create the bot token (<code>xoxb-...</code>):{" "}
-                  <strong>OAuth &amp; Permissions</strong> → add bot scopes (use the Manifest below)
-                  → <strong>Install to Workspace</strong> → copy{" "}
+                  Create the bot token (xoxb-...): <strong>OAuth &amp; Permissions</strong> → add
+                  bot scopes (use the Manifest below) → <strong>Install to Workspace</strong> → copy{" "}
                   <strong>Bot User OAuth Token</strong>.
                 </li>
                 <li>
-                  Invite the bot to channels you want it to read (for example, in Slack:{" "}
-                  <code>/invite @YourBot</code>).
+                  Invite the bot to channels you want it to read (for example, in Slack: /invite
+                  @YourBot).
                 </li>
               </ol>
               Notes:
@@ -260,12 +254,9 @@ export function SlackConnectPage(props: {
             </div>
           </details>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
           <div className="UiApiKeyInputRow">
-            <div className="UiSectionSubtitle" style={{ marginBottom: 8 }}>
-              Bot display name (manifest)
-            </div>
             <TextInput
               value={botName}
               onChange={setBotName}
@@ -275,13 +266,11 @@ export function SlackConnectPage(props: {
               spellCheck={false}
               disabled={props.busy}
               isError={errors.dmAllowFrom}
+              label={"Bot display name (manifest)"}
             />
           </div>
 
           <div className="UiApiKeyInputRow" style={{ marginTop: 12 }}>
-            <div className="UiSectionSubtitle" style={{ marginBottom: 8 }}>
-              Bot token (<code>xoxb-…</code>)
-            </div>
             <TextInput
               type="password"
               value={botToken}
@@ -293,13 +282,11 @@ export function SlackConnectPage(props: {
               disabled={props.busy}
               error={!props.busy && !botToken.trim()}
               isError={errors.botToken}
+              label={"Bot token xoxb-…"}
             />
           </div>
 
           <div className="UiApiKeyInputRow" style={{ marginTop: 12 }}>
-            <div className="UiSectionSubtitle" style={{ marginBottom: 8 }}>
-              App token (<code>xapp-…</code>)
-            </div>
             <TextInput
               type="password"
               value={appToken}
@@ -311,6 +298,7 @@ export function SlackConnectPage(props: {
               disabled={props.busy}
               error={!props.busy && !appToken.trim()}
               isError={errors.appToken}
+              label={"App token xapp-…"}
             />
           </div>
 
@@ -396,8 +384,8 @@ export function SlackConnectPage(props: {
             ) : null}
           </div>
 
-          <div style={{ marginTop: 12 }}>
-            <div className="UiPill">Manifest (JSON)</div>
+          <div className="UiSectionSubtitle" style={{ marginTop: 12 }}>
+            <div style={{ marginBottom: 6 }}>Manifest (JSON)</div>
             <pre style={{ maxHeight: 240 }}>{manifest}</pre>
           </div>
 
@@ -414,7 +402,7 @@ export function SlackConnectPage(props: {
             Back
           </button>
           <PrimaryButton size={"sm"} disabled={!canSubmit} onClick={handleSubmit}>
-            {props.busy ? "Saving..." : "Save & return"}
+            Connect
           </PrimaryButton>
         </div>
       </GlassCard>

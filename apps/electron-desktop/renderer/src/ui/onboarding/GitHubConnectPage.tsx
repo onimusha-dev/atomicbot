@@ -50,14 +50,11 @@ export function GitHubConnectPage(props: {
           Tips:
           <ol>
             <li>Prefer a fine-grained PAT if possible.</li>
-            <li>
-              Common scopes: <code>repo</code>, <code>read:org</code>, <code>workflow</code> (adjust
-              to your needs).
-            </li>
+            <li>Common scopes: repo, read:org, workflow (adjust to your needs).</li>
           </ol>
         </div>
 
-        {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+        {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
         <div className="UiApiKeyInputRow">
           <TextInput
@@ -70,6 +67,7 @@ export function GitHubConnectPage(props: {
             spellCheck={false}
             disabled={props.busy}
             isError={errorText}
+            label={"GitHub Personal Access Token"}
           />
         </div>
 
