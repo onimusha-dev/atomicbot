@@ -23,6 +23,10 @@ jobs:
     timeout-minutes: 90
     permissions:
       contents: write
+    env:
+      # Provide a GitHub token to all steps so fetch-*-runtime scripts
+      # can authenticate and avoid GitHub API rate limits (60 req/h → 5000 req/h).
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
