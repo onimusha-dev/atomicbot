@@ -6,7 +6,7 @@ import notionIcon from "../../../../assets/set-up-skills/Notion.svg";
 import trelloIcon from "../../../../assets/set-up-skills/Trello.svg";
 import nanoBananaIcon from "../../../../assets/set-up-skills/Nano-Banana.svg";
 import slackIcon from "../../../../assets/set-up-skills/Slack.svg";
-import sagIcon from "../../../../assets/set-up-skills/Slack.svg";
+import sagIcon from "../../../../assets/set-up-skills/Sag.svg";
 import mediaIcon from "../../../../assets/set-up-skills/Media.svg";
 import webIcon from "../../../../assets/set-up-skills/Web-Search.svg";
 import obsidianIcon from "../../../../assets/set-up-skills/Obsidian.svg";
@@ -50,43 +50,16 @@ const SKILLS: SkillEntry[] = [
   {
     id: "media-understanding",
     name: "Media Understanding",
-    description: "Transcribe voice messages, describe images, and summarize videos you send",
+    description: "Turn audio, images, and videos into text instantly",
     status: "connect",
     iconText: "M",
     iconVariant: "nano-banana",
     image: mediaIcon,
   },
   {
-    id: "web-search",
-    name: "Web Search",
-    description: "Enable the web_search tool via Brave Search or Perplexity Sonar",
-    status: "connect",
-    iconText: "🌐",
-    iconVariant: "gemini",
-    image: webIcon,
-  },
-  {
-    id: "notion",
-    name: "Notion",
-    description: "Create, search, update and organize your notes, docs, and knowledge base",
-    status: "connect",
-    iconText: "N",
-    iconVariant: "notion",
-    image: notionIcon,
-  },
-  {
-    id: "trello",
-    name: "Trello",
-    description: "Track tasks, update boards and manage projects without opening Trello",
-    status: "connect",
-    iconText: "T",
-    iconVariant: "trello",
-    image: trelloIcon,
-  },
-  {
     id: "apple-notes",
     name: "Apple Notes",
-    description: "Create, search and organize notes without leaving your keyboard",
+    description: "Create, search and organize your notes",
     status: "connect",
     iconText: "",
     iconVariant: "apple",
@@ -95,16 +68,43 @@ const SKILLS: SkillEntry[] = [
   {
     id: "apple-reminders",
     name: "Apple Reminders",
-    description: "Add, list and complete reminders without opening the Reminders app",
+    description: "Add, list and complete your reminders",
     status: "connect",
     iconText: "✓",
     iconVariant: "reminders",
     image: remindersIcon,
   },
   {
+    id: "web-search",
+    name: "Web Search",
+    description: "Get up-to-date answers from the web via Brave Search or Perplexity Sonar",
+    status: "connect",
+    iconText: "🌐",
+    iconVariant: "gemini",
+    image: webIcon,
+  },
+  {
+    id: "notion",
+    name: "Notion",
+    description: "Create, search, update and organize your Notion pages",
+    status: "connect",
+    iconText: "N",
+    iconVariant: "notion",
+    image: notionIcon,
+  },
+  {
+    id: "trello",
+    name: "Trello",
+    description: "Track tasks, update boards and manage your projects",
+    status: "connect",
+    iconText: "T",
+    iconVariant: "trello",
+    image: trelloIcon,
+  },
+  {
     id: "obsidian",
     name: "Obsidian",
-    description: "Work with your Obsidian vaults from the terminal (search, create, move, delete)",
+    description: "Search and manage your Obsidian vaults",
     status: "connect",
     iconText: "💎",
     iconVariant: "obsidian",
@@ -113,7 +113,7 @@ const SKILLS: SkillEntry[] = [
   {
     id: "github",
     name: "GitHub",
-    description: "Work with issues, pull requests, and workflows via the bundled gh CLI",
+    description: "Review pull requests, manage issues and workflows",
     status: "connect",
     iconText: "🐙",
     iconVariant: "github",
@@ -122,24 +122,16 @@ const SKILLS: SkillEntry[] = [
   {
     id: "slack",
     name: "Slack",
-    description: "Send messages, react, and manage pins in your Slack workspace",
+    description: "Send messages, search info and manage pins in your workspace",
     status: "connect",
     iconText: "S",
     iconVariant: "slack",
     image: slackIcon,
   },
   {
-    id: "gemini",
-    name: "Gemini",
-    description: "Interact with Google's Gemini models and experiment with powerful multimodal AI",
-    status: "connect",
-    iconText: "✦",
-    iconVariant: "gemini",
-  },
-  {
     id: "nano-banana",
-    name: "Nano Banana",
-    description: "Generate high-quality images with modern image models",
+    name: "Nano Banana (Images)",
+    description: "Generate AI images from text prompts",
     status: "connect",
     iconText: "NB",
     iconVariant: "nano-banana",
@@ -147,8 +139,8 @@ const SKILLS: SkillEntry[] = [
   },
   {
     id: "sag",
-    name: "Sag",
-    description: "Elevate your text-to-speech tool",
+    name: "Eleven Labs",
+    description: "Create lifelike speech with AI voice generator",
     status: "coming-soon",
     iconText: "Ⅱ",
     iconVariant: "sag",
