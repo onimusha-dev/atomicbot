@@ -105,7 +105,7 @@ export function TelegramTokenPage(props: {
             Back
           </button>
           <PrimaryButton size={"sm"} onClick={handleSubmit}>
-            Save & continue
+            Continue
           </PrimaryButton>
         </div>
       </GlassCard>

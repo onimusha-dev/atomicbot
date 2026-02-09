@@ -28,7 +28,7 @@ export function AppleRemindersConnectPage(props: {
 
         <div className="UiApiKeyTitle">Connect Apple Reminders</div>
         <div className="UiApiKeySubtitle">
-          Enable Reminders access via the bundled <code>remindctl</code> CLI.
+          Enable Reminders access via the bundled remindctl CLI.
         </div>
 
         <div className="UiSectionSubtitle">
@@ -42,8 +42,6 @@ export function AppleRemindersConnectPage(props: {
           </ol>
         </div>
 
-        {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
-
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
         <div className="UiApiKeyButtonRow">
@@ -56,11 +54,8 @@ export function AppleRemindersConnectPage(props: {
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <SecondaryButton size={"sm"} disabled={props.busy} onClick={props.onAuthorizeAndEnable}>
-              {props.busy ? "Authorizing..." : "Authorize & enable"}
-            </SecondaryButton>
-            <PrimaryButton size={"sm"} disabled={props.busy} onClick={props.onBack}>
-              Done
+            <PrimaryButton size={"sm"} disabled={props.busy} onClick={props.onAuthorizeAndEnable}>
+              Connect
             </PrimaryButton>
           </div>
         </div>

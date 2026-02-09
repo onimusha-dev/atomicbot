@@ -784,9 +784,18 @@ button:disabled {
 
 .InputErrorMessage {
   font-size: 13px;
-  line-height: 16px;
-  margin-top: 8px;
+  line-height: 13px;
   color: #ff3b30;
+  padding-top: 4px;
+  padding-left: 4px;
+}
+
+.InputErrorMessageContainer {
+  height: 17px;
+}
+
+.UiModalCard .InputErrorMessageContainer {
+  height: auto;
 }
 
 .UiInput {

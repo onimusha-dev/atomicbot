@@ -156,14 +156,6 @@ export function GogPage(props: {
             {skipText}
           </button>
           <div className="UiGoogleWorkspaceActions">
-            <button
-              className="UiSecondaryButton UiSecondaryButtonSm UiGoogleWorkspaceSecondary"
-              type="button"
-              disabled={props.gogBusy}
-              onClick={() => void props.onRunAuthList()}
-            >
-              {props.gogBusy ? "Checking…" : "Check"}
-            </button>
             <PrimaryButton
               size={"sm"}
               disabled={props.gogBusy || selectedServices.length === 0}

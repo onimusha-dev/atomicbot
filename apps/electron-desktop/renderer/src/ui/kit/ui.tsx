@@ -179,7 +179,9 @@ export function TextInput(props: {
           aria-invalid={props.error ? true : undefined}
         />
       </div>
-      {props.isError && <div className="InputErrorMessage">{props.isError}</div>}
+     <div className="InputErrorMessageContainer">
+       {props.isError && <div className="InputErrorMessage">{props.isError}</div>}
+     </div>
     </div>
   );
 }

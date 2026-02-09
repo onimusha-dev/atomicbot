@@ -77,7 +77,7 @@ export function WebSearchPage(props: {
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Choose your web search provider and add an API key for the <code>web_search</code> tool.
+            Choose your web search provider and add an API key for the web_search tool.
           </div>
 
           <div className="UiProviderList" style={{ marginTop: 12 }}>
@@ -127,7 +127,7 @@ export function WebSearchPage(props: {
             ) : null}
           </div>
 
-          {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
+          {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
           <div className="UiApiKeyInputRow">
             <TextInput
@@ -140,6 +140,7 @@ export function WebSearchPage(props: {
               spellCheck={false}
               disabled={props.busy}
               isError={errorText}
+              label={meta.name + " API key"}
             />
           </div>
 
@@ -156,9 +157,6 @@ export function WebSearchPage(props: {
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <SecondaryButton size={"sm"} disabled={props.busy} onClick={props.onSkip}>
-              Skip
-            </SecondaryButton>
             <PrimaryButton size={"sm"} disabled={props.busy} onClick={handleSubmit}>
               {props.busy ? "Saving..." : "Continue"}
             </PrimaryButton>

@@ -69,7 +69,7 @@ export function TelegramUserPage(props: {
               <li>Click the Start button</li>
               <li>Send a message to your bot</li>
               <li>Copy your Telegram user id</li>
-              <li>Paste the token in the field below and click Save & Connect</li>
+              <li>Paste the token in the field below and click Connect</li>
             </ol>
 
             {/*{props.channelsProbe ? (*/}
@@ -108,7 +108,7 @@ export function TelegramUserPage(props: {
             Back
           </button>
           <PrimaryButton size={"sm"} onClick={handleSubmit}>
-            Save & return
+            Connect
           </PrimaryButton>
         </div>
       </GlassCard>

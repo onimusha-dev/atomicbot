@@ -28,7 +28,7 @@ export function AppleNotesConnectPage(props: {
 
         <div className="UiApiKeyTitle">Connect Apple Notes</div>
         <div className="UiApiKeySubtitle">
-          Enable Apple Notes access via the bundled <code>memo</code> CLI.
+          Enable Apple Notes access via the bundled memo CLI.
         </div>
 
         <div className="UiSectionSubtitle">
@@ -40,8 +40,6 @@ export function AppleNotesConnectPage(props: {
             </li>
           </ol>
         </div>
-
-        {props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}
 
         <div className="UiApiKeySpacer" aria-hidden="true" />
 
@@ -55,11 +53,8 @@ export function AppleNotesConnectPage(props: {
             Back
           </button>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <SecondaryButton size={"sm"} disabled={props.busy} onClick={props.onCheckAndEnable}>
-              {props.busy ? "Checking..." : "Check & enable"}
-            </SecondaryButton>
-            <PrimaryButton size={"sm"} disabled={props.busy} onClick={props.onBack}>
-              Done
+            <PrimaryButton size={"sm"} disabled={props.busy} onClick={props.onCheckAndEnable}>
+              Connect
             </PrimaryButton>
           </div>
         </div>
