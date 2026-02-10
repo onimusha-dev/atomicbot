@@ -44,21 +44,26 @@ function run(argv) {
   }
 
   // ---- Window ----
-  var W = 340, H = 150;
-  // NSWindowStyleMaskTitled (1) | NSWindowStyleMaskFullSizeContentView (1<<15)
-  var styleMask = 1 | (1 << 15);
+  // Titled + FullSizeContentView gives native rounded corners; traffic light
+  // buttons are hidden so they don't shift the layout.
+  var W = 360, H = 180;
+  var styleMask = 1 | (1 << 15); // NSWindowStyleMaskTitled | FullSizeContentView
   var win = $.NSWindow.alloc.initWithContentRectStyleMaskBackingDefer(
     $.NSMakeRect(0, 0, W, H), styleMask, 2 /* NSBackingStoreBuffered */, false
   );
 
   win.titlebarAppearsTransparent = true;
   win.titleVisibility = 1; // NSWindowTitleHidden
+  // Hide close / minimize / zoom buttons (JXA: use property, not setter).
+  win.standardWindowButton(0).hidden = true;
+  win.standardWindowButton(1).hidden = true;
+  win.standardWindowButton(2).hidden = true;
   win.isMovableByWindowBackground = true;
   win.level = 3; // NSFloatingWindowLevel
+  win.hasShadow = true;
   win.backgroundColor = $.NSColor.colorWithSRGBRedGreenBlueAlpha(
     0.043, 0.059, 0.078, 1.0 // #0b0f14
   );
-  win.hasShadow = true;
 
   // Force dark appearance so the native spinner is light-on-dark.
   try {
@@ -70,50 +75,56 @@ function run(argv) {
 
   var cv = win.contentView;
 
-  // ---- Spinner ----
+  // ---- Spinner (40x40, centered) ----
   var spinner = $.NSProgressIndicator.alloc.initWithFrame(
-    $.NSMakeRect((W - 32) / 2, 78, 32, 32)
+    $.NSMakeRect((W - 40) / 2, 70, 40, 40)
   );
   spinner.style = 1; // NSProgressIndicatorStyleSpinning
   spinner.displayedWhenStopped = false;
   spinner.startAnimation(null);
   cv.addSubview(spinner);
 
-  // ---- Title label ----
-  var titleField = $.NSTextField.alloc.initWithFrame(
-    $.NSMakeRect(0, 42, W, 28)
-  );
-  titleField.stringValue = 'Updating Atomic Bot\\u2026'; // ellipsis
-  titleField.alignment = 2; // NSTextAlignmentCenter
-  titleField.setBezeled(false);
-  titleField.setDrawsBackground(false);
-  titleField.setEditable(false);
-  titleField.setSelectable(false);
-  titleField.textColor = $.NSColor.colorWithSRGBRedGreenBlueAlpha(
-    0.9, 0.93, 0.95, 1.0
-  );
-  titleField.font = $.NSFont.systemFontOfSizeWeight(16, 0.5);
-  cv.addSubview(titleField);
+  // ---- Helper: measure text width and create a centered label ----
+  function makeLabel(text, font, color, y, h) {
+    var attrs = $.NSDictionary.dictionaryWithObjectForKey(font, $.NSFontAttributeName);
+    var textW = $(text).sizeWithAttributes(attrs).width + 4;
+    var textX = (W - textW) / 2;
+    var field = $.NSTextField.alloc.initWithFrame($.NSMakeRect(textX, y, textW, h));
+    field.stringValue = text;
+    field.setBezeled(false);
+    field.setDrawsBackground(false);
+    field.setEditable(false);
+    field.setSelectable(false);
+    field.textColor = color;
+    field.font = font;
+    return field;
+  }
 
-  // ---- Subtitle ----
-  var subField = $.NSTextField.alloc.initWithFrame(
-    $.NSMakeRect(0, 20, W, 20)
-  );
-  subField.stringValue = 'Please wait\\u2026';
-  subField.alignment = 2;
-  subField.setBezeled(false);
-  subField.setDrawsBackground(false);
-  subField.setEditable(false);
-  subField.setSelectable(false);
-  subField.textColor = $.NSColor.colorWithSRGBRedGreenBlueAlpha(
-    0.55, 0.6, 0.65, 1.0
-  );
-  subField.font = $.NSFont.systemFontOfSize(12);
-  cv.addSubview(subField);
+  // ---- Title label (manually centered) ----
+  cv.addSubview(makeLabel(
+    'Updating Atomic Bot\\u2026',
+    $.NSFont.systemFontOfSizeWeight(16, 0.5),
+    $.NSColor.colorWithSRGBRedGreenBlueAlpha(0.9, 0.93, 0.95, 1.0),
+    26, 28
+  ));
+
+  // ---- Subtitle (manually centered) ----
+  cv.addSubview(makeLabel(
+    'Please wait\\u2026',
+    $.NSFont.systemFontOfSize(12),
+    $.NSColor.colorWithSRGBRedGreenBlueAlpha(0.55, 0.6, 0.65, 1.0),
+    4, 20
+  ));
 
   // ---- Show ----
-  win.center();
+  // Manual centering via setFrameDisplayAnimate (performSelector('center')
+  // and win.center() both crash in JXA).
+  var screen = $.NSScreen.mainScreen.frame;
+  var cx = (screen.size.width - W) / 2;
+  var cy = (screen.size.height - H) / 2;
+  win.setFrameDisplayAnimate($.NSMakeRect(cx, cy, W, H), true, false);
   win.makeKeyAndOrderFront(null);
+  nsApp.activateIgnoringOtherApps(true);
 
   // ---- Poll loop: wait for the new app or timeout ----
   var MAX_SECONDS = 120;
