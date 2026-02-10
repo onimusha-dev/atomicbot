@@ -77,7 +77,8 @@ export function WebSearchPage(props: {
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Enables the bot to access up-to-date information from the web using external search providers like Brave or Perplexity.
+            Enables the bot to access up-to-date information from the web using external search
+            providers like Brave or Perplexity.
           </div>
 
           <div className="UiProviderList" style={{ marginTop: 12 }}>

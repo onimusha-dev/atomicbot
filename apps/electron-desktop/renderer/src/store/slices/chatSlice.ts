@@ -151,8 +151,7 @@ export function extractAttachmentsFromMessage(msg: unknown): UiMessageAttachment
 }
 
 // Default heartbeat prompt sent by the gateway as a user message.
-const HEARTBEAT_PROMPT_PREFIX =
-  "Read HEARTBEAT.md if it exists (workspace context).";
+const HEARTBEAT_PROMPT_PREFIX = "Read HEARTBEAT.md if it exists (workspace context).";
 const HEARTBEAT_OK_TOKEN = "HEARTBEAT_OK";
 
 /** Detect heartbeat-related messages that should be hidden from the chat UI. */
