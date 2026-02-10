@@ -39,7 +39,7 @@ export function ProviderSelectPage(props: {
 
         <div className="UiSectionTitle">Choose Al Provider</div>
         <div className="UiSectionSubtitle">
-          Pick the Al provider you want to start with. You can switch or add more providers later.
+          Pick the AI provider you want to start with. You can switch or add more providers later.
         </div>
 
         <div className="UiProviderList UiListWithScroll">
@@ -62,7 +62,8 @@ export function ProviderSelectPage(props: {
               <div className="UiProviderContent">
                 <div className="UiProviderHeader">
                   <span className="UiProviderName">{provider.name}</span>
-                  {provider.recommended && <span className="UiProviderBadge">Popular</span>}
+                  {provider.recommended && <span className="UiProviderBadge">Recommended</span>}
+                  {provider.popular && <span className="UiProviderBadgePopular">Popular</span>}
                 </div>
                 <div className="UiProviderDescription">{provider.description}</div>
               </div>

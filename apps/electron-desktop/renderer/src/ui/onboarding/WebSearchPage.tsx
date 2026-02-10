@@ -77,7 +77,8 @@ export function WebSearchPage(props: {
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Choose your web search provider and add an API key for the web_search tool.
+            Enables the bot to access up-to-date information from the web using external search
+            providers like Brave or Perplexity.
           </div>
 
           <div className="UiProviderList" style={{ marginTop: 12 }}>

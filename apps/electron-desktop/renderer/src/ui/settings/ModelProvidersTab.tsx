@@ -555,8 +555,6 @@ export function ModelProvidersTab(props: {
             <div className="UiSectionSubtitle">No model selected yet. Choose one below.</div>
           )}
 
-          {modelsError ? <InlineError>{modelsError}</InlineError> : null}
-
           <div className="UiSettingsSubtitle">Change Model</div>
           <div className="UiInputRow">
             <TextInput

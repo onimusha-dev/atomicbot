@@ -172,7 +172,12 @@ export function SlackConnectorModalContent(props: {
     <div className="UiSkillModalContent">
       <div className="UiSectionSubtitle">
         Connect your Slack workspace via Socket Mode. See{" "}
-        <a href="https://docs.openclaw.ai/slack" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://docs.openclaw.ai/slack"
+          className="UiLink"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Slack setup docs
         </a>{" "}
         for details.

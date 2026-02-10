@@ -236,7 +236,8 @@ export function SlackConnectPage(props: {
                   </div>
                 </li>
                 <li>
-                  <div>Create the bot token (xoxb-...): <strong>OAuth &amp; Permissions</strong> → add
+                  <div>
+                    Create the bot token (xoxb-...): <strong>OAuth &amp; Permissions</strong> → add
                     bot scopes (use the Manifest below) → <strong>Install to Workspace</strong> →
                     copy <strong>Bot User OAuth Token</strong>.
                   </div>

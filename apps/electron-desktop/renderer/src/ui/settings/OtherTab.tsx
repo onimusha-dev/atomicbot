@@ -140,8 +140,8 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
           </div>
           <div className="UiSettingsOtherRow">
             <span className="UiSettingsOtherRowLabel">Support</span>
-            <a href="mailto:hello@atomicbot.ai" className="UiSettingsOtherLink">
-              hello@atomicbot.ai
+            <a href="mailto:support@atomicbot.ai" className="UiSettingsOtherLink">
+              support@atomicbot.ai
             </a>
           </div>
           <div className="UiSettingsOtherRow">

@@ -88,7 +88,7 @@ export function GogPage(props: {
     }
     const account = props.gogAccount.trim();
     if (!account) {
-      setErrorText("Please enter your mail Address to continue");
+      setErrorText("Please enter your email address to continue");
       return;
     }
     if (!emailRegex.test(account)) {

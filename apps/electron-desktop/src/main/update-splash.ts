@@ -219,7 +219,7 @@ export function showUpdateSplash(): void {
     const child = spawn(
       "osascript",
       ["-l", "JavaScript", scriptPath, String(process.pid), sentinelPath, bundleId],
-      { detached: true, stdio: "ignore" },
+      { detached: true, stdio: "ignore" }
     );
     child.unref();
   } catch {

@@ -6,6 +6,7 @@ export type ModelProviderInfo = {
   description: string;
   recommended?: boolean;
   placeholder: string;
+  popular?: boolean;
   helpUrl?: string;
   helpText?: string;
 };
@@ -42,7 +43,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
     id: "openrouter",
     name: "OpenRouter",
     description: "One gateway to 200+ AI models. Ideal for flexibility and experimentation",
-    recommended: true,
+    popular: true,
     placeholder: "sk-or-...",
     helpUrl: "https://openrouter.ai/keys",
     helpText: "Get your API key from OpenRouter.",

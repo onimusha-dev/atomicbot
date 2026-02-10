@@ -41,8 +41,8 @@ body {
 }
 
 *::-webkit-scrollbar {
-  width: 0;
   height: 0;
+  width: 0;
 }
 
 a {
@@ -1388,8 +1388,7 @@ pre {
 .UiContentWrapper {
   flex: 1;
   overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #ffffff26 transparent;
+  scrollbar-width: auto;
   margin-bottom: 10px;
   padding-bottom: 4px;
 }
@@ -1399,7 +1398,8 @@ pre {
 }
 
 .UiContentWrapper::-webkit-scrollbar-track {
-  background: transparent;
+  background: #ffffff0a;
+  border-radius: 1000px;
 }
 
 .UiContentWrapper::-webkit-scrollbar-thumb {
@@ -1643,6 +1643,16 @@ pre {
   font-weight: 400;
   font-size: 13px;
   color: #4e95ff;
+}
+
+.UiProviderBadgePopular {
+  opacity: 1;
+  border-radius: 4px;
+  padding: 1px 4px;
+  background-color: #f34eff26;
+  font-weight: 400;
+  font-size: 13px;
+  color: #f34eff;
 }
 
 .UiProviderDescription {
@@ -2492,8 +2502,7 @@ pre {
 .UiModalContent {
   overflow-y: auto;
   flex: 1;
-  scrollbar-width: thin;
-  scrollbar-color: #ffffff26 transparent;
+  scrollbar-width: auto;
 }
 
 .UiModalContent::-webkit-scrollbar {
@@ -2501,7 +2510,8 @@ pre {
 }
 
 .UiModalContent::-webkit-scrollbar-track {
-  background: transparent;
+  background: #ffffff0a;
+  border-radius: 1000px;
 }
 
 .UiModalContent::-webkit-scrollbar-thumb {

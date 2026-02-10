@@ -108,8 +108,7 @@ export function MediaUnderstandingPage(props: {
 
         <div className="UiContentWrapper">
           <div className="UiSectionSubtitle">
-            Let OpenClaw understand images, voice notes, and videos you send. It automatically picks
-            a compatible provider based on the API keys you already configured.
+            Enables the bot to analyze images, audio and videos that come from external sources.
           </div>
 
           {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}

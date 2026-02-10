@@ -71,7 +71,7 @@ function pruneQueue(queue: ExecApprovalRequest[]): ExecApprovalRequest[] {
 
 function addToQueue(
   queue: ExecApprovalRequest[],
-  entry: ExecApprovalRequest,
+  entry: ExecApprovalRequest
 ): ExecApprovalRequest[] {
   const next = pruneQueue(queue).filter((e) => e.id !== entry.id);
   next.push(entry);
@@ -210,7 +210,12 @@ function ExecApprovalCard({
   }, [onDecision]);
 
   return (
-    <div className="ExecApprovalOverlay" role="dialog" aria-modal="true" aria-label="Exec approval needed">
+    <div
+      className="ExecApprovalOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Exec approval needed"
+    >
       <div className="ExecApprovalCard">
         {/* Header */}
         <div className="ExecApprovalHeader">
@@ -218,9 +223,7 @@ function ExecApprovalCard({
             <div className="ExecApprovalTitle">Exec approval needed</div>
             <div className="ExecApprovalSub">{remaining}</div>
           </div>
-          {queueCount > 1 && (
-            <div className="ExecApprovalBadge">{queueCount} pending</div>
-          )}
+          {queueCount > 1 && <div className="ExecApprovalBadge">{queueCount} pending</div>}
         </div>
 
         {/* Command */}
