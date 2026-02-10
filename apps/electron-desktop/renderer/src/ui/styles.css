@@ -1643,6 +1643,16 @@ pre {
   color: #4e95ff;
 }
 
+.UiProviderBadgePopular {
+  opacity: 1;
+  border-radius: 4px;
+  padding: 1px 4px;
+  background-color: #F34EFF26;
+  font-weight: 400;
+  font-size: 13px;
+  color: #F34EFF;
+}
+
 .UiProviderDescription {
   font-weight: 400;
   font-size: 13px;
