@@ -197,6 +197,15 @@ export function ConnectorsTab(props: {
     [markConnected, refresh]
   );
 
+  /** Mark connector as connected without closing the modal (used mid-setup). */
+  const handleTokenSaved = React.useCallback(
+    (id: ConnectorId) => {
+      markConnected(id);
+      void refresh();
+    },
+    [markConnected, refresh]
+  );
+
   const handleDisabled = React.useCallback(
     async (id: ConnectorId) => {
       props.onError(null);
@@ -213,7 +222,7 @@ export function ConnectorsTab(props: {
   );
 
   const tileClass = (status: ConnectorStatus) => {
-    if (status === "disabled") return "UiSkillCard UiSkillCard--disabled";
+    if (status === "disabled") {return "UiSkillCard UiSkillCard--disabled";}
     return "UiSkillCard";
   };
 
@@ -270,6 +279,7 @@ export function ConnectorsTab(props: {
           loadConfig={loadConfig}
           isConnected={statuses.telegram === "connected"}
           onConnected={() => handleConnected("telegram")}
+          onTokenSaved={() => handleTokenSaved("telegram")}
           onDisabled={() => void handleDisabled("telegram")}
         />
       </Modal>
