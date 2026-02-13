@@ -59,6 +59,7 @@ declare global {
       version: string;
       openLogs: () => Promise<void>;
       openWorkspaceFolder: () => Promise<void>;
+      openOpenclawFolder: () => Promise<void>;
       toggleDevTools: () => Promise<void>;
       retry: () => Promise<void>;
       resetAndClose: () => Promise<ResetAndCloseResult>;
@@ -95,6 +96,9 @@ declare global {
       ghAuthStatus: () => Promise<GhExecResult>;
       ghApiUser: () => Promise<GhExecResult>;
       onGatewayState: (cb: (state: GatewayState) => void) => () => void;
+      // OpenClaw config (openclaw.json)
+      readConfig: () => Promise<{ ok: boolean; content: string; error?: string }>;
+      writeConfig: (content: string) => Promise<{ ok: boolean; error?: string }>;
       // Launch at login (auto-start)
       getLaunchAtLogin: () => Promise<{ enabled: boolean }>;
       setLaunchAtLogin: (enabled: boolean) => Promise<{ ok: true }>;

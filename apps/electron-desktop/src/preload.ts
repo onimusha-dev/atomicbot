@@ -59,6 +59,7 @@ type OpenclawDesktopApi = {
   version: string;
   openLogs: () => Promise<void>;
   openWorkspaceFolder: () => Promise<void>;
+  openOpenclawFolder: () => Promise<void>;
   toggleDevTools: () => Promise<void>;
   retry: () => Promise<void>;
   resetAndClose: () => Promise<ResetAndCloseResult>;
@@ -92,6 +93,9 @@ type OpenclawDesktopApi = {
   ghAuthStatus: () => Promise<GhExecResult>;
   ghApiUser: () => Promise<GhExecResult>;
   onGatewayState: (cb: (state: GatewayState) => void) => () => void;
+  // OpenClaw config (openclaw.json)
+  readConfig: () => Promise<{ ok: boolean; content: string; error?: string }>;
+  writeConfig: (content: string) => Promise<{ ok: boolean; error?: string }>;
   // Launch at login (auto-start)
   getLaunchAtLogin: () => Promise<{ enabled: boolean }>;
   setLaunchAtLogin: (enabled: boolean) => Promise<{ ok: true }>;
@@ -111,6 +115,7 @@ const api: OpenclawDesktopApi = {
   version: "0.0.0",
   openLogs: async () => ipcRenderer.invoke("open-logs"),
   openWorkspaceFolder: async () => ipcRenderer.invoke("open-workspace-folder"),
+  openOpenclawFolder: async () => ipcRenderer.invoke("open-openclaw-folder"),
   toggleDevTools: async () => ipcRenderer.invoke("devtools-toggle"),
   retry: async () => ipcRenderer.invoke("gateway-retry"),
   resetAndClose: async () => ipcRenderer.invoke("reset-and-close"),
@@ -149,6 +154,9 @@ const api: OpenclawDesktopApi = {
       ipcRenderer.removeListener("gateway-state", handler);
     };
   },
+  // OpenClaw config (openclaw.json)
+  readConfig: async () => ipcRenderer.invoke("config-read"),
+  writeConfig: async (content: string) => ipcRenderer.invoke("config-write", { content }),
   // Launch at login (auto-start)
   getLaunchAtLogin: async () => ipcRenderer.invoke("launch-at-login-get"),
   setLaunchAtLogin: async (enabled: boolean) =>

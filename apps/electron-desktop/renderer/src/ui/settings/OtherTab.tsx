@@ -62,7 +62,25 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
     <div className="UiSettingsContentInner UiSettingsOther">
       <h2 className="UiSettingsOtherTitle">Other</h2>
 
-      {/* Agent workspace folder */}
+      <section className="UiSettingsOtherSection">
+        <h3 className="UiSettingsOtherSectionTitle">OpenClaw Folder</h3>
+        <div className="UiSettingsOtherCard">
+          <div className="UiSettingsOtherRow">
+            <span className="UiSettingsOtherRowLabel">OpenClaw folder</span>
+            <button
+              type="button"
+              className="UiSettingsOtherLink"
+              onClick={() => void api?.openOpenclawFolder()}
+            >
+              Open folder
+            </button>
+          </div>
+        </div>
+        <p className="UiSettingsOtherHint">
+          Contains your local OpenClaw state and app data.
+        </p>
+      </section>
+
       <section className="UiSettingsOtherSection">
         <h3 className="UiSettingsOtherSectionTitle">Workspace</h3>
         <div className="UiSettingsOtherCard">
@@ -78,11 +96,7 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
           </div>
         </div>
         <p className="UiSettingsOtherHint">
-          The workspace contains markdown files that define how the agent works: AGENTS.md
-          (instructions), SOUL.md (personality and style), USER.md (info about you), IDENTITY.md
-          (name, emoji, avatar), TOOLS.md (tool notes), HEARTBEAT.md (heartbeat checks), and
-          BOOTSTRAP.md (initial setup, safe to delete after first conversation). You can edit them
-          manually in any text editor.
+          Contains editable .md files (AGENTS, SOUL, USER, IDENTITY, TOOLS, HEARTBEAT, BOOTSTRAP) that shape the agent.
         </p>
       </section>
 

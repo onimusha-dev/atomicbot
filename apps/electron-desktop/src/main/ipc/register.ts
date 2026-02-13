@@ -260,6 +260,16 @@ export function registerIpcHandlers(params: {
     await shell.openPath(workspaceDir);
   });
 
+  // Open the Openclaw state folder in Finder/Explorer.
+  ipcMain.handle("open-openclaw-folder", async () => {
+    try {
+      fs.mkdirSync(params.stateDir, { recursive: true });
+    } catch {
+      // ignore
+    }
+    await shell.openPath(params.stateDir);
+  });
+
   ipcMain.handle("devtools-toggle", async () => {
     const win = params.getMainWindow();
     if (!win || win.isDestroyed()) {
@@ -702,6 +712,38 @@ export function registerIpcHandlers(params: {
       env: { ...process.env, GH_CONFIG_DIR: ghConfigDir },
       timeoutMs: 15_000,
     });
+  });
+
+  // OpenClaw config (openclaw.json) read/write.
+  const configJsonPath = path.join(params.stateDir, "openclaw.json");
+
+  ipcMain.handle("config-read", async () => {
+    try {
+      if (!fs.existsSync(configJsonPath)) {
+        return { ok: true, content: "" };
+      }
+      const content = fs.readFileSync(configJsonPath, "utf-8");
+      return { ok: true, content };
+    } catch (err) {
+      return { ok: false, content: "", error: String(err) };
+    }
+  });
+
+  ipcMain.handle("config-write", async (_evt, p: { content?: unknown }) => {
+    const content = typeof p?.content === "string" ? p.content : "";
+    try {
+      // Validate JSON before writing to prevent corruption.
+      JSON.parse(content);
+    } catch {
+      return { ok: false, error: "Invalid JSON" };
+    }
+    try {
+      fs.mkdirSync(path.dirname(configJsonPath), { recursive: true });
+      fs.writeFileSync(configJsonPath, content, "utf-8");
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: String(err) };
+    }
   });
 
   // Launch at login (auto-start) IPC handlers.
