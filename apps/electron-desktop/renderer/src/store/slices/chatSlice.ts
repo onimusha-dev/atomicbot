@@ -209,6 +209,10 @@ export function parseHistoryMessages(raw: unknown[]): UiMessage[] {
     if (!text && !hasAttachments) {
       continue;
     }
+    // Hide heartbeat prompts and ack responses from chat history
+    if (text && isHeartbeatMessage(role, text)) {
+      continue;
+    }
     const ts =
       typeof msg.timestamp === "number" && Number.isFinite(msg.timestamp)
         ? Math.floor(msg.timestamp)
