@@ -588,13 +588,6 @@
   gap: 10px;
 }
 
-.UiGoogleWorkspaceSecondary {
-  margin-top: 0;
-  width: auto;
-  min-width: 110px;
-  padding: 8px 16px;
-}
-
 .UiGoogleWorkspaceActions .UiPrimaryButton {
   margin-top: 0;
   width: auto;
@@ -644,54 +637,6 @@
   margin-top: 16px;
 }
 
-.UiModelContent {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  gap: 2px;
-}
-
-.UiModelName {
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.UiModelMeta {
-  font-size: 13px;
-  color: rgba(230, 237, 243, 0.7);
-  line-height: 1.35;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.UiModelHints {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.UiModelHint {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.45);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 2px 6px;
-  border-radius: var(--radius-xs);
-}
-
-.UiModelNameRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  min-width: 0;
-}
-
 .UiModelTierBadge {
   font-size: 13px;
   font-weight: 600;
@@ -718,20 +663,6 @@
   color: #f34eff;
 }
 
-.UiModelTier {
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 2px 0;
-  border-radius: var(--radius-xs);
-  background-color: var(--accent-color, #a3e635);
-  color: #0b0f14;
-  flex-shrink: 0;
-  width: 46px;
-  text-align: center;
-}
-
 .UiModelBottomRow {
   display: flex;
   align-items: center;
@@ -749,84 +680,3 @@
   min-width: 140px;
 }
 
-.UiSectionTitleRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.UiTierHelp {
-  position: relative;
-  display: inline-flex;
-}
-
-.UiTierHelpIcon {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: help;
-  transition:
-    border-color 0.15s,
-    color 0.15s;
-}
-
-.UiTierHelp:hover .UiTierHelpIcon {
-  border-color: var(--accent-color, #a3e635);
-  color: var(--accent-color, #a3e635);
-}
-
-.UiTierHelpTooltip {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 8px;
-  background: rgba(20, 24, 28, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  padding: 12px;
-  width: 280px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  z-index: 100;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.15s,
-    visibility 0.15s;
-}
-
-.UiTierHelp:hover .UiTierHelpTooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-.UiTierHelpItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.4;
-}
-
-.UiTierHelpItem:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.UiTierHelpItem:first-child {
-  padding-top: 0;
-}
-
-.UiTierHelpItem .UiModelTier {
-  flex-shrink: 0;
-}
