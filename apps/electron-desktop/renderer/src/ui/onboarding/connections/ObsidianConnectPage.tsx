@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../shared/kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../../shared/kit";
 
 type ObsidianVault = {
   name: string;

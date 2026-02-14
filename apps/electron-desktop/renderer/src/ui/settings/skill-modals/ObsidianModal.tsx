@@ -2,8 +2,8 @@ import React from "react";
 
 import { getDesktopApi, getDesktopApiOrNull } from "../../../ipc/desktopApi";
 import { ActionButton, InlineError } from "../../shared/kit";
-import { useWelcomeObsidian } from "../../onboarding/welcome/useWelcomeObsidian";
-import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
+import { useWelcomeObsidian } from "../../onboarding/hooks/useWelcomeObsidian";
+import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/hooks/types";
 
 type ObsidianVault = {
   name: string;

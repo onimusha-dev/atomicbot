@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton } from "../shared/kit";
+import { GlassCard, HeroPageLayout, PrimaryButton } from "../../shared/kit";
 
 export function AppleNotesConnectPage(props: {
   status: string | null;

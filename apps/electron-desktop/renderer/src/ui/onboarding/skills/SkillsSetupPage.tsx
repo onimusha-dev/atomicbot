@@ -1,18 +1,18 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../shared/kit";
-import googleIcon from "../../../../assets/set-up-skills/Google.svg";
-import notionIcon from "../../../../assets/set-up-skills/Notion.svg";
-import trelloIcon from "../../../../assets/set-up-skills/Trello.svg";
-import nanoBananaIcon from "../../../../assets/set-up-skills/Nano-Banana.svg";
-import slackIcon from "../../../../assets/set-up-skills/Slack.svg";
-import sagIcon from "../../../../assets/set-up-skills/Sag.svg";
-import mediaIcon from "../../../../assets/set-up-skills/Media.svg";
-import webIcon from "../../../../assets/set-up-skills/Web-Search.svg";
-import obsidianIcon from "../../../../assets/set-up-skills/Obsidian.svg";
-import githubIcon from "../../../../assets/set-up-skills/GitHub.svg";
-import remindersIcon from "../../../../assets/set-up-skills/Reminders.svg";
-import notesIcon from "../../../../assets/set-up-skills/Notes.svg";
+import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../../shared/kit";
+import googleIcon from "../../../../../assets/set-up-skills/Google.svg";
+import notionIcon from "../../../../../assets/set-up-skills/Notion.svg";
+import trelloIcon from "../../../../../assets/set-up-skills/Trello.svg";
+import nanoBananaIcon from "../../../../../assets/set-up-skills/Nano-Banana.svg";
+import slackIcon from "../../../../../assets/set-up-skills/Slack.svg";
+import sagIcon from "../../../../../assets/set-up-skills/Sag.svg";
+import mediaIcon from "../../../../../assets/set-up-skills/Media.svg";
+import webIcon from "../../../../../assets/set-up-skills/Web-Search.svg";
+import obsidianIcon from "../../../../../assets/set-up-skills/Obsidian.svg";
+import githubIcon from "../../../../../assets/set-up-skills/GitHub.svg";
+import remindersIcon from "../../../../../assets/set-up-skills/Reminders.svg";
+import notesIcon from "../../../../../assets/set-up-skills/Notes.svg";
 
 type SkillStatus = "connect" | "connected" | "coming-soon";
 

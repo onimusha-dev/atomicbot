@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ActionButton, InlineError, TextInput } from "../../shared/kit";
-import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
+import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/hooks/types";
 
 type GroupPolicy = "open" | "allowlist" | "disabled";
 type DmPolicy = "pairing" | "allowlist" | "open" | "disabled";

@@ -34,18 +34,18 @@ vi.mock("react-hot-toast", () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { WebSearchPage } from "../onboarding/WebSearchPage";
-import { MediaUnderstandingPage } from "../onboarding/MediaUnderstandingPage";
-import { NotionConnectPage } from "../onboarding/NotionConnectPage";
-import { TrelloConnectPage } from "../onboarding/TrelloConnectPage";
-import { ObsidianConnectPage } from "../onboarding/ObsidianConnectPage";
-import { GitHubConnectPage } from "../onboarding/GitHubConnectPage";
-import { AppleNotesConnectPage } from "../onboarding/AppleNotesConnectPage";
-import { AppleRemindersConnectPage } from "../onboarding/AppleRemindersConnectPage";
-import { SlackConnectPage } from "../onboarding/SlackConnectPage";
-import { TelegramTokenPage } from "../onboarding/TelegramTokenPage";
-import { TelegramUserPage } from "../onboarding/TelegramUserPage";
-import { GogPage } from "../onboarding/GogPage";
+import { WebSearchPage } from "../onboarding/skills/WebSearchPage";
+import { MediaUnderstandingPage } from "../onboarding/skills/MediaUnderstandingPage";
+import { NotionConnectPage } from "../onboarding/connections/NotionConnectPage";
+import { TrelloConnectPage } from "../onboarding/connections/TrelloConnectPage";
+import { ObsidianConnectPage } from "../onboarding/connections/ObsidianConnectPage";
+import { GitHubConnectPage } from "../onboarding/connections/GitHubConnectPage";
+import { AppleNotesConnectPage } from "../onboarding/connections/AppleNotesConnectPage";
+import { AppleRemindersConnectPage } from "../onboarding/connections/AppleRemindersConnectPage";
+import { SlackConnectPage } from "../onboarding/connections/SlackConnectPage";
+import { TelegramTokenPage } from "../onboarding/connections/TelegramTokenPage";
+import { TelegramUserPage } from "../onboarding/connections/TelegramUserPage";
+import { GogPage } from "../onboarding/skills/GogPage";
 import { TestShell, noop, noopAsync, expectRendered } from "./helpers/onboarding-test-helpers";
 import { expect } from "vitest";
 

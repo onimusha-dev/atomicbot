@@ -1,8 +1,8 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../shared/kit";
-import telegramIcon from "../../../../assets/messangers/Telegram.svg";
-import slackIcon from "../../../../assets/set-up-skills/Slack.svg";
+import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../../shared/kit";
+import telegramIcon from "../../../../../assets/messangers/Telegram.svg";
+import slackIcon from "../../../../../assets/set-up-skills/Slack.svg";
 
 type ConnectionStatus = "connect" | "connected";
 

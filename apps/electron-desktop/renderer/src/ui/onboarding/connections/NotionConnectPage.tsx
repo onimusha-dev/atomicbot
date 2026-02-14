@@ -1,49 +1,35 @@
 import React from "react";
 
-import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../shared/kit";
+import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
+import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../../shared/kit";
 
-export function TrelloConnectPage(props: {
+export function NotionConnectPage(props: {
   status: string | null;
   error: string | null;
   busy: boolean;
-  onSubmit: (apiKey: string, token: string) => void;
+  onSubmit: (apiKey: string) => void;
   onBack: () => void;
 }) {
   const [apiKey, setApiKey] = React.useState("");
-  const [token, setToken] = React.useState("");
+  const [errorText, setErrorText] = React.useState("");
   const totalSteps = 5;
   const activeStep = 3;
-  const [errors, setErrors] = React.useState<{
-    apiKey?: string;
-    token?: string;
-  }>({});
 
   const handleSubmit = () => {
-    const trimmedKey = apiKey.trim();
-    const trimmedToken = token.trim();
-
-    const nextErrors: typeof errors = {};
-
-    if (!trimmedKey) {
-      nextErrors.apiKey = "Please enter your Trello API key";
+    if (errorText) {
+      setErrorText("");
     }
 
-    if (!trimmedToken) {
-      nextErrors.token = "Please enter your Trello token";
+    const trimmed = apiKey.trim();
+    if (trimmed && trimmed.length > 3) {
+      props.onSubmit(trimmed);
+    } else {
+      setErrorText("Please enter your API key to continue");
     }
-
-    if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors);
-      return;
-    }
-
-    setErrors({});
-    props.onSubmit(trimmedKey, trimmedToken);
   };
 
   return (
-    <HeroPageLayout variant="compact" align="center" aria-label="Trello setup">
+    <HeroPageLayout variant="compact" align="center" aria-label="Notion setup">
       <GlassCard className="UiApiKeyCard UiGlassCardOnboarding">
         <div className="UiOnboardingDots" aria-label="Onboarding progress">
           {Array.from({ length: totalSteps }).map((_, idx) => (
@@ -56,61 +42,49 @@ export function TrelloConnectPage(props: {
           ))}
         </div>
 
-        <div className="UiApiKeyTitle">Connect Trello</div>
+        <div className="UiApiKeyTitle">Connect Notion</div>
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Get your Trello API key and token from{" "}
+            Create a Notion integration, copy its API key, then share the target pages/databases
+            with the integration.{" "}
             <a
-              href="https://trello.com/app-key"
+              href="https://notion.so/my-integrations"
               target="_blank"
               rel="noopener noreferrer"
               className="UiLink"
               onClick={(e) => {
                 e.preventDefault();
-                void getDesktopApiOrNull()?.openExternal("https://trello.com/app-key");
+                void getDesktopApiOrNull()?.openExternal("https://notion.so/my-integrations");
               }}
             >
-              trello.com/app-key ↗
+              Open integrations ↗
             </a>
           </div>
 
           <div className="UiSectionSubtitle">
             Steps:
             <ol>
-              <li>Open the app key page.</li>
-              <li>Copy your API key.</li>
-              <li>Click the Token link and generate a token.</li>
-              <li>Paste both values here.</li>
+              <li>Create an integration.</li>
+              <li>Copy the API key (usually starts with ntn_ or secret_).</li>
+              <li>Share the pages/databases you want to use with the integration.</li>
             </ol>
           </div>
 
           {/*{props.status ? <div className="UiSectionSubtitle">{props.status}</div> : null}*/}
 
-          <div className="UiApiKeyInputRow" style={{ display: "grid", gap: 10 }}>
+          <div className="UiApiKeyInputRow">
             <TextInput
               type="password"
               value={apiKey}
               onChange={setApiKey}
-              label="Trello API key"
-              placeholder="Trello API key"
+              placeholder="ntn_..."
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
               disabled={props.busy}
-              isError={errors.apiKey}
-            />
-            <TextInput
-              type="password"
-              value={token}
-              onChange={setToken}
-              label="Trello token"
-              placeholder="Trello token"
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-              disabled={props.busy}
-              isError={errors.token}
+              label={"Notion API key"}
+              isError={errorText}
             />
           </div>
 

@@ -1,9 +1,9 @@
 import React from "react";
 
-import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { CheckboxRow, GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../shared/kit";
-import { DEFAULT_GOG_SERVICES } from "./welcome/constants";
-import { UiCheckbox } from "../shared/kit/ui";
+import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
+import { CheckboxRow, GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../../shared/kit";
+import { DEFAULT_GOG_SERVICES } from "../hooks/constants";
+import { UiCheckbox } from "../../shared/kit/ui";
 
 type ServiceOption = {
   id: string;

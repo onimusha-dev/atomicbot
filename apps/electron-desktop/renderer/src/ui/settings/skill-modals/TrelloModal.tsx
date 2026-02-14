@@ -1,8 +1,8 @@
 import React from "react";
 
 import { ActionButton, InlineError, TextInput } from "../../shared/kit";
-import { useWelcomeTrello } from "../../onboarding/welcome/useWelcomeTrello";
-import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
+import { useWelcomeTrello } from "../../onboarding/hooks/useWelcomeTrello";
+import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/hooks/types";
 
 export function TrelloModalContent(props: {
   gw: GatewayRpcLike;

@@ -1,5 +1,5 @@
 import React from "react";
-import type { ModelEntry } from "../ModelSelectPage";
+import type { ModelEntry } from "../providers/ModelSelectPage";
 import type { ConfigSnapshot, GatewayRpcLike, ModelsListResult } from "./types";
 
 type UseWelcomeModelsInput = {

@@ -33,11 +33,11 @@ vi.mock("react-hot-toast", () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { ProviderSelectPage } from "../onboarding/ProviderSelectPage";
-import { ApiKeyPage } from "../onboarding/ApiKeyPage";
-import { ModelSelectPage } from "../onboarding/ModelSelectPage";
-import { SkillsSetupPage } from "../onboarding/SkillsSetupPage";
-import { ConnectionsSetupPage } from "../onboarding/ConnectionsSetupPage";
+import { ProviderSelectPage } from "../onboarding/providers/ProviderSelectPage";
+import { ApiKeyPage } from "../onboarding/providers/ApiKeyPage";
+import { ModelSelectPage } from "../onboarding/providers/ModelSelectPage";
+import { SkillsSetupPage } from "../onboarding/skills/SkillsSetupPage";
+import { ConnectionsSetupPage } from "../onboarding/connections/ConnectionsSetupPage";
 import { TestShell, noop, expectRendered } from "./helpers/onboarding-test-helpers";
 
 // ---------------------------------------------------------------------------

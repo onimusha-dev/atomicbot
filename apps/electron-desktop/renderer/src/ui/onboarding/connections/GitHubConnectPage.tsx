@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../shared/kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../../shared/kit";
 
 export function GitHubConnectPage(props: {
   status: string | null;

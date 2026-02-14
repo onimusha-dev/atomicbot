@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import { setOnboarded } from "../../../store/slices/onboardingSlice";
 import type { GatewayState } from "../../../../../src/main/types";
 import { routes } from "../../app/routes";
-import type { Provider } from "../ProviderSelectPage";
+import type { Provider } from "../providers/ProviderSelectPage";
 import { useWelcomeApiKey } from "./useWelcomeApiKey";
 import { useWelcomeAppleNotes } from "./useWelcomeAppleNotes";
 import { useWelcomeAppleReminders } from "./useWelcomeAppleReminders";

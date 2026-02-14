@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../shared/kit";
+import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
+import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../../shared/kit";
 import type { Provider } from "./ProviderSelectPage";
-import { MODEL_PROVIDER_BY_ID } from "../shared/models/providers";
+import { MODEL_PROVIDER_BY_ID } from "../../shared/models/providers";
 
 export function ApiKeyPage(props: {
   provider: Provider;

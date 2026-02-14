@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton } from "../shared/kit";
+import { GlassCard, HeroPageLayout, PrimaryButton } from "../../shared/kit";
 import {
   type ModelEntry,
   TIER_INFO,
   formatModelMeta,
   getModelTier,
   sortModelsByProviderTierName,
-} from "../shared/models/modelPresentation";
-import { ModelProvider, resolveProviderIconUrl } from "../shared/models/providers";
+} from "../../shared/models/modelPresentation";
+import { ModelProvider, resolveProviderIconUrl } from "../../shared/models/providers";
 
 export function ModelSelectPage(props: {
   models: ModelEntry[];

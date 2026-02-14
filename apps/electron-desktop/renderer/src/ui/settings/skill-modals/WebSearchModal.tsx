@@ -4,8 +4,8 @@ import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import {
   useWelcomeWebSearch,
   type WebSearchProvider,
-} from "../../onboarding/welcome/useWelcomeWebSearch";
-import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
+} from "../../onboarding/hooks/useWelcomeWebSearch";
+import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/hooks/types";
 
 function getObject(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) {return {};}

@@ -1,8 +1,8 @@
 import React from "react";
 
 import { ActionButton, InlineError, TextInput } from "../../shared/kit";
-import { useWelcomeNotion } from "../../onboarding/welcome/useWelcomeNotion";
-import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
+import { useWelcomeNotion } from "../../onboarding/hooks/useWelcomeNotion";
+import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/hooks/types";
 
 function getObject(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) {return {};}

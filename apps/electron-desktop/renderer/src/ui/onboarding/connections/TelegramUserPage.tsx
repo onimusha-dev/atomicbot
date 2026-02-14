@@ -1,20 +1,22 @@
 import React from "react";
 
-import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../shared/kit";
+import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
+import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../../shared/kit";
 
-export function TelegramTokenPage(props: {
+export function TelegramUserPage(props: {
   status: string | null;
   error: string | null;
-  telegramToken: string;
-  setTelegramToken: (value: string) => void;
+  telegramUserId: string;
+  setTelegramUserId: (value: string) => void;
+  channelsProbe: unknown;
   onNext: () => void;
   onSkip: () => void;
 }) {
   const totalSteps = 5;
   const activeStep = 4;
+
   const [errorText, setErrorText] = React.useState("");
-  const token = props.telegramToken.trim();
+  const token = props.telegramUserId.trim();
 
   const handleSubmit = () => {
     if (errorText) {
@@ -29,7 +31,7 @@ export function TelegramTokenPage(props: {
   };
 
   return (
-    <HeroPageLayout variant="compact" align="center" aria-label="Telegram token setup">
+    <HeroPageLayout variant="compact" align="center" aria-label="Telegram allowlist setup">
       <GlassCard className="UiApiKeyCard UiGlassCardOnboarding">
         <div className="UiOnboardingDots" aria-label="Onboarding progress">
           {Array.from({ length: totalSteps }).map((_, idx) => (
@@ -42,11 +44,11 @@ export function TelegramTokenPage(props: {
           ))}
         </div>
 
-        <div className="UiApiKeyTitle">Connect Telegram</div>
+        <div className="UiApiKeyTitle">Allow Telegram DMs</div>
 
         <div className="UiContentWrapper">
           <div className="UiApiKeySubtitle">
-            Get your bot token from the Telegram.{" "}
+            Get your Telegram user id.{" "}
             <a
               href="https://t.me/BotFather"
               target="_blank"
@@ -57,48 +59,49 @@ export function TelegramTokenPage(props: {
                 void getDesktopApiOrNull()?.openExternal("https://t.me/BotFather");
               }}
             >
-              Get bot token ↗
+              Open BotFather ↗
             </a>
           </div>
 
           <div className="UiSectionSubtitle">
-            <div className="UiSectionSubtitleAccent">How to get your Telegram bot token?</div>
+            <div className="UiSectionSubtitleAccent">Follow these steps</div>
             <ol>
-              <li>
-                <div>
-                  Open Telegram and go to{" "}
-                  <span className="UiSectionSubtitleAccent">@BotFather</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  Start a chat and type <span className="UiSectionSubtitleAccent">/newbot</span>
-                </div>
-              </li>
-              <li>Follow the prompts to name your bot and choose a username</li>
-              <li>
-                BotFather will send you a message with your bot token. Copy the entire token (it
-                looks like a long string of numbers and letters)
-              </li>
-              <li>Paste the token in the field below and click Continue</li>
+              <li>Open the bot by clicking on the BotFather message</li>
+              <li>Click the Start button</li>
+              <li>Send a message to your bot</li>
+              <li>Copy your Telegram user id</li>
+              <li>Paste the token in the field below and click Connect</li>
             </ol>
+
+            {/*{props.channelsProbe ? (*/}
+            {/*  <details className="UiGoogleWorkspaceDetails" style={{ marginTop: 10 }}>*/}
+            {/*    <summary className="UiGoogleWorkspaceDetailsSummary">*/}
+            {/*      Troubleshooting: channels.status (probe)*/}
+            {/*    </summary>*/}
+            {/*    <div className="UiSectionSubtitle" style={{ marginTop: 10 }}>*/}
+            {/*      <div className="UiPill">channels.status (probe)</div>*/}
+            {/*      <pre style={{ maxHeight: 240, overflow: "auto" }}>*/}
+            {/*        {JSON.stringify(props.channelsProbe, null, 2)}*/}
+            {/*      </pre>*/}
+            {/*    </div>*/}
+            {/*  </details>*/}
+            {/*) : null}*/}
+
+            <div className="UiApiKeySpacer" aria-hidden="true" />
           </div>
 
-          <div className="UiApiKeyInputRow">
+          <div className="UiApiKeyInputRow" style={{ marginBottom: 6 }}>
             <TextInput
-              type="password"
-              value={props.telegramToken}
-              onChange={props.setTelegramToken}
-              placeholder="123456789:ABCDEF..."
+              value={props.telegramUserId}
+              onChange={props.setTelegramUserId}
+              placeholder="123456789"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
               isError={errorText}
-              label={"Telegram bot token"}
+              label={"Telegram user id"}
             />
           </div>
-
-          <div className="UiApiKeySpacer" aria-hidden="true" />
         </div>
 
         <div className="UiApiKeyButtonRow">
@@ -106,7 +109,7 @@ export function TelegramTokenPage(props: {
             Back
           </button>
           <PrimaryButton size={"sm"} onClick={handleSubmit}>
-            Continue
+            Connect
           </PrimaryButton>
         </div>
       </GlassCard>

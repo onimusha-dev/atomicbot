@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../shared/kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../../shared/kit";
 
 export function AppleRemindersConnectPage(props: {
   status: string | null;
