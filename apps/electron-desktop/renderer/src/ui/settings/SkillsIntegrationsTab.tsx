@@ -2,7 +2,7 @@ import React from "react";
 import toast from "react-hot-toast";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { FeatureCta, Modal, TextInput } from "../kit";
+import { FeatureCta, Modal, TextInput } from "../shared/kit";
 import type { GatewayState } from "../../../../src/main/types";
 import { disableSkill, type SkillId, type SkillStatus, useSkillsStatus } from "./useSkillsStatus";
 import {
@@ -19,7 +19,7 @@ import {
 } from "./skill-modals";
 import { CustomSkillMenu } from "./CustomSkillMenu";
 import { CustomSkillUploadModal } from "./CustomSkillUploadModal";
-import { toastStyles } from "../toast";
+import { toastStyles } from "../shared/toast";
 
 import googleImage from "../../../../assets/set-up-skills/Google.svg";
 import notionImage from "../../../../assets/set-up-skills/Notion.svg";

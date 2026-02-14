@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 
 function getObject(value: unknown): Record<string, unknown> {

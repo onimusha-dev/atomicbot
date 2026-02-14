@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApi } from "../../../ipc/desktopApi";
-import { ActionButton, InlineError } from "../../kit";
+import { ActionButton, InlineError } from "../../shared/kit";
 import { useWelcomeAppleNotes } from "../../onboarding/welcome/useWelcomeAppleNotes";
 import { useWelcomeAppleReminders } from "../../onboarding/welcome/useWelcomeAppleReminders";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";

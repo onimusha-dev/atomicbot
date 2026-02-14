@@ -5,9 +5,9 @@
 import React from "react";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { ActionButton, TextInput } from "../kit";
-import type { ModelProviderInfo } from "../models/providers";
-import { resolveProviderIconUrl } from "../models/providers";
+import { ActionButton, TextInput } from "../shared/kit";
+import type { ModelProviderInfo } from "../shared/models/providers";
+import { resolveProviderIconUrl } from "../shared/models/providers";
 
 export function ApiKeyModalContent(props: {
   provider: ModelProviderInfo;

@@ -8,7 +8,7 @@ import {
   InlineError,
   PrimaryButton,
   TextInput,
-} from "../kit";
+} from "../shared/kit";
 
 type MediaUnderstandingSettings = {
   image: boolean;

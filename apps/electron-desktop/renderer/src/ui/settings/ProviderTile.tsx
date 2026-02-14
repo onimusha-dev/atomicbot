@@ -4,8 +4,8 @@
  */
 import React from "react";
 
-import type { ModelProviderInfo } from "../models/providers";
-import { resolveProviderIconUrl } from "../models/providers";
+import type { ModelProviderInfo } from "../shared/models/providers";
+import { resolveProviderIconUrl } from "../shared/models/providers";
 
 export function ProviderTile(props: {
   provider: ModelProviderInfo;

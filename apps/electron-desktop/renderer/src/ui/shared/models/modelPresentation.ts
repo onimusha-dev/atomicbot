@@ -122,7 +122,7 @@ export function formatModelMeta(model: ModelEntry): string | null {
 }
 
 export function sortModelsByProviderTierName(models: ModelEntry[]): ModelEntry[] {
-  return models.slice().sort((a, b) => {
+  return models.slice().toSorted((a, b) => {
     const p = a.provider.localeCompare(b.provider);
     if (p !== 0) {
       return p;

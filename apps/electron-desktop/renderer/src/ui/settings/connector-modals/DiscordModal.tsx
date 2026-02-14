@@ -1,10 +1,10 @@
 import React from "react";
 
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 
 function getObject(value: unknown): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) {return {};}
   return value as Record<string, unknown>;
 }
 
@@ -23,12 +23,12 @@ export function DiscordModalContent(props: {
 
   // Pre-fill: detect existing token.
   React.useEffect(() => {
-    if (!props.isConnected) return;
+    if (!props.isConnected) {return;}
     let cancelled = false;
     (async () => {
       try {
         const snap = await props.loadConfig();
-        if (cancelled) return;
+        if (cancelled) {return;}
         const cfg = getObject(snap.config);
         const channels = getObject(cfg.channels);
         const discord = getObject(channels.discord);
@@ -56,10 +56,10 @@ export function DiscordModalContent(props: {
     try {
       const snap = await props.loadConfig();
       const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
-      if (!baseHash) throw new Error("Config base hash missing. Reload and try again.");
+      if (!baseHash) {throw new Error("Config base hash missing. Reload and try again.");}
 
       const patch: Record<string, unknown> = { enabled: true };
-      if (t) patch.token = t;
+      if (t) {patch.token = t;}
 
       await props.gw.request("config.patch", {
         baseHash,

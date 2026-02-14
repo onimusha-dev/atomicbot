@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { Modal } from "../kit";
+import { Modal } from "../shared/kit";
 
 type CustomSkillResult = {
   name: string;

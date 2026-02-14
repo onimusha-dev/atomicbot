@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton, TextInput } from "../kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton, TextInput } from "../shared/kit";
 
 export type WebSearchProvider = "brave" | "perplexity";
 

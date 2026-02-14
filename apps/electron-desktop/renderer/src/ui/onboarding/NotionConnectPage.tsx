@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, TextInput } from "../shared/kit";
 
 export function NotionConnectPage(props: {
   status: string | null;

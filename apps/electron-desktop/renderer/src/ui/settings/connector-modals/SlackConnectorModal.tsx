@@ -1,18 +1,18 @@
 import React from "react";
 
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 
 type GroupPolicy = "open" | "allowlist" | "disabled";
 type DmPolicy = "pairing" | "allowlist" | "open" | "disabled";
 
 function getObject(value: unknown): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) {return {};}
   return value as Record<string, unknown>;
 }
 
 function getStringArray(value: unknown): string[] {
-  if (!Array.isArray(value)) return [];
+  if (!Array.isArray(value)) {return [];}
   return value.filter((v): v is string => typeof v === "string");
 }
 
@@ -21,9 +21,9 @@ function uniqueStrings(values: string[]): string[] {
   const next: string[] = [];
   for (const v of values) {
     const trimmed = String(v ?? "").trim();
-    if (!trimmed) continue;
+    if (!trimmed) {continue;}
     const key = trimmed.toLowerCase();
-    if (seen.has(key)) continue;
+    if (seen.has(key)) {continue;}
     seen.add(key);
     next.push(trimmed);
   }
@@ -58,12 +58,12 @@ export function SlackConnectorModalContent(props: {
 
   // Pre-fill from config when already connected.
   React.useEffect(() => {
-    if (!props.isConnected) return;
+    if (!props.isConnected) {return;}
     let cancelled = false;
     (async () => {
       try {
         const snap = await props.loadConfig();
-        if (cancelled) return;
+        if (cancelled) {return;}
         const cfg = getObject(snap.config);
         const channels = getObject(cfg.channels);
         const slack = getObject(channels.slack);
@@ -72,7 +72,7 @@ export function SlackConnectorModalContent(props: {
         // Group policy.
         if (typeof slack.groupPolicy === "string") {
           const gp = slack.groupPolicy as GroupPolicy;
-          if (["open", "allowlist", "disabled"].includes(gp)) setGroupPolicy(gp);
+          if (["open", "allowlist", "disabled"].includes(gp)) {setGroupPolicy(gp);}
         }
 
         // Channel allowlist — extract keys from channels.slack.channels object.
@@ -85,7 +85,7 @@ export function SlackConnectorModalContent(props: {
         // DM policy.
         if (typeof dm.policy === "string") {
           const dp = dm.policy as DmPolicy;
-          if (["pairing", "allowlist", "open", "disabled"].includes(dp)) setDmPolicy(dp);
+          if (["pairing", "allowlist", "open", "disabled"].includes(dp)) {setDmPolicy(dp);}
         }
 
         // DM allowFrom.
@@ -104,8 +104,8 @@ export function SlackConnectorModalContent(props: {
 
   const canSave = React.useMemo(() => {
     // Need tokens for first connect; for update, can save policy changes alone.
-    if (!props.isConnected && (!botToken.trim() || !appToken.trim())) return false;
-    if (dmPolicy === "allowlist" && parseList(dmAllowFromRaw).length === 0) return false;
+    if (!props.isConnected && (!botToken.trim() || !appToken.trim())) {return false;}
+    if (dmPolicy === "allowlist" && parseList(dmAllowFromRaw).length === 0) {return false;}
     return true;
   }, [appToken, botToken, dmAllowFromRaw, dmPolicy, props.isConnected]);
 
@@ -116,7 +116,7 @@ export function SlackConnectorModalContent(props: {
     try {
       const snap = await props.loadConfig();
       const baseHash = typeof snap.hash === "string" && snap.hash.trim() ? snap.hash.trim() : null;
-      if (!baseHash) throw new Error("Config base hash missing. Reload and try again.");
+      if (!baseHash) {throw new Error("Config base hash missing. Reload and try again.");}
 
       // Build channel allowlist object.
       const channelAllowlist = parseList(channelsRaw);
@@ -143,8 +143,8 @@ export function SlackConnectorModalContent(props: {
           ...(dmAllowFrom ? { allowFrom: dmAllowFrom } : {}),
         },
       };
-      if (botToken.trim()) patch.botToken = botToken.trim();
-      if (appToken.trim()) patch.appToken = appToken.trim();
+      if (botToken.trim()) {patch.botToken = botToken.trim();}
+      if (appToken.trim()) {patch.appToken = appToken.trim();}
 
       await props.gw.request("config.patch", {
         baseHash,

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApi, getDesktopApiOrNull } from "../../../ipc/desktopApi";
-import { ActionButton, InlineError } from "../../kit";
+import { ActionButton, InlineError } from "../../shared/kit";
 import { useWelcomeObsidian } from "../../onboarding/welcome/useWelcomeObsidian";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 

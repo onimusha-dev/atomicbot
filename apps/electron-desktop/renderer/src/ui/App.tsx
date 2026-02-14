@@ -18,7 +18,7 @@ import { WelcomePage } from "./WelcomePage";
 import { getDesktopApiOrNull } from "../ipc/desktopApi";
 import { ConsentScreen, type ConsentDesktopApi } from "./ConsentScreen";
 import { LoadingScreen } from "./LoadingScreen";
-import { Brand } from "./kit";
+import { Brand } from "./shared/kit";
 import { GatewayRpcProvider } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { initGatewayState } from "../store/slices/gatewaySlice";

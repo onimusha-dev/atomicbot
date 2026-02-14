@@ -1,6 +1,6 @@
 import React from "react";
 import type { GatewayState } from "../../../src/main/types";
-import { FooterText, FullscreenShell, SpinningSplashLogo } from "./kit";
+import { FooterText, FullscreenShell, SpinningSplashLogo } from "./shared/kit";
 import pkg from "../../../package.json";
 
 export function LoadingScreen({ state: _state }: { state: GatewayState | null }) {

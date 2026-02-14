@@ -1,11 +1,11 @@
 import React from "react";
 
-import { ActionButton, CheckboxRow, InlineError, TextInput } from "../../kit";
+import { ActionButton, CheckboxRow, InlineError, TextInput } from "../../shared/kit";
 import { useWelcomeApiKey } from "../../onboarding/welcome/useWelcomeApiKey";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 
 function getObject(value: unknown): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) {return {};}
   return value as Record<string, unknown>;
 }
 
@@ -16,7 +16,7 @@ function detectOpenAiProvider(config: unknown): boolean {
   const profiles = getObject(auth.profiles);
   const order = getObject(auth.order);
   const hasProfile = Object.values(profiles).some((p) => {
-    if (!p || typeof p !== "object" || Array.isArray(p)) return false;
+    if (!p || typeof p !== "object" || Array.isArray(p)) {return false;}
     return (p as { provider?: unknown }).provider === "openai";
   });
   const hasOrder = Object.prototype.hasOwnProperty.call(order, "openai");
@@ -54,7 +54,7 @@ export function MediaUnderstandingModalContent(props: {
     (async () => {
       try {
         const snap = await props.loadConfig();
-        if (cancelled) return;
+        if (cancelled) {return;}
         const cfg = getObject(snap.config);
         setHasOpenAi(detectOpenAiProvider(cfg));
 

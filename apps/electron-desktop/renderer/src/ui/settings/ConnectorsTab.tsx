@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FeatureCta, Modal } from "../kit";
+import { FeatureCta, Modal } from "../shared/kit";
 import {
   useConnectorsStatus,
   disableConnector,

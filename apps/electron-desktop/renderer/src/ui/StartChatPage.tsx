@@ -4,7 +4,7 @@ import { useGatewayRpc } from "../gateway/context";
 import type { GatewayState } from "../../../src/main/types";
 import { dataUrlToBase64, type ChatAttachmentInput } from "../store/slices/chatSlice";
 import { ChatComposer, type ChatComposerRef } from "./ChatComposer";
-import { addToastError } from "./toast";
+import { addToastError } from "./shared/toast";
 import { routes } from "./routes";
 
 function newSessionKey(): string {
@@ -33,7 +33,7 @@ export function StartChatPage({
   // Focus when "New session" was clicked (works even when already on main chat).
   React.useEffect(() => {
     const focusRequested = (location.state as { focusComposer?: boolean } | null)?.focusComposer;
-    if (!focusRequested) return;
+    if (!focusRequested) {return;}
     const id = requestAnimationFrame(() => composerRef.current?.focusInput());
     return () => cancelAnimationFrame(id);
   }, [location.state]);

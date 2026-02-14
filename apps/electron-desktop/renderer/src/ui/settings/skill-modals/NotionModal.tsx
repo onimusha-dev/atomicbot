@@ -1,11 +1,11 @@
 import React from "react";
 
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import { useWelcomeNotion } from "../../onboarding/welcome/useWelcomeNotion";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 
 function getObject(value: unknown): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) {return {};}
   return value as Record<string, unknown>;
 }
 
@@ -31,12 +31,12 @@ export function NotionModalContent(props: {
 
   // Pre-fill: detect if API key is already configured.
   React.useEffect(() => {
-    if (!props.isConnected) return;
+    if (!props.isConnected) {return;}
     let cancelled = false;
     (async () => {
       try {
         const snap = await props.loadConfig();
-        if (cancelled) return;
+        if (cancelled) {return;}
         const cfg = getObject(snap.config);
         const skills = getObject(cfg.skills);
         const entries = getObject(skills.entries);

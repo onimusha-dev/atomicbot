@@ -22,7 +22,7 @@ import { useWelcomeSlack } from "./useWelcomeSlack";
 import { useWelcomeTelegram } from "./useWelcomeTelegram";
 import { useWelcomeTrello } from "./useWelcomeTrello";
 import { useWelcomeWebSearch } from "./useWelcomeWebSearch";
-import { addToastError } from "../../toast";
+import { addToastError } from "../../shared/toast";
 
 type WelcomeStateInput = {
   state: Extract<GatewayState, { kind: "ready" }>;

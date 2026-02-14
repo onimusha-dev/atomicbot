@@ -4,8 +4,8 @@ import { useGatewayRpc } from "../gateway/context";
 import type { OptimisticSession } from "./optimisticSessionContext";
 import { useOptimisticSession } from "./optimisticSessionContext";
 import { routes } from "./routes";
-import { addToastError } from "./toast";
-import { SplashLogo } from "./kit";
+import { addToastError } from "./shared/toast";
+import { SplashLogo } from "./shared/kit";
 import { SessionSidebarItem } from "./SessionSidebarItem";
 import { cleanDerivedTitle } from "./utils/messageParser";
 

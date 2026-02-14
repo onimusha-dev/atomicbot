@@ -17,7 +17,7 @@ import type { GatewayState } from "../../../src/main/types";
 import { ChatAttachmentCard, getFileTypeLabel } from "./ChatAttachmentCard";
 import { ChatComposer, type ChatComposerRef } from "./ChatComposer";
 import { useOptimisticSession } from "./optimisticSessionContext";
-import { addToastError } from "./toast";
+import { addToastError } from "./shared/toast";
 import { parseUserMessageWithAttachments } from "./utils/messageParser";
 import { CopyMessageButton } from "./CopyMessageButton";
 

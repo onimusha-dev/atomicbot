@@ -322,15 +322,15 @@ export function Modal(props: {
 }) {
   // Close on Escape key
   React.useEffect(() => {
-    if (!props.open) return;
+    if (!props.open) {return;}
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") props.onClose();
+      if (e.key === "Escape") {props.onClose();}
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [props.open, props.onClose]);
 
-  if (!props.open) return null;
+  if (!props.open) {return null;}
 
   return (
     <div
@@ -340,7 +340,7 @@ export function Modal(props: {
       aria-label={props["aria-label"]}
       onClick={(e) => {
         // Close when clicking the backdrop (not the card itself)
-        if (e.target === e.currentTarget) props.onClose();
+        if (e.target === e.currentTarget) {props.onClose();}
       }}
     >
       <div className="UiModalCard">

@@ -3,7 +3,7 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import type { GatewayState } from "../../../src/main/types";
 import { routes } from "./routes";
-import { GlassCard, HeroPageLayout, PrimaryButton } from "./kit";
+import { GlassCard, HeroPageLayout, PrimaryButton } from "./shared/kit";
 import { LoadingScreen } from "./LoadingScreen";
 import { ApiKeyPage } from "./onboarding/ApiKeyPage";
 import { AppleNotesConnectPage } from "./onboarding/AppleNotesConnectPage";

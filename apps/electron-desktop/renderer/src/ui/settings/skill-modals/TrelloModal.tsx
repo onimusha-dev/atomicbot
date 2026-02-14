@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import { useWelcomeTrello } from "../../onboarding/welcome/useWelcomeTrello";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 

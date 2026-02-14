@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import {
   useWelcomeWebSearch,
   type WebSearchProvider,
@@ -8,7 +8,7 @@ import {
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 
 function getObject(value: unknown): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) {return {};}
   return value as Record<string, unknown>;
 }
 
@@ -34,12 +34,12 @@ export function WebSearchModalContent(props: {
 
   // Pre-fill provider from config when already connected.
   React.useEffect(() => {
-    if (!props.isConnected) return;
+    if (!props.isConnected) {return;}
     let cancelled = false;
     (async () => {
       try {
         const snap = await props.loadConfig();
-        if (cancelled) return;
+        if (cancelled) {return;}
         const cfg = getObject(snap.config);
         const tools = getObject(cfg.tools);
         const web = getObject(tools.web);

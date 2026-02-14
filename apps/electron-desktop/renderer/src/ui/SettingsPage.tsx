@@ -4,13 +4,13 @@ import { useGatewayRpc } from "../gateway/context";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { configActions, reloadConfig, type ConfigSnapshot } from "../store/slices/configSlice";
 import type { GatewayState } from "../../../src/main/types";
-import { HeroPageLayout } from "./kit";
+import { HeroPageLayout } from "./shared/kit";
 import "./SettingsPage.css";
 import { ConnectorsTab } from "./settings/ConnectorsTab";
 import { ModelProvidersTab } from "./settings/ModelProvidersTab";
 import { OtherTab } from "./settings/OtherTab";
 import { SkillsIntegrationsTab } from "./settings/SkillsIntegrationsTab";
-import { addToastError } from "./toast";
+import { addToastError } from "./shared/toast";
 
 export type SettingsOutletContext = {
   state: Extract<GatewayState, { kind: "ready" }>;
@@ -44,7 +44,7 @@ function SettingsTabItem({ to, children }: { to: string; children: React.ReactNo
 
 export function SettingsTab({ tab }: { tab: SettingsTabId }) {
   const ctx = useOutletContext<SettingsOutletContext>();
-  if (!ctx) return null;
+  if (!ctx) {return null;}
 
   switch (tab) {
     case "model":

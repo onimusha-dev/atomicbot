@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import { App } from "./ui/App";
-import { Toaster } from "./ui/Toaster";
+import { Toaster } from "./ui/shared/Toaster";
 import { UpdateBanner } from "./ui/UpdateBanner";
 import { WhatsNewModal } from "./ui/WhatsNewModal";
 import { store } from "./store/store";

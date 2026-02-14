@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApi, getDesktopApiOrNull } from "../../../ipc/desktopApi";
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 import { useWelcomeGitHub } from "../../onboarding/welcome/useWelcomeGitHub";
 import type { ConfigSnapshot, GatewayRpcLike } from "../../onboarding/welcome/types";
 

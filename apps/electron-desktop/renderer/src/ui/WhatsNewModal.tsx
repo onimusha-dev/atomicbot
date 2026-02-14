@@ -1,7 +1,7 @@
 import React from "react";
 import Markdown from "react-markdown";
 import { getDesktopApiOrNull } from "../ipc/desktopApi";
-import { Modal } from "./kit/ui";
+import { Modal } from "./shared/kit/ui";
 
 const STORAGE_KEY = "whatsNew_lastVersion";
 const GITHUB_OWNER = "AtomicBot-ai";

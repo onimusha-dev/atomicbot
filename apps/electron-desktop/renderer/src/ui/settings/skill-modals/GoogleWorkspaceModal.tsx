@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApiOrNull } from "../../../ipc/desktopApi";
-import { ActionButton, InlineError, TextInput } from "../../kit";
+import { ActionButton, InlineError, TextInput } from "../../shared/kit";
 
 const DEFAULT_GOG_SERVICES = "gmail,calendar,drive,docs,sheets,contacts";
 

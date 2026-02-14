@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../kit";
+import { GlassCard, HeroPageLayout, PrimaryButton, SecondaryButton } from "../shared/kit";
 import googleIcon from "../../../../assets/set-up-skills/Google.svg";
 import notionIcon from "../../../../assets/set-up-skills/Notion.svg";
 import trelloIcon from "../../../../assets/set-up-skills/Trello.svg";

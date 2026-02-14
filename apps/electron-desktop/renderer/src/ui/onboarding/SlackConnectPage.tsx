@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getDesktopApiOrNull } from "../../ipc/desktopApi";
-import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../kit";
+import { GlassCard, HeroPageLayout, InlineError, PrimaryButton, TextInput } from "../shared/kit";
 
 type GroupPolicy = "open" | "allowlist" | "disabled";
 type DmPolicy = "pairing" | "allowlist" | "open" | "disabled";
