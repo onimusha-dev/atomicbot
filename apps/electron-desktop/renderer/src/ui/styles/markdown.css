@@ -116,6 +116,8 @@
   border-radius: var(--radius-sm);
   font-size: 11px;
   font-weight: 500;
+  min-width: 90px;
+  justify-content: center;
   opacity: 0;
   transition:
     opacity var(--transition-fast),
