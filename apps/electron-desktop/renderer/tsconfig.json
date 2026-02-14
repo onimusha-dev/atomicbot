@@ -8,7 +8,18 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["../assets/*"],
+      "@main/*": ["../src/main/*"],
+      "@store/*": ["src/store/*"],
+      "@ipc/*": ["src/ipc/*"],
+      "@gateway/*": ["src/gateway/*"],
+      "@shared/*": ["src/ui/shared/*"],
+      "@styles/*": ["src/ui/styles/*"],
+      "@ui/*": ["src/ui/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"]
 }

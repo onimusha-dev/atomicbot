@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../store";
 
 export type UiMessageAttachment = {
   type: string;
@@ -26,6 +27,11 @@ export type ChatSliceState = {
   /** Monotonically increasing epoch; bumped on every sessionCleared so stale
    *  loadChatHistory results can be detected and discarded. */
   epoch: number;
+  /** The session key that messages/streamByRun belong to.  Used by the UI to
+   *  avoid rendering stale messages from a previous session during the single
+   *  render that occurs between a navigation (which changes sessionKey
+   *  immediately) and the sessionCleared effect (which runs after the render). */
+  activeSessionKey: string;
 };
 
 const initialState: ChatSliceState = {
@@ -34,6 +40,7 @@ const initialState: ChatSliceState = {
   sending: false,
   error: null,
   epoch: 0,
+  activeSessionKey: "",
 };
 
 export type GatewayRequest = <T = unknown>(method: string, params?: unknown) => Promise<T>;
@@ -161,7 +168,7 @@ const HEARTBEAT_OK_TOKEN = "HEARTBEAT_OK";
 /** Detect heartbeat-related messages that should be hidden from the chat UI. */
 export function isHeartbeatMessage(role: string, text: string): boolean {
   const trimmed = text.trim();
-  if (!trimmed) return false;
+  if (!trimmed) {return false;}
   // User-side: the heartbeat prompt injected by the gateway
   if (role === "user" && trimmed.startsWith(HEARTBEAT_PROMPT_PREFIX)) {
     return true;
@@ -230,9 +237,9 @@ export const loadChatHistory = createAsyncThunk(
     thunkApi.dispatch(chatActions.setError(null));
     // Capture epoch before the async fetch so we can discard stale results
     // (e.g. when the user navigated away and back, triggering sessionCleared).
-    const epochBefore = (thunkApi.getState() as { chat: ChatSliceState }).chat.epoch;
+    const epochBefore = (thunkApi.getState() as RootState).chat.epoch;
     const res = await request<ChatHistoryResult>("chat.history", { sessionKey, limit });
-    const epochAfter = (thunkApi.getState() as { chat: ChatSliceState }).chat.epoch;
+    const epochAfter = (thunkApi.getState() as RootState).chat.epoch;
     if (epochAfter !== epochBefore) {
       // Session was cleared while we were fetching — discard stale history.
       return;
@@ -350,10 +357,11 @@ const chatSlice = createSlice({
       state.error = action.payload;
     },
     /** Clear transcript when switching to another session so we don't show the previous thread. */
-    sessionCleared(state) {
+    sessionCleared(state, action: PayloadAction<string>) {
       state.messages = [];
       state.streamByRun = {};
       state.epoch += 1;
+      state.activeSessionKey = action.payload;
     },
     historyLoaded(state, action: PayloadAction<UiMessage[]>) {
       const fromHistory = action.payload;
@@ -361,15 +369,20 @@ const chatSlice = createSlice({
         fromHistory.length > 0 ? Math.max(...fromHistory.map((m) => m.ts ?? 0)) : 0;
       // Keep assistant messages from live stream (runId) that are newer than history,
       // so we don't lose them when the API hasn't persisted yet.
+      // Deduplicate against history by text to avoid race-condition duplicates
+      // (e.g. a stream final arriving between sessionCleared and historyLoaded).
+      const historyTexts = new Set(fromHistory.map((m) => m.text));
       const liveOnly: UiMessage[] = [];
       for (const m of state.messages) {
         if (m.role === "assistant" && m.runId && m.ts != null && m.ts > lastHistoryTs) {
-          liveOnly.push(m);
+          if (!historyTexts.has(m.text)) {
+            liveOnly.push(m);
+          }
         }
       }
       state.messages =
         liveOnly.length > 0
-          ? [...fromHistory, ...liveOnly.sort((a, b) => (a.ts ?? 0) - (b.ts ?? 0))]
+          ? [...fromHistory, ...liveOnly.toSorted((a, b) => (a.ts ?? 0) - (b.ts ?? 0))]
           : fromHistory;
       state.streamByRun = {};
     },

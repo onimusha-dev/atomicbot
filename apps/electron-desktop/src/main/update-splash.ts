@@ -222,8 +222,8 @@ export function showUpdateSplash(): void {
       { detached: true, stdio: "ignore" }
     );
     child.unref();
-  } catch {
-    // Splash is best-effort; never block the update.
+  } catch (err) {
+    console.warn("[update-splash] showUpdateSplash failed:", err);
   }
 }
 
@@ -252,13 +252,13 @@ export function killUpdateSplash(): void {
     if (pid > 0) {
       try {
         process.kill(pid, "SIGTERM");
-      } catch {
-        // Process already gone.
+      } catch (err) {
+        console.warn("[update-splash] kill splash process failed:", err);
       }
     }
 
     fs.unlinkSync(sentinelPath);
-  } catch {
-    // Best-effort cleanup.
+  } catch (err) {
+    console.warn("[update-splash] killUpdateSplash failed:", err);
   }
 }

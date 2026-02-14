@@ -78,8 +78,8 @@ export function initAutoUpdater(getMainWindow: () => BrowserWindow | null): void
 export async function checkForUpdates(): Promise<void> {
   try {
     await autoUpdater.checkForUpdates();
-  } catch {
-    // Silently ignore network errors during background checks.
+  } catch (err) {
+    console.warn("[updater] checkForUpdates failed:", err);
   }
 }
 
@@ -104,8 +104,8 @@ export function getAppVersion(): string {
 function sendToRenderer(win: BrowserWindow | null, channel: string, payload: unknown): void {
   try {
     win?.webContents.send(channel, payload);
-  } catch {
-    // Window may be destroyed; ignore.
+  } catch (err) {
+    console.warn("[updater] sendToRenderer failed:", err);
   }
 }
 

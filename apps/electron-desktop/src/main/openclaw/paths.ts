@@ -21,94 +21,32 @@ export function resolveBundledNodeBin(): string {
   return path.join(base, "bin", "node");
 }
 
-export function resolveBundledGogBin(): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  return path.join(process.resourcesPath, "gog", `${platform}-${arch}`, "gog");
+/**
+ * Resolve the path to a bundled tool binary shipped inside the Electron
+ * resources directory. Layout: `resources/<tool>/<platform>-<arch>/<tool>`.
+ */
+export function bundledBin(tool: string): string {
+  return path.join(process.resourcesPath, tool, `${process.platform}-${process.arch}`, tool);
 }
 
-export function resolveBundledJqBin(): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  return path.join(process.resourcesPath, "jq", `${platform}-${arch}`, "jq");
-}
-
-export function resolveBundledMemoBin(): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  return path.join(process.resourcesPath, "memo", `${platform}-${arch}`, "memo");
-}
-
-export function resolveBundledRemindctlBin(): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  return path.join(process.resourcesPath, "remindctl", `${platform}-${arch}`, "remindctl");
-}
-
-export function resolveBundledObsidianCliBin(): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  return path.join(process.resourcesPath, "obsidian-cli", `${platform}-${arch}`, "obsidian-cli");
-}
-
-export function resolveBundledGhBin(): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  return path.join(process.resourcesPath, "gh", `${platform}-${arch}`, "gh");
-}
-
-export function resolveDownloadedGogBin(mainDir: string): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  // In dev, the entry file compiles to apps/electron-desktop/dist/main.js.
-  // We keep the downloaded gog runtime next to the Electron app sources.
+/**
+ * Resolve the path to a downloaded tool binary stored next to the Electron
+ * app sources (dev mode). Layout: `<appDir>/.<tool>-runtime/<platform>-<arch>/<tool>`.
+ */
+export function downloadedBin(mainDir: string, tool: string): string {
   const appDir = path.resolve(mainDir, "..");
-  return path.join(appDir, ".gog-runtime", `${platform}-${arch}`, "gog");
+  return path.join(appDir, `.${tool}-runtime`, `${process.platform}-${process.arch}`, tool);
 }
 
-export function resolveDownloadedJqBin(mainDir: string): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  // In dev, the entry file compiles to apps/electron-desktop/dist/main.js.
-  // We keep the downloaded jq runtime next to the Electron app sources.
-  const appDir = path.resolve(mainDir, "..");
-  return path.join(appDir, ".jq-runtime", `${platform}-${arch}`, "jq");
-}
-
-export function resolveDownloadedMemoBin(mainDir: string): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  // In dev, the entry file compiles to apps/electron-desktop/dist/main.js.
-  // We keep the built memo runtime next to the Electron app sources.
-  const appDir = path.resolve(mainDir, "..");
-  return path.join(appDir, ".memo-runtime", `${platform}-${arch}`, "memo");
-}
-
-export function resolveDownloadedRemindctlBin(mainDir: string): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  // In dev, the entry file compiles to apps/electron-desktop/dist/main.js.
-  // We keep the downloaded remindctl runtime next to the Electron app sources.
-  const appDir = path.resolve(mainDir, "..");
-  return path.join(appDir, ".remindctl-runtime", `${platform}-${arch}`, "remindctl");
-}
-
-export function resolveDownloadedObsidianCliBin(mainDir: string): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  // In dev, the entry file compiles to apps/electron-desktop/dist/main.js.
-  // We keep the downloaded obsidian-cli runtime next to the Electron app sources.
-  const appDir = path.resolve(mainDir, "..");
-  return path.join(appDir, ".obsidian-cli-runtime", `${platform}-${arch}`, "obsidian-cli");
-}
-
-export function resolveDownloadedGhBin(mainDir: string): string {
-  const platform = process.platform;
-  const arch = process.arch;
-  // In dev, the entry file compiles to apps/electron-desktop/dist/main.js.
-  // We keep the downloaded gh runtime next to the Electron app sources.
-  const appDir = path.resolve(mainDir, "..");
-  return path.join(appDir, ".gh-runtime", `${platform}-${arch}`, "gh");
+/**
+ * Resolve a tool binary path: bundled (packaged) or downloaded (dev).
+ * Combines bundledBin / downloadedBin into a single call.
+ */
+export function resolveBin(
+  tool: string,
+  opts: { isPackaged: boolean; mainDir: string },
+): string {
+  return opts.isPackaged ? bundledBin(tool) : downloadedBin(opts.mainDir, tool);
 }
 
 export function resolveBundledGogCredentialsPath(): string {

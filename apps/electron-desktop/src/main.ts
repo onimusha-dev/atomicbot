@@ -11,20 +11,9 @@ import { spawnGateway } from "./main/gateway/spawn";
 import { initAutoUpdater, disposeAutoUpdater } from "./main/updater";
 import { killUpdateSplash } from "./main/update-splash";
 import {
-  resolveBundledGogBin,
-  resolveBundledJqBin,
-  resolveBundledMemoBin,
-  resolveBundledObsidianCliBin,
-  resolveBundledGhBin,
-  resolveBundledRemindctlBin,
+  resolveBin,
   resolveBundledNodeBin,
   resolveBundledOpenClawDir,
-  resolveDownloadedGogBin,
-  resolveDownloadedJqBin,
-  resolveDownloadedMemoBin,
-  resolveDownloadedObsidianCliBin,
-  resolveDownloadedGhBin,
-  resolveDownloadedRemindctlBin,
   resolvePreloadPath,
   resolveRendererIndex,
   resolveRepoRoot,
@@ -54,15 +43,15 @@ async function stopGatewayChild(): Promise<void> {
   }
   try {
     child.kill("SIGTERM");
-  } catch {
-    // ignore
+  } catch (err) {
+    console.warn("[main] stopGatewayChild SIGTERM failed:", err);
   }
   await new Promise((r) => setTimeout(r, 1500));
   if (!child.killed) {
     try {
       child.kill("SIGKILL");
-    } catch {
-      // ignore
+    } catch (err) {
+      console.warn("[main] stopGatewayChild SIGKILL failed:", err);
     }
   }
 }
@@ -71,8 +60,8 @@ function broadcastGatewayState(win: BrowserWindow | null, state: GatewayState) {
   gatewayState = state;
   try {
     win?.webContents.send("gateway-state", state);
-  } catch {
-    // ignore
+  } catch (err) {
+    console.warn("[main] broadcastGatewayState failed:", err);
   }
 }
 
@@ -199,16 +188,13 @@ void app.whenReady().then(async () => {
   const nodeBin = app.isPackaged
     ? resolveBundledNodeBin()
     : (process.env.OPENCLAW_DESKTOP_NODE_BIN || "node").trim() || "node";
-  const gogBin = app.isPackaged ? resolveBundledGogBin() : resolveDownloadedGogBin(MAIN_DIR);
-  const jqBin = app.isPackaged ? resolveBundledJqBin() : resolveDownloadedJqBin(MAIN_DIR);
-  const memoBin = app.isPackaged ? resolveBundledMemoBin() : resolveDownloadedMemoBin(MAIN_DIR);
-  const remindctlBin = app.isPackaged
-    ? resolveBundledRemindctlBin()
-    : resolveDownloadedRemindctlBin(MAIN_DIR);
-  const obsidianCliBin = app.isPackaged
-    ? resolveBundledObsidianCliBin()
-    : resolveDownloadedObsidianCliBin(MAIN_DIR);
-  const ghBin = app.isPackaged ? resolveBundledGhBin() : resolveDownloadedGhBin(MAIN_DIR);
+  const binOpts = { isPackaged: app.isPackaged, mainDir: MAIN_DIR };
+  const gogBin = resolveBin("gog", binOpts);
+  const jqBin = resolveBin("jq", binOpts);
+  const memoBin = resolveBin("memo", binOpts);
+  const remindctlBin = resolveBin("remindctl", binOpts);
+  const obsidianCliBin = resolveBin("obsidian-cli", binOpts);
+  const ghBin = resolveBin("gh", binOpts);
 
   const port = await pickPort(DEFAULT_PORT);
   const url = `http://127.0.0.1:${port}/`;
@@ -341,7 +327,8 @@ function readConsentAccepted(consentPath: string): boolean {
     }
     const obj = parsed as { accepted?: unknown };
     return obj.accepted === true;
-  } catch {
+  } catch (err) {
+    console.warn("[main] readConsentAccepted failed:", err);
     return false;
   }
 }
@@ -351,7 +338,7 @@ function writeConsentAccepted(consentPath: string): void {
     fs.mkdirSync(path.dirname(consentPath), { recursive: true });
     const payload = { accepted: true, acceptedAt: new Date().toISOString() };
     fs.writeFileSync(consentPath, `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
-  } catch {
-    // ignore
+  } catch (err) {
+    console.warn("[main] writeConsentAccepted failed:", err);
   }
 }

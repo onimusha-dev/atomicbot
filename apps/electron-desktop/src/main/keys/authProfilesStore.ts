@@ -36,7 +36,8 @@ export function readAuthProfilesStore(params: { authProfilesPath: string }): Aut
       const text = fs.readFileSync(params.authProfilesPath, "utf-8");
       raw = JSON.parse(text) as unknown;
     }
-  } catch {
+  } catch (err) {
+    console.warn("[authProfilesStore] readAuthProfilesStore failed:", err);
     raw = undefined;
   }
 
@@ -83,13 +84,13 @@ export function writeAuthProfilesStoreAtomic(params: {
   fs.writeFileSync(tmp, `${JSON.stringify(params.store, null, 2)}\n`, { encoding: "utf-8" });
   try {
     fs.chmodSync(tmp, 0o600);
-  } catch {
-    // ignore
+  } catch (err) {
+    console.warn("[authProfilesStore] chmod tmp file failed:", err);
   }
   fs.renameSync(tmp, params.authProfilesPath);
   try {
     fs.chmodSync(params.authProfilesPath, 0o600);
-  } catch {
-    // ignore
+  } catch (err) {
+    console.warn("[authProfilesStore] chmod auth profiles file failed:", err);
   }
 }

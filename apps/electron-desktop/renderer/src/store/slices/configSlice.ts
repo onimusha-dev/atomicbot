@@ -2,12 +2,27 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { GatewayRequest } from "./chatSlice";
 
+/** Typed structure for openclaw config; allows other fields via index signature. */
+export type ConfigData = {
+  agents?: {
+    defaults?: {
+      model?: { primary?: string };
+      models?: Record<string, unknown>;
+    };
+  };
+  auth?: {
+    profiles?: Record<string, { provider: string; mode: string }>;
+    order?: Record<string, string[]>;
+  };
+  [key: string]: unknown;
+};
+
 export type ConfigSnapshot = {
   path?: string;
   exists?: boolean;
   valid?: boolean;
   hash?: string;
-  config?: unknown;
+  config?: ConfigData;
 };
 
 export type ConfigSliceState = {
