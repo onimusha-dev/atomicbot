@@ -1,0 +1,130 @@
+/* Tool call card: compact inline card shown in assistant messages */
+.ToolCallCards {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 6px 0;
+}
+
+.ToolCallCard {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md, 8px);
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.ToolCallHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition-fast, 120ms);
+}
+
+.ToolCallHeader:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ToolCallIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ToolCallLabel {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+}
+
+.ToolCallArgs {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  font-size: 11px;
+}
+
+.ToolCallStatus {
+  flex-shrink: 0;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm, 4px);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ToolCallStatus--pending {
+  color: rgba(255, 200, 50, 0.8);
+  background: rgba(255, 200, 50, 0.1);
+}
+
+.ToolCallStatus--running {
+  flex-shrink: 0;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm, 4px);
+  color: rgba(100, 200, 255, 0.85);
+  background: rgba(100, 200, 255, 0.1);
+  animation: toolCallPulse 1.5s ease-in-out infinite;
+}
+
+.ToolCallStatus--error {
+  flex-shrink: 0;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm, 4px);
+  color: rgba(255, 100, 100, 0.85);
+  background: rgba(255, 100, 100, 0.1);
+}
+
+.ToolCallCard--live {
+  border-color: rgba(100, 200, 255, 0.15);
+}
+
+@keyframes toolCallPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ToolCallStatus--running {
+    animation: none;
+  }
+}
+
+.ToolCallChevron {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: transform var(--transition-fast, 120ms);
+}
+
+.ToolCallChevron--open {
+  transform: rotate(90deg);
+}
+
+.ToolCallOutput {
+  padding: 8px 10px;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 11px;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
+}

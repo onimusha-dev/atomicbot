@@ -213,6 +213,7 @@ export class GatewayClient {
         platform: "electron",
         mode: "ui",
       },
+      caps: ["tool-events"],
       role: "operator",
       scopes: ["operator.admin", "operator.approvals", "operator.pairing"],
       auth: { token: this.opts.token },

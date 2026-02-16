@@ -9,6 +9,21 @@ export type UiMessageAttachment = {
   dataUrl?: string;
 };
 
+/** A tool invocation extracted from assistant message content. */
+export type UiToolCall = {
+  id: string;
+  name: string;
+  arguments: Record<string, unknown>;
+};
+
+/** A tool result extracted from toolResult messages in the history. */
+export type UiToolResult = {
+  toolCallId: string;
+  toolName: string;
+  text: string;
+  status?: string;
+};
+
 export type UiMessage = {
   id: string;
   role: "user" | "assistant" | "system" | "unknown";
@@ -18,6 +33,21 @@ export type UiMessage = {
   pending?: boolean;
   /** Attachments (images/files) from history; shown before message text. */
   attachments?: UiMessageAttachment[];
+  /** Tool calls extracted from assistant message content. */
+  toolCalls?: UiToolCall[];
+  /** Tool results matched to the preceding assistant's tool calls. */
+  toolResults?: UiToolResult[];
+};
+
+/** A tool call currently in-flight, streamed via agent events in real time. */
+export type LiveToolCall = {
+  toolCallId: string;
+  runId: string;
+  name: string;
+  arguments: Record<string, unknown>;
+  phase: "start" | "update" | "result";
+  resultText?: string;
+  isError?: boolean;
 };
 
 export type ChatSliceState = {
@@ -33,6 +63,8 @@ export type ChatSliceState = {
    *  render that occurs between a navigation (which changes sessionKey
    *  immediately) and the sessionCleared effect (which runs after the render). */
   activeSessionKey: string;
+  /** Tool calls currently in-flight, streamed via agent "tool" events. Keyed by toolCallId. */
+  liveToolCalls: Record<string, LiveToolCall>;
 };
 
 const initialState: ChatSliceState = {
@@ -42,6 +74,7 @@ const initialState: ChatSliceState = {
   error: null,
   epoch: 0,
   activeSessionKey: "",
+  liveToolCalls: {},
 };
 
 export type GatewayRequest = <T = unknown>(method: string, params?: unknown) => Promise<T>;
@@ -196,6 +229,54 @@ function parseRole(value: unknown): UiMessage["role"] {
   return "unknown";
 }
 
+/** Extract tool calls from an assistant message's content array. */
+export function extractToolCalls(msg: unknown): UiToolCall[] {
+  const out: UiToolCall[] = [];
+  if (!msg || typeof msg !== "object") {return out;}
+  const m = msg as { content?: unknown };
+  if (!Array.isArray(m.content)) {return out;}
+  for (const part of m.content) {
+    if (!part || typeof part !== "object") {continue;}
+    const p = part as { type?: string; id?: string; name?: string; arguments?: unknown };
+    const t = typeof p.type === "string" ? p.type.toLowerCase() : "";
+    if (
+      (t === "toolcall" || t === "tool_call" || t === "tooluse" || t === "tool_use") &&
+      typeof p.name === "string"
+    ) {
+      out.push({
+        id: typeof p.id === "string" ? p.id : `tc-${out.length}`,
+        name: p.name,
+        arguments:
+          p.arguments && typeof p.arguments === "object"
+            ? (p.arguments as Record<string, unknown>)
+            : {},
+      });
+    }
+  }
+  return out;
+}
+
+/** Extract tool result info from a toolResult-role message. */
+function extractToolResult(msg: unknown): UiToolResult | null {
+  if (!msg || typeof msg !== "object") {return null;}
+  const m = msg as {
+    role?: string;
+    toolCallId?: string;
+    toolName?: string;
+    content?: unknown;
+    details?: { status?: string };
+  };
+  const role = typeof m.role === "string" ? m.role : "";
+  if (role !== "toolResult" && role !== "tool_result") {return null;}
+  const text = extractText(msg);
+  return {
+    toolCallId: typeof m.toolCallId === "string" ? m.toolCallId : "",
+    toolName: typeof m.toolName === "string" ? m.toolName : "unknown",
+    text,
+    status: typeof m.details?.status === "string" ? m.details.status : undefined,
+  };
+}
+
 export function parseHistoryMessages(raw: unknown[]): UiMessage[] {
   const out: UiMessage[] = [];
   for (let i = 0; i < raw.length; i += 1) {
@@ -204,18 +285,33 @@ export function parseHistoryMessages(raw: unknown[]): UiMessage[] {
       continue;
     }
     const msg = item as { role?: unknown; timestamp?: unknown };
+    const rawRole = typeof msg.role === "string" ? msg.role : "";
+
+    // Handle toolResult messages: attach results to the preceding assistant message.
+    if (rawRole === "toolResult" || rawRole === "tool_result") {
+      const result = extractToolResult(item);
+      if (result && out.length > 0) {
+        const prev = out[out.length - 1];
+        if (prev.role === "assistant") {
+          prev.toolResults = [...(prev.toolResults ?? []), result];
+        }
+      }
+      continue;
+    }
+
     const role = parseRole(msg.role);
     const text = extractText(item);
+    const toolCalls = role === "assistant" ? extractToolCalls(item) : [];
     const attachments = extractAttachmentsFromMessage(item);
     const hasAttachments = attachments.length > 0;
-    if (!text && !hasAttachments) {
+    const hasToolCalls = toolCalls.length > 0;
+    if (!text && !hasAttachments && !hasToolCalls) {
       continue;
     }
     // Hide heartbeat prompts and ack responses from chat history
     if (text && isHeartbeatMessage(role, text)) {
       continue;
     }
-    console.log("attachments>>>", attachments);
     // Strip gateway-injected metadata (untrusted context blocks, date headers,
     // attachment markers, etc.) so the UI shows only the actual message content.
     const displayText = text ? stripMetadata(text).trim() : "";
@@ -229,6 +325,7 @@ export function parseHistoryMessages(raw: unknown[]): UiMessage[] {
       text: displayText,
       ts,
       attachments: hasAttachments ? attachments : undefined,
+      toolCalls: hasToolCalls ? toolCalls : undefined,
     });
   }
   return out;
@@ -370,6 +467,7 @@ const chatSlice = createSlice({
     sessionCleared(state, action: PayloadAction<string>) {
       state.messages = [];
       state.streamByRun = {};
+      state.liveToolCalls = {};
       state.epoch += 1;
       state.activeSessionKey = action.payload;
     },
@@ -447,15 +545,51 @@ const chatSlice = createSlice({
     },
     streamFinalReceived(
       state,
-      action: PayloadAction<{ runId: string; seq: number; text: string }>
+      action: PayloadAction<{
+        runId: string;
+        seq: number;
+        text: string;
+        toolCalls?: UiToolCall[];
+      }>
     ) {
-      const { runId, seq, text } = action.payload;
+      const { runId, seq, text, toolCalls } = action.payload;
       delete state.streamByRun[runId];
-      if (!text) {
+
+      // Collect any live tool calls for this run and convert them to UiToolCall[]
+      const liveForRun: UiToolCall[] = [];
+      const liveResultsForRun: UiToolResult[] = [];
+      for (const key of Object.keys(state.liveToolCalls)) {
+        const ltc = state.liveToolCalls[key];
+        if (ltc.runId === runId) {
+          liveForRun.push({
+            id: ltc.toolCallId,
+            name: ltc.name,
+            arguments: ltc.arguments,
+          });
+          if (ltc.phase === "result" && ltc.resultText) {
+            liveResultsForRun.push({
+              toolCallId: ltc.toolCallId,
+              toolName: ltc.name,
+              text: ltc.resultText,
+              status: ltc.isError ? "error" : undefined,
+            });
+          }
+          delete state.liveToolCalls[key];
+        }
+      }
+
+      // Merge tool calls from payload with those collected from live events
+      const allToolCalls = [
+        ...(toolCalls ?? []),
+        ...liveForRun.filter((ltc) => !toolCalls?.some((tc) => tc.id === ltc.id)),
+      ];
+      const hasToolCalls = allToolCalls.length > 0;
+
+      if (!text && !hasToolCalls) {
         return;
       }
       // Suppress heartbeat ack messages from appearing in chat history
-      if (isHeartbeatMessage("assistant", text)) {
+      if (text && isHeartbeatMessage("assistant", text)) {
         return;
       }
       state.messages.push({
@@ -464,6 +598,8 @@ const chatSlice = createSlice({
         text,
         runId,
         ts: Date.now(),
+        toolCalls: hasToolCalls ? allToolCalls : undefined,
+        toolResults: liveResultsForRun.length > 0 ? liveResultsForRun : undefined,
       });
     },
     streamErrorReceived(state, action: PayloadAction<{ runId: string; errorMessage?: string }>) {
@@ -477,6 +613,49 @@ const chatSlice = createSlice({
     },
     streamCleared(state, action: PayloadAction<{ runId: string }>) {
       delete state.streamByRun[action.payload.runId];
+    },
+    /** A tool call started (agent event with stream="tool", phase="start"). */
+    toolCallStarted(
+      state,
+      action: PayloadAction<{
+        toolCallId: string;
+        runId: string;
+        name: string;
+        arguments: Record<string, unknown>;
+      }>
+    ) {
+      const { toolCallId, runId, name, arguments: args } = action.payload;
+      state.liveToolCalls[toolCallId] = {
+        toolCallId,
+        runId,
+        name,
+        arguments: args,
+        phase: "start",
+      };
+    },
+    /** A tool call finished (agent event with stream="tool", phase="result"). */
+    toolCallFinished(
+      state,
+      action: PayloadAction<{
+        toolCallId: string;
+        resultText?: string;
+        isError?: boolean;
+      }>
+    ) {
+      const entry = state.liveToolCalls[action.payload.toolCallId];
+      if (entry) {
+        entry.phase = "result";
+        entry.resultText = action.payload.resultText;
+        entry.isError = action.payload.isError;
+      }
+    },
+    /** Clear all live tool calls for a given runId (e.g. when the run finishes). */
+    liveToolCallsClearedForRun(state, action: PayloadAction<{ runId: string }>) {
+      for (const key of Object.keys(state.liveToolCalls)) {
+        if (state.liveToolCalls[key].runId === action.payload.runId) {
+          delete state.liveToolCalls[key];
+        }
+      }
     },
   },
 });

@@ -73,6 +73,8 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
   const messages = activeSessionKey === sessionKey ? rawMessages : [];
   const rawStreamByRun = useAppSelector((s) => s.chat.streamByRun);
   const streamByRun = activeSessionKey === sessionKey ? rawStreamByRun : {};
+  const rawLiveToolCalls = useAppSelector((s) => s.chat.liveToolCalls);
+  const liveToolCalls = activeSessionKey === sessionKey ? Object.values(rawLiveToolCalls) : [];
   const sending = useAppSelector((s) => s.chat.sending);
   const error = useAppSelector((s) => s.chat.error);
 
@@ -170,7 +172,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
   const displayMessages = allMessages.filter(
     (m) =>
       (m.role === "user" || m.role === "assistant") &&
-      m.text.trim() !== "" &&
+      (m.text.trim() !== "" || (m.toolCalls && m.toolCalls.length > 0)) &&
       !isHeartbeatMessage(m.role, m.text)
   );
 
@@ -185,7 +187,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
       return;
     }
     el.scrollTop = el.scrollHeight;
-  }, [messages.length, optimisticFirstMessage, streamByRun, waitingForFirstResponse]);
+  }, [messages.length, optimisticFirstMessage, streamByRun, liveToolCalls, waitingForFirstResponse]);
 
   React.useEffect(() => {
     if (error) {
@@ -213,6 +215,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
       <ChatMessageList
         displayMessages={displayMessages}
         streamByRun={streamByRun}
+        liveToolCalls={liveToolCalls}
         optimisticFirstMessage={optimisticFirstMessage}
         optimisticFirstAttachments={optimisticFirstAttachments}
         matchingFirstUserFromHistory={matchingFirstUserFromHistory}
