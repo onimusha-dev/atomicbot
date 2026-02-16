@@ -193,7 +193,7 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     if (!el) {
       return;
     }
-    el.scrollTop = el.scrollHeight;
+    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [messages.length, optimisticFirstMessage, streamByRun, liveToolCalls, waitingForFirstResponse, awaitingContinuation]);
 
   React.useEffect(() => {

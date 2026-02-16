@@ -181,11 +181,6 @@ function LiveToolCallCardItem({ tc }: { tc: LiveToolCall }) {
       >
         <span className={s.ToolCallCursor}>{"\u2022"}</span>
         <span className={s.ToolCallLabel}>{label}</span>
-        {isRunning ? (
-          <span className={s["ToolCallBadge--running"]}>running\u2026</span>
-        ) : tc.isError ? (
-          <span className={s["ToolCallBadge--error"]}>error</span>
-        ) : null}
         <ChevronIcon open={expanded} />
       </button>
       {expanded ? (
