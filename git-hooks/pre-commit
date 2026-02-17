@@ -35,4 +35,18 @@ if [ "${#format_files[@]}" -gt 0 ]; then
   "$RUN_NODE_TOOL" oxfmt --write -- "${format_files[@]}"
 fi
 
+# Run Prettier for electron-desktop staged files
+electron_prefix="apps/electron-desktop/"
+has_electron_files=false
+for f in "${files[@]}"; do
+  if [[ "$f" == "$electron_prefix"* ]]; then
+    has_electron_files=true
+    break
+  fi
+done
+
+if $has_electron_files; then
+  npm run format:fix --prefix "$ROOT_DIR/$electron_prefix"
+fi
+
 git add -- "${files[@]}"
