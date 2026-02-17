@@ -71,7 +71,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   },
   {
     id: "openai",
-    name: "OpenAI (GPT)",
+    name: "OpenAI (API Key)",
     description: "An all-rounder for chat, coding, and everyday tasks",
     placeholder: "sk-...",
     helpUrl: "https://platform.openai.com/api-keys",
@@ -79,7 +79,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   },
   {
     id: "openai-codex",
-    name: "OpenAI Codex",
+    name: "ChatGPT (Subscription)",
     description: "Use your ChatGPT subscription for coding models",
     authType: "oauth",
     helpUrl: "https://openai.com/codex/",

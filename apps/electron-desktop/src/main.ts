@@ -267,6 +267,17 @@ void app.whenReady().then(async () => {
     console.log(`[main] Cleaned up orphaned gateway process (PID ${killedPid})`);
   }
 
+  // Temporary: force-kill all lingering openclaw-gateway processes to prevent
+  // zombie instances. Safe because we are about to spawn a fresh one.
+  // TODO: remove after 1-2 releases once the orphan cleanup above is proven reliable.
+  try {
+    const { execSync } = await import("node:child_process");
+    execSync("pkill -9 openclaw-gateway", { stdio: "ignore" });
+    console.log("[main] pkill openclaw-gateway: killed lingering processes");
+  } catch {
+    // pkill exits non-zero when no matching processes found — expected.
+  }
+
   // Remove stale gateway lock file so the new spawn can acquire it.
   const configPath = path.join(stateDir, "openclaw.json");
   removeStaleGatewayLock(configPath);
@@ -417,10 +428,9 @@ void app.whenReady().then(async () => {
     ghBin,
   });
 
-  // If consent has already been accepted previously, start the gateway immediately.
-  if (consentAccepted) {
-    await startGateway();
-  }
+  // Always start the gateway on launch — consent is handled in the renderer
+  // after the gateway is ready (loading screen shows while gateway starts).
+  await startGateway();
 });
 
 function readConsentAccepted(consentPath: string): boolean {

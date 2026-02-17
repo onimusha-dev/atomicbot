@@ -144,16 +144,16 @@ describe("Smoke render tests", () => {
 
   it("ConsentScreen renders without crash", () => {
     const onAccepted = vi.fn();
-    const { container } = render(
+    const onImport = vi.fn();
+    render(
       <TestShell>
-        <ConsentScreen onAccepted={onAccepted} />
+        <ConsentScreen onAccepted={onAccepted} onImport={onImport} />
       </TestShell>
     );
-    // Query by role/text instead of CSS module class name (CSS modules
-    // return undefined class names in vitest without extra config).
     expect(screen.getByRole("dialog", { name: /user agreement/i })).toBeTruthy();
     expect(screen.getByText(/Welcome to Atomic Bot/i)).toBeTruthy();
-    expect(screen.getByRole("button", { name: /start/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /create a new ai agent/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /import an existing setup/i })).toBeTruthy();
   });
 
   it("ChatComposer renders with empty state", () => {

@@ -45,6 +45,11 @@ export class BrowserWindow {
   on = vi.fn();
 }
 
+export const dialog = {
+  showOpenDialog: vi.fn(() => Promise.resolve({ canceled: true, filePaths: [] })),
+  showSaveDialog: vi.fn(() => Promise.resolve({ canceled: true, filePath: undefined })),
+};
+
 export const contextBridge = {
   exposeInMainWorld: vi.fn(),
 };

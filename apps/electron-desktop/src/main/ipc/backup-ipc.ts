@@ -284,6 +284,77 @@ export function registerBackupHandlers(params: RegisterParams) {
     acceptConsent,
   } = params;
 
+  /**
+   * Shared restore logic: given a source directory that contains openclaw.json,
+   * stop gateway, swap stateDir contents, rewrite paths, patch config, restart.
+   * Used by both archive-based and directory-based restore flows.
+   */
+  async function performRestoreFromSourceDir(sourceDir: string): Promise<void> {
+    const preRestoreDir = `${stateDir}.pre-restore`;
+
+    // 1. Stop the gateway
+    await stopGatewayChild();
+
+    // 2. Safety backup: rename current stateDir
+    try {
+      await fsp.rm(preRestoreDir, { recursive: true, force: true });
+    } catch {
+      // may not exist
+    }
+    if (fs.existsSync(stateDir)) {
+      await fsp.rename(stateDir, preRestoreDir);
+    }
+
+    try {
+      // 3. Create fresh stateDir and copy backup contents
+      await fsp.mkdir(stateDir, { recursive: true });
+      await fsp.cp(sourceDir, stateDir, { recursive: true });
+
+      // 4. Detect old stateDir from backup config and rewrite stale
+      //    paths across all restored text files (sessions, logs, etc.)
+      const configPath = path.join(stateDir, "openclaw.json");
+      const oldStateDir = detectOldStateDir(configPath);
+      if (oldStateDir && oldStateDir !== stateDir) {
+        const rewritten = await rewritePathsInDir(stateDir, oldStateDir, stateDir);
+        console.log(
+          `[ipc/backup] rewrote paths in ${rewritten} file(s): ${oldStateDir} → ${stateDir}`
+        );
+      }
+
+      // 5. Patch config for the desktop environment (workspace paths,
+      //    gateway mode, controlUi origin allowlist)
+      patchRestoredConfig(configPath, stateDir);
+
+      // 6. Read the token from the restored config and update in-memory state
+      //    so gateway, main process, and renderer all use the backup's token.
+      const restoredToken = readGatewayTokenFromConfig(configPath);
+      if (restoredToken) {
+        setGatewayToken(restoredToken);
+      }
+
+      // 7. Mark terms of service as accepted so the gateway starts without
+      //    requiring the user to re-accept consent after a backup restore.
+      await acceptConsent();
+
+      // 8. Start the gateway — it reads the token from config + env var (now in sync)
+      await startGateway();
+    } catch (err) {
+      // Attempt rollback: restore original stateDir and restart gateway
+      try {
+        if (fs.existsSync(stateDir)) {
+          await fsp.rm(stateDir, { recursive: true, force: true });
+        }
+        if (fs.existsSync(preRestoreDir)) {
+          await fsp.rename(preRestoreDir, stateDir);
+        }
+        await startGateway();
+      } catch (rollbackErr) {
+        console.error("[ipc/backup] rollback also failed:", rollbackErr);
+      }
+      throw err;
+    }
+  }
+
   // ── Create backup ──────────────────────────────────────────────────────
   ipcMain.handle("backup-create", async () => {
     try {
@@ -298,11 +369,19 @@ export function registerBackupHandlers(params: RegisterParams) {
         String(now.getMonth() + 1).padStart(2, "0"),
         String(now.getDate()).padStart(2, "0"),
       ].join("-");
+      const timePart = [
+        String(now.getHours()).padStart(2, "0"),
+        String(now.getMinutes()).padStart(2, "0"),
+        String(now.getSeconds()).padStart(2, "0"),
+      ].join("");
 
       const parentWindow = getMainWindow();
       const dialogOpts = {
         title: "Save OpenClaw Backup",
-        defaultPath: path.join(app.getPath("documents"), `openclaw-backup-${datePart}.zip`),
+        defaultPath: path.join(
+          app.getPath("documents"),
+          `atomicbot-backup-${datePart}-${timePart}.zip`
+        ),
         filters: [{ name: "ZIP Archives", extensions: ["zip"] }],
       };
       const result = parentWindow
@@ -321,7 +400,7 @@ export function registerBackupHandlers(params: RegisterParams) {
     }
   });
 
-  // ── Restore from backup ────────────────────────────────────────────────
+  // ── Restore from backup archive ───────────────────────────────────────
   ipcMain.handle("backup-restore", async (_evt, p: { data?: unknown; filename?: unknown }) => {
     const b64 = typeof p?.data === "string" ? p.data : "";
     if (!b64) {
@@ -330,76 +409,18 @@ export function registerBackupHandlers(params: RegisterParams) {
     const filenameHint = typeof p?.filename === "string" ? p.filename : undefined;
 
     const tmpDir = path.join(os.tmpdir(), `openclaw-restore-${randomBytes(8).toString("hex")}`);
-    const preRestoreDir = `${stateDir}.pre-restore`;
 
     try {
-      // 1. Extract archive to temp dir and validate
+      // Extract archive to temp dir and validate
       const buffer = Buffer.from(b64, "base64");
       await fsp.mkdir(tmpDir, { recursive: true });
       await extractArchiveBuffer(buffer, tmpDir, filenameHint);
       const backupRoot = await resolveBackupRoot(tmpDir);
 
-      // 2. Stop the gateway
-      await stopGatewayChild();
-
-      // 3. Safety backup: rename current stateDir
-      try {
-        await fsp.rm(preRestoreDir, { recursive: true, force: true });
-      } catch {
-        // may not exist
-      }
-      await fsp.rename(stateDir, preRestoreDir);
-
-      // 4. Create fresh stateDir and copy backup contents
-      await fsp.mkdir(stateDir, { recursive: true });
-      await fsp.cp(backupRoot, stateDir, { recursive: true });
-
-      // 5. Detect old stateDir from backup config and rewrite stale
-      //    paths across all restored text files (sessions, logs, etc.)
-      const configPath = path.join(stateDir, "openclaw.json");
-      const oldStateDir = detectOldStateDir(configPath);
-      if (oldStateDir && oldStateDir !== stateDir) {
-        const rewritten = await rewritePathsInDir(stateDir, oldStateDir, stateDir);
-        console.log(
-          `[ipc/backup] rewrote paths in ${rewritten} file(s): ${oldStateDir} → ${stateDir}`
-        );
-      }
-
-      // 6. Patch config for the desktop environment (workspace paths,
-      //    gateway mode, controlUi origin allowlist)
-      patchRestoredConfig(configPath, stateDir);
-
-      // 7. Read the token from the restored config and update in-memory state
-      //    so gateway, main process, and renderer all use the backup's token.
-      const restoredToken = readGatewayTokenFromConfig(configPath);
-      if (restoredToken) {
-        setGatewayToken(restoredToken);
-      }
-
-      // 8. Mark terms of service as accepted so the gateway starts without
-      //    requiring the user to re-accept consent after a backup restore.
-      await acceptConsent();
-
-      // 9. Start the gateway — it reads the token from config + env var (now in sync)
-      await startGateway();
-
+      await performRestoreFromSourceDir(backupRoot);
       return { ok: true };
     } catch (err) {
       console.error("[ipc/backup] backup-restore failed:", err);
-
-      // Attempt rollback: restore original stateDir and restart gateway
-      try {
-        if (fs.existsSync(stateDir)) {
-          await fsp.rm(stateDir, { recursive: true, force: true });
-        }
-        if (fs.existsSync(preRestoreDir)) {
-          await fsp.rename(preRestoreDir, stateDir);
-        }
-        await startGateway();
-      } catch (rollbackErr) {
-        console.error("[ipc/backup] rollback also failed:", rollbackErr);
-      }
-
       return { ok: false, error: `Failed to restore backup: ${String(err)}` };
     } finally {
       try {
@@ -407,6 +428,77 @@ export function registerBackupHandlers(params: RegisterParams) {
       } catch {
         // cleanup best-effort
       }
+    }
+  });
+
+  // ── Detect local OpenClaw instance at ~/.openclaw ─────────────────────
+  ipcMain.handle("backup-detect-local", async () => {
+    try {
+      const openclawDir = path.join(os.homedir(), ".openclaw");
+      const configPath = path.join(openclawDir, "openclaw.json");
+      const exists = fs.existsSync(configPath);
+      return { found: exists, path: openclawDir };
+    } catch (err) {
+      console.error("[ipc/backup] backup-detect-local failed:", err);
+      return { found: false, path: "" };
+    }
+  });
+
+  // ── Restore from a directory (local instance or user-picked folder) ───
+  ipcMain.handle("backup-restore-from-dir", async (_evt, p: { dirPath?: unknown }) => {
+    const dirPath = typeof p?.dirPath === "string" ? p.dirPath.trim() : "";
+    if (!dirPath) {
+      return { ok: false, error: "No directory path provided" };
+    }
+
+    try {
+      // Validate the directory contains openclaw.json
+      const configPath = path.join(dirPath, "openclaw.json");
+      if (!fs.existsSync(configPath)) {
+        return {
+          ok: false,
+          error: "Invalid OpenClaw directory: openclaw.json not found",
+        };
+      }
+
+      await performRestoreFromSourceDir(dirPath);
+      return { ok: true };
+    } catch (err) {
+      console.error("[ipc/backup] backup-restore-from-dir failed:", err);
+      return { ok: false, error: `Failed to restore: ${String(err)}` };
+    }
+  });
+
+  // ── Open folder picker and validate it contains openclaw.json ─────────
+  ipcMain.handle("backup-select-folder", async () => {
+    try {
+      const parentWindow = getMainWindow();
+      const dialogOpts = {
+        title: "Select OpenClaw Configuration Folder",
+        properties: ["openDirectory"] as Array<"openDirectory">,
+      };
+      const result = parentWindow
+        ? await dialog.showOpenDialog(parentWindow, dialogOpts)
+        : await dialog.showOpenDialog(dialogOpts);
+
+      if (result.canceled || !result.filePaths[0]) {
+        return { ok: false, cancelled: true };
+      }
+
+      const selectedDir = result.filePaths[0];
+      const configPath = path.join(selectedDir, "openclaw.json");
+      if (!fs.existsSync(configPath)) {
+        return {
+          ok: false,
+          error:
+            "Selected folder does not contain openclaw.json. Please select a valid OpenClaw configuration directory.",
+        };
+      }
+
+      return { ok: true, path: selectedDir };
+    } catch (err) {
+      console.error("[ipc/backup] backup-select-folder failed:", err);
+      return { ok: false, error: `Failed to select folder: ${String(err)}` };
     }
   });
 }

@@ -58,6 +58,9 @@ const EXPECTED_CHANNELS = [
   // backup
   "backup-create",
   "backup-restore",
+  "backup-detect-local",
+  "backup-restore-from-dir",
+  "backup-select-folder",
   // skills
   "install-custom-skill",
   "list-custom-skills",
@@ -93,6 +96,8 @@ describe("IPC channel contracts", () => {
       obsidianCliBin: "/bin/obsidian-cli",
       ghBin: "/bin/gh",
       stopGatewayChild: vi.fn(async () => {}),
+      getGatewayToken: vi.fn(() => "test-token"),
+      setGatewayToken: vi.fn(),
     };
 
     registerIpcHandlers(mockParams);
@@ -122,6 +127,8 @@ describe("IPC channel contracts", () => {
       obsidianCliBin: "/bin/obsidian-cli",
       ghBin: "/bin/gh",
       stopGatewayChild: vi.fn(async () => {}),
+      getGatewayToken: vi.fn(() => "test-token"),
+      setGatewayToken: vi.fn(),
     };
 
     registerIpcHandlers(mockParams);

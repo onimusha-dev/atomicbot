@@ -4,7 +4,6 @@ import { useAppSelector } from "@store/hooks";
 import type { GatewayState } from "@main/types";
 import { routes } from "../app/routes";
 import { GlassCard, HeroPageLayout, PrimaryButton } from "@shared/kit";
-import { LoadingScreen } from "./LoadingScreen";
 import { ApiKeyPage } from "./providers/ApiKeyPage";
 import { OAuthProviderPage } from "./providers/OAuthProviderPage";
 import { AppleNotesConnectPage } from "./connections/AppleNotesConnectPage";
@@ -23,6 +22,8 @@ import { TrelloConnectPage } from "./connections/TrelloConnectPage";
 import { TelegramTokenPage } from "./connections/TelegramTokenPage";
 import { TelegramUserPage } from "./connections/TelegramUserPage";
 import { WebSearchPage } from "./skills/WebSearchPage";
+import { RestoreOptionPage } from "./RestoreOptionPage";
+import { RestoreFilePage } from "./RestoreFilePage";
 import { useWelcomeState } from "./hooks/useWelcomeState";
 
 function WelcomeAutoStart(props: {
@@ -40,8 +41,10 @@ function WelcomeAutoStart(props: {
     props.onStart();
   }, [props.onStart]);
 
+  // While config setup is in progress, render nothing visible to avoid a
+  // loading-screen flash between consent and provider-select.
   if (props.startBusy) {
-    return <LoadingScreen state={null} />;
+    return null;
   }
 
   if (props.error) {
@@ -59,7 +62,7 @@ function WelcomeAutoStart(props: {
   }
 
   // If start is neither busy nor errored, we should have navigated away already.
-  return <LoadingScreen state={null} />;
+  return null;
 }
 
 export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "ready" }> }) {
@@ -95,6 +98,7 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
             selectedProvider={welcome.selectedProvider}
             error={welcome.error}
             onSelect={welcome.onProviderSelect}
+            onBack={() => void navigate(routes.consent)}
           />
         }
       />
@@ -379,6 +383,9 @@ export function WelcomePage({ state }: { state: Extract<GatewayState, { kind: "r
           />
         }
       />
+
+      <Route path="restore" element={<RestoreOptionPage />} />
+      <Route path="restore-file" element={<RestoreFilePage />} />
 
       <Route path="*" element={<Navigate to={routes.welcome} replace />} />
     </Routes>

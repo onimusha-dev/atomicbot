@@ -15,8 +15,7 @@ import { Sidebar } from "../sidebar/Sidebar";
 import { SettingsIndexRedirect, SettingsPage, SettingsTab } from "../settings/SettingsPage";
 import { TerminalPage } from "../terminal/TerminalPage";
 import { WelcomePage } from "../onboarding/WelcomePage";
-import { getDesktopApiOrNull } from "@ipc/desktopApi";
-import { ConsentScreen, type ConsentDesktopApi } from "../onboarding/ConsentScreen";
+import { ConsentScreen } from "../onboarding/ConsentScreen";
 import { LoadingScreen } from "../onboarding/LoadingScreen";
 import { Brand } from "@shared/kit";
 import { GatewayRpcProvider } from "@gateway/context";
@@ -150,53 +149,27 @@ export function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const didAutoNavRef = React.useRef(false);
-  const [consent, setConsent] = React.useState<"unknown" | "required" | "accepted">("unknown");
 
   React.useEffect(() => {
     void dispatch(initGatewayState());
     void dispatch(loadOnboardingFromStorage());
   }, [dispatch]);
 
+  // Auto-navigate when gateway state changes (loading → ready / failed).
   React.useEffect(() => {
-    const api = getDesktopApiOrNull() as ConsentDesktopApi | null;
-    let alive = true;
-    void (async () => {
-      try {
-        const info = await api?.getConsentInfo();
-        const accepted = info?.accepted === true;
-        if (alive) {
-          setConsent(accepted ? "accepted" : "required");
-        }
-      } catch {
-        if (alive) {
-          setConsent("required");
-        }
-      }
-    })();
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  React.useEffect(() => {
-    if (consent !== "accepted") {
-      return;
-    }
     if (!state) {
       return;
     }
     if (state.kind === "ready") {
-      // Only auto-navigate once (first time we become ready), and only if the user
-      // is still on the bootstrap screens. Otherwise, user navigation would be
-      // overridden on every render.
+      // Only auto-navigate once, and only from bootstrap screens.
       if (didAutoNavRef.current) {
         return;
       }
       const path = location.pathname || "/";
-      const isBootstrap = isBootstrapPath(path);
-      if (isBootstrap) {
+      if (isBootstrapPath(path)) {
         didAutoNavRef.current = true;
-        void navigate(onboarded ? routes.chat : routes.welcome, { replace: true });
+        const destination = onboarded ? routes.chat : routes.consent;
+        void navigate(destination, { replace: true });
       }
       return;
     }
@@ -206,38 +179,22 @@ export function App() {
     if (state.kind === "starting") {
       void navigate(routes.loading, { replace: true });
     }
-  }, [state, consent, onboarded, navigate, location.pathname]);
+  }, [state, onboarded, navigate, location.pathname]);
 
-  if (consent !== "accepted") {
-    // While consent is loading, keep showing the splash to avoid a flash of unstyled content.
-    if (consent === "unknown") {
-      return <LoadingScreen state={null} />;
-    }
-    return (
-      <ConsentScreen
-        onAccepted={() => {
-          setConsent("accepted");
-          // Avoid getting stuck on /loading when gateway is already ready.
-          if (state?.kind === "ready") {
-            void navigate(onboarded ? routes.chat : routes.welcome, { replace: true });
-            return;
-          }
-          if (state?.kind === "failed") {
-            void navigate(routes.error, { replace: true });
-            return;
-          }
-          void navigate(routes.loading, { replace: true });
-        }}
-      />
-    );
-  }
-
-  // After consent is accepted, route fullscreen pages explicitly so nested routing works correctly
-  // (especially onboarding, which relies on an index route).
+  // Gateway is ready — show full app or onboarding consent flow.
   if (state?.kind === "ready") {
     return (
       <Routes>
         <Route path={routes.loading} element={<LoadingScreen state={state} />} />
+        <Route
+          path={routes.consent}
+          element={
+            <ConsentScreen
+              onAccepted={() => void navigate(routes.welcome, { replace: true })}
+              onImport={() => void navigate(`${routes.welcome}/restore`, { replace: true })}
+            />
+          }
+        />
         <Route
           path={`${routes.welcome}/*`}
           element={
@@ -274,6 +231,7 @@ export function App() {
     );
   }
 
+  // Gateway not ready yet — show loading or error.
   return (
     <Routes>
       <Route path={routes.loading} element={<LoadingScreen state={state ?? null} />} />
@@ -287,7 +245,6 @@ export function App() {
           )
         }
       />
-      <Route path={`${routes.welcome}/*`} element={<Navigate to={routes.loading} replace />} />
       <Route path="*" element={<Navigate to={routes.loading} replace />} />
     </Routes>
   );
