@@ -65,7 +65,7 @@ if git rev-parse "$TAG" >/dev/null 2>&1; then
 fi
 
 # Check for uncommitted changes (outside of package.json which we're about to modify).
-if ! git diff --quiet -- ':!apps/electron-desktop/package.json'; then
+if ! git diff --quiet -- ':!apps/electron-desktop/package.json' ':!apps/electron-desktop/package-lock.json'; then
   echo "Error: you have uncommitted changes. Commit or stash them first."
   exit 1
 fi
@@ -93,8 +93,12 @@ fi
 
 echo "Updated package.json → $NEW_VERSION"
 
+# Sync package-lock.json with the new version.
+echo "Running npm install to update package-lock.json..."
+(cd "$APP_DIR" && npm install --package-lock-only)
+
 # Commit and tag.
-git add "$PKG"
+git add "$PKG" "$APP_DIR/package-lock.json"
 git commit -m "electron-desktop: release $TAG"
 git tag -a "$TAG" -m "AtomicBot Desktop $TAG"
 
