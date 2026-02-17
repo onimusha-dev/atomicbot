@@ -2,11 +2,11 @@ import { app, type BrowserWindow } from "electron";
 import { autoUpdater, type UpdateInfo } from "electron-updater";
 import { showUpdateSplash } from "./update-splash";
 
-// Interval between periodic update checks (4 hours).
-const CHECK_INTERVAL_MS = 4 * 60 * 60 * 1000;
+// Interval between periodic update checks (5 minutes).
+const CHECK_INTERVAL_MS = 5 * 60 * 1000;
 
-// Delay before the first check after startup (30 seconds).
-const INITIAL_DELAY_MS = 30_000;
+// Delay before the first check after startup (5 seconds).
+const INITIAL_DELAY_MS = 5_000;
 
 let initialized = false;
 let periodicTimer: ReturnType<typeof setInterval> | null = null;
