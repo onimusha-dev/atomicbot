@@ -117,8 +117,8 @@
 }
 
 .UiTerminalNewTab:hover {
-  background: var(--panel);
-  color: var(--accent);
+  background: rgba(163, 230, 53, 0.06);
+  color: var(--lime);
 }
 
 /* ── Terminal pane container ─────────────────────────────────────── */
