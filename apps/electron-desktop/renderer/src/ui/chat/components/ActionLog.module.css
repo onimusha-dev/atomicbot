@@ -1,0 +1,105 @@
+/* Action Log wrapper: expanded block with timeline (dot + line) */
+.ActionLog {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0;
+}
+
+.ActionLogHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0 8px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  user-select: none;
+  transition: color var(--transition-fast, 120ms);
+}
+
+.ActionLogHeader:hover {
+  color: #ffffff;
+}
+
+.ActionLogChevron {
+  flex-shrink: 0;
+  width: 10px;
+  height: 6px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform var(--transition-fast, 120ms);
+}
+
+.ActionLogChevronOpen {
+  transform: rotate(180deg);
+}
+
+.ActionLogBody {
+  display: flex;
+  flex-direction: column;
+  animation: actionLogBodyFadeIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes actionLogBodyFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ActionLogList {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Vertical line from first dot to last dot */
+.ActionLogList::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
+.ActionLogItem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.ActionLogDotWrap {
+  width: 13px;
+  flex-shrink: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: var(--bg-base);
+  position: relative;
+  z-index: 1;
+}
+
+.ActionLogDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 auto;
+  display: block;
+}
+
+.ActionLogCard {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 4px;
+  padding-left: 6px;
+}

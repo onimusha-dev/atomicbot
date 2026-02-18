@@ -15,7 +15,8 @@ import type { ChatAttachmentInput } from "@store/slices/chatSlice";
 import { CopyMessageButton } from "./CopyMessageButton";
 import { UserMessageBubble } from "./UserMessageBubble";
 import { AssistantStreamBubble, TypingIndicator } from "./AssistantStreamBubble";
-import { ToolCallCards, LiveToolCallCards } from "./ToolCallCard";
+import { ToolCallCards, LiveToolCallCards, HIDDEN_TOOL_NAMES } from "./ToolCallCard";
+import { ActionLog } from "./ActionLog";
 import am from "./AssistantMessage.module.css";
 import ct from "../ChatTranscript.module.css";
 
@@ -136,19 +137,26 @@ export function ChatMessageList(props: {
               liveToolCalls.length === 0 &&
               !waitingForFirstResponse &&
               index === lastAssistantFromRenderItems;
+            const resultMap = new Map<string, UiToolResult>();
+            for (const m of item.msgs) {
+              for (const r of m.toolResults ?? []) {
+                if (r.toolCallId) resultMap.set(r.toolCallId, r);
+              }
+            }
+            const flatCards: { toolCall: UiToolCall; result?: UiToolResult }[] = [];
+            for (const m of item.msgs) {
+              const list = (m.toolCalls ?? []).filter((tc) => !HIDDEN_TOOL_NAMES.has(tc.name));
+              for (const tc of list) {
+                flatCards.push({ toolCall: tc, result: resultMap.get(tc.id) });
+              }
+            }
             return (
               <div
                 key={key}
                 className={`${ct.UiChatRow} ${am["UiChatRow-assistant"]} ${isLastAssistant ? ct.UiChatRowLastAssistant : ""}`}
               >
                 <div className={am["UiChatBubble-assistant"]}>
-                  {item.msgs.map((m) => (
-                    <ToolCallCards
-                      key={getMessageKey(m)}
-                      toolCalls={m.toolCalls!}
-                      toolResults={m.toolResults}
-                    />
-                  ))}
+                  <ActionLog cards={flatCards} />
                 </div>
               </div>
             );

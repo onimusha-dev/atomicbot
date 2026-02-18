@@ -9,7 +9,6 @@
 .ToolCallCard {
   display: flex;
   flex-direction: column;
-  animation: toolCallFadeIn 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .ToolCallCard--live {
@@ -24,16 +23,16 @@
   padding: 4px 0;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 13px;
+  color: #ffffff;
+  font-size: 14px;
   font-family: inherit;
-  cursor: pointer;
   text-align: left;
   transition: color var(--transition-fast, 120ms);
+  cursor: pointer;
 }
 
-.ToolCallHeader:hover {
-  color: rgba(255, 255, 255, 0.55);
+.ToolCallHeader--static {
+  cursor: default;
 }
 
 .ToolCallCursor {
@@ -45,8 +44,6 @@
 }
 
 .ToolCallLabel {
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.45);
   white-space: nowrap;
 }
 
@@ -66,7 +63,7 @@
 /* Inline badges for live tool calls in header */
 .ToolCallBadge--running {
   flex-shrink: 0;
-  font-size: 10px;
+  font-size: 12px;
   padding: 1px 6px;
   border-radius: var(--radius-sm, 4px);
   color: rgba(160, 160, 180, 0.8);
@@ -76,17 +73,16 @@
 
 .ToolCallBadge--error {
   flex-shrink: 0;
-  font-size: 10px;
+  font-size: 12px;
   padding: 1px 6px;
   border-radius: var(--radius-sm, 4px);
-  color: rgba(200, 120, 120, 0.7);
+  color: #ff3b30;
   background: rgba(255, 255, 255, 0.04);
 }
 
 /* Expanded body — indented content under the header */
 .ToolCallBody {
-  padding: 4px 0 8px 16px;
-  animation: toolCallBodyFadeIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  padding: 4px 0 8px 0;
 }
 
 .ToolCallArgLine {
@@ -104,7 +100,7 @@
 
 .ToolCallArgValue {
   font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.3);
 }
 
@@ -119,15 +115,15 @@
 }
 
 .ToolCallStatusLine--approved {
-  color: rgba(120, 180, 140, 0.7);
+  color: #38bb58;
 }
 
 .ToolCallStatusLine--denied {
-  color: rgba(200, 120, 120, 0.7);
+  color: #ff3b30;
 }
 
 .ToolCallStatusLine--pending {
-  color: rgba(200, 180, 100, 0.6);
+  color: #e47a00;
 }
 
 .ToolCallStatusLine--running {
@@ -136,11 +132,13 @@
 }
 
 .ToolCallStatusLine--error {
-  color: rgba(200, 120, 120, 0.7);
+  color: #ff3b30;
 }
 
 .ToolCallStatusIcon {
   flex-shrink: 0;
+  width: 14px;
+  height: 14px;
 }
 
 .ToolCallStatusText {
