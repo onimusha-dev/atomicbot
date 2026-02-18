@@ -213,6 +213,7 @@ export function App() {
             <Route path="ai-providers" element={<SettingsTab tab="providers" />} />
             <Route path="messengers" element={<SettingsTab tab="connectors" />} />
             <Route path="skills" element={<SettingsTab tab="skills-integrations" />} />
+            <Route path="voice" element={<SettingsTab tab="voice" />} />
             <Route path="other" element={<SettingsTab tab="other" />} />
           </Route>
         </Route>

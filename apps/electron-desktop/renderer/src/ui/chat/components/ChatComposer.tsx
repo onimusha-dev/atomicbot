@@ -1,7 +1,7 @@
 import React from "react";
 import type { ChatAttachmentInput } from "@store/slices/chatSlice";
 import { ChatAttachmentCard, getFileTypeLabel } from "./ChatAttachmentCard";
-import { SendIcon } from "@shared/kit/icons";
+import { MicrophoneIcon, SendIcon } from "@shared/kit/icons";
 import {
   dataUrlDecodedBytes,
   MAX_ATTACHMENTS_DEFAULT,
@@ -31,6 +31,14 @@ export type ChatComposerProps = {
   /** Max attachments (default 5). When exceeded, onAttachmentsLimitError is called. */
   maxAttachments?: number;
   onAttachmentsLimitError?: (message: string) => void;
+  /** Voice recording state */
+  isVoiceRecording?: boolean;
+  isVoiceProcessing?: boolean;
+  onVoiceStart?: () => void;
+  onVoiceStop?: () => void;
+  /** When true, clicking mic shows a "not configured" tooltip instead of recording. */
+  voiceNotConfigured?: boolean;
+  onNavigateVoiceSettings?: () => void;
 };
 
 export const ChatComposer = React.forwardRef<ChatComposerRef, ChatComposerProps>(
@@ -50,11 +58,30 @@ export const ChatComposer = React.forwardRef<ChatComposerRef, ChatComposerProps>
       placeholder = "Message...",
       maxAttachments = MAX_ATTACHMENTS_DEFAULT,
       onAttachmentsLimitError,
+      isVoiceRecording = false,
+      isVoiceProcessing = false,
+      onVoiceStart,
+      onVoiceStop,
+      voiceNotConfigured = false,
+      onNavigateVoiceSettings,
     },
     ref
   ) {
     const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
+    const [showMicTooltip, setShowMicTooltip] = React.useState(false);
+    const micTooltipRef = React.useRef<HTMLDivElement | null>(null);
+
+    React.useEffect(() => {
+      if (!showMicTooltip) return;
+      const handle = (e: MouseEvent) => {
+        if (micTooltipRef.current && !micTooltipRef.current.contains(e.target as Node)) {
+          setShowMicTooltip(false);
+        }
+      };
+      document.addEventListener("mousedown", handle);
+      return () => document.removeEventListener("mousedown", handle);
+    }, [showMicTooltip]);
 
     React.useImperativeHandle(ref, () => ({
       focusInput() {
@@ -284,28 +311,98 @@ export const ChatComposer = React.forwardRef<ChatComposerRef, ChatComposerProps>
               </svg>
             </button>
 
-            {streaming && onStop ? (
-              <button
-                type="button"
-                className={`${s.UiChatSendButton} ${s.UiChatStopButton}`}
-                onClick={onStop}
-                aria-label={stopLabel}
-                title={stopLabel}
-              >
-                <div className={s.UiChatStopButtonInner} />
-              </button>
-            ) : (
-              <button
-                type="button"
-                className={s.UiChatSendButton}
-                onClick={onSend}
-                disabled={disabled || !canSend}
-                aria-label={disabled ? sendingLabel : sendLabel}
-                title={disabled ? sendingLabel : sendLabel}
-              >
-                <SendIcon />
-              </button>
-            )}
+            <div className={s.UiChatComposerButtonGroup}>
+              {onVoiceStart && (
+                <div className={s.UiChatMicWrap} ref={micTooltipRef}>
+                  <button
+                    type="button"
+                    className={`${s.UiChatMicButton}${isVoiceRecording ? ` ${s["UiChatMicButton--recording"]}` : ""}${isVoiceProcessing ? ` ${s["UiChatMicButton--processing"]}` : ""}`}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      if (voiceNotConfigured) {
+                        setShowMicTooltip((v) => !v);
+                        return;
+                      }
+                      if (!isVoiceRecording && !isVoiceProcessing) {
+                        onVoiceStart();
+                      }
+                    }}
+                    onMouseUp={(e) => {
+                      e.preventDefault();
+                      if (voiceNotConfigured) return;
+                      if (isVoiceRecording) {
+                        onVoiceStop?.();
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      if (voiceNotConfigured) return;
+                      if (isVoiceRecording) {
+                        onVoiceStop?.();
+                      }
+                    }}
+                    disabled={disabled || isVoiceProcessing}
+                    aria-label={
+                      voiceNotConfigured
+                        ? "Voice not configured"
+                        : isVoiceRecording
+                          ? "Release to stop recording"
+                          : isVoiceProcessing
+                            ? "Transcribing..."
+                            : "Hold to record voice"
+                    }
+                    title={
+                      voiceNotConfigured
+                        ? "Voice not configured"
+                        : isVoiceRecording
+                          ? "Release to stop"
+                          : isVoiceProcessing
+                            ? "Transcribing..."
+                            : "Hold to record"
+                    }
+                  >
+                    <MicrophoneIcon />
+                  </button>
+                  {showMicTooltip && (
+                    <div className={s.UiChatMicTooltip}>
+                      <div className={s.UiChatMicTooltipText}>Voice is not configured.</div>
+                      <button
+                        type="button"
+                        className={s.UiChatMicTooltipLink}
+                        onClick={() => {
+                          setShowMicTooltip(false);
+                          onNavigateVoiceSettings?.();
+                        }}
+                      >
+                        Settings → Voice
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {streaming && onStop ? (
+                <button
+                  type="button"
+                  className={`${s.UiChatSendButton} ${s.UiChatStopButton}`}
+                  onClick={onStop}
+                  aria-label={stopLabel}
+                  title={stopLabel}
+                >
+                  <div className={s.UiChatStopButtonInner} />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className={s.UiChatSendButton}
+                  onClick={onSend}
+                  disabled={disabled || !canSend}
+                  aria-label={disabled ? sendingLabel : sendLabel}
+                  title={disabled ? sendingLabel : sendLabel}
+                >
+                  <SendIcon />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

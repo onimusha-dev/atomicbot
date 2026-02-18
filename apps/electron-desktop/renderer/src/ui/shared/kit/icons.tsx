@@ -42,6 +42,35 @@ export function CheckIcon() {
   );
 }
 
+/** Microphone icon for voice input button (20x20). */
+export function MicrophoneIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M10 1.25C8.62 1.25 7.5 2.37 7.5 3.75V10C7.5 11.38 8.62 12.5 10 12.5C11.38 12.5 12.5 11.38 12.5 10V3.75C12.5 2.37 11.38 1.25 10 1.25Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.58 8.12V10C4.58 12.99 7.01 15.42 10 15.42C12.99 15.42 15.42 12.99 15.42 10V8.12"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10 15.42V18.75"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /** Chevron down icon (20×20), e.g. for scroll-to-bottom button. */
 export function ArrowDownIcon() {
   return (

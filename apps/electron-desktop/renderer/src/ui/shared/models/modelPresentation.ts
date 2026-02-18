@@ -13,7 +13,7 @@ export type ModelTier = "ultra" | "pro" | "fast";
 const MODEL_TIERS: Record<string, Record<ModelTier, string>> = {
   anthropic: {
     ultra: "claude-opus-4-6",
-    pro: "claude-sonnet-4-5",
+    pro: "claude-sonnet-4-6",
     fast: "claude-haiku-4-5",
   },
   google: {

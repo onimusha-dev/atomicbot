@@ -231,6 +231,12 @@
   width: 100%;
 }
 
+.UiChatComposerButtonGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .UiChatInput {
   flex: 1 1 auto;
   resize: none;
@@ -307,4 +313,122 @@
 
 .UiChatStopButton:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+.UiChatMicWrap {
+  position: relative;
+}
+
+.UiChatMicTooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  background: var(--surface-primary);
+  border: 1px solid var(--surface-overlay-strong);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  min-width: 190px;
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.UiChatMicTooltipText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+}
+
+.UiChatMicTooltipLink {
+  font-size: 13px;
+  color: var(--lime);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: var(--font-body);
+}
+
+.UiChatMicTooltipLink:hover {
+  opacity: 0.8;
+}
+
+.UiChatMicButton {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.UiChatMicButton svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.UiChatMicButton:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.8);
+  background: var(--surface-overlay-subtle);
+}
+
+.UiChatMicButton--recording {
+  color: var(--bg-base);
+  background: var(--lime);
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35);
+  animation: micPulse 1.2s ease-in-out infinite;
+}
+
+.UiChatMicButton--recording:hover:not(:disabled) {
+  background: var(--lime);
+  opacity: 0.85;
+}
+
+.UiChatMicButton--processing {
+  color: var(--lime);
+  cursor: wait;
+  position: relative;
+}
+
+.UiChatMicButton--processing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--lime);
+  animation: micSpin 0.8s linear infinite;
+}
+
+.UiChatMicButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@keyframes micPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(163, 230, 53, 0.15);
+  }
+}
+
+@keyframes micSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }

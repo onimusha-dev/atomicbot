@@ -11,6 +11,7 @@ import { ConnectorsTab } from "./connectors/ConnectorsTab";
 import { ModelProvidersTab } from "./providers/ModelProvidersTab";
 import { OtherTab } from "./OtherTab";
 import { SkillsIntegrationsTab } from "./skills/SkillsIntegrationsTab";
+import { VoiceRecognitionTab } from "./voice/VoiceRecognitionTab";
 import { addToastError } from "@shared/toast";
 
 export type SettingsOutletContext = {
@@ -21,13 +22,20 @@ export type SettingsOutletContext = {
   onError: (msg: string | null) => void;
 };
 
-export type SettingsTabId = "model" | "providers" | "skills-integrations" | "connectors" | "other";
+export type SettingsTabId =
+  | "model"
+  | "providers"
+  | "skills-integrations"
+  | "connectors"
+  | "voice"
+  | "other";
 
 const SETTINGS_TABS: Array<{ path: string; label: string; tab: SettingsTabId }> = [
   { path: "ai-models", label: "AI Models", tab: "model" },
   { path: "ai-providers", label: "AI Providers", tab: "providers" },
   { path: "messengers", label: "Messengers", tab: "connectors" },
   { path: "skills", label: "Skills", tab: "skills-integrations" },
+  { path: "voice", label: "Voice", tab: "voice" },
   { path: "other", label: "Other", tab: "other" },
 ];
 
@@ -85,6 +93,15 @@ export function SettingsTab({ tab }: { tab: SettingsTabId }) {
     case "connectors":
       return (
         <ConnectorsTab
+          gw={ctx.gw}
+          configSnap={ctx.configSnap ?? null}
+          reload={ctx.reload}
+          onError={ctx.onError}
+        />
+      );
+    case "voice":
+      return (
+        <VoiceRecognitionTab
           gw={ctx.gw}
           configSnap={ctx.configSnap ?? null}
           reload={ctx.reload}

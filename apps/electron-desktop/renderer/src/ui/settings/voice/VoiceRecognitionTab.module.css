@@ -1,0 +1,116 @@
+.VoiceDescription {
+  font-size: 14px;
+  color: rgba(230, 237, 243, 0.55);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.VoiceProviderSelect {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.VoiceProviderOption {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--surface-overlay-strong);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color var(--transition-base),
+    background var(--transition-base);
+}
+
+.VoiceProviderOption:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.VoiceProviderOption--active {
+  border-color: var(--lime-soft, #a3e635);
+  background: rgba(163, 230, 53, 0.06);
+}
+
+.VoiceProviderOption--active:hover {
+  border-color: var(--lime-soft, #a3e635);
+}
+
+.VoiceProviderTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.VoiceProviderDesc {
+  font-size: 13px;
+  color: rgba(230, 237, 243, 0.55);
+  line-height: 1.4;
+}
+
+.VoiceProviderOption--disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.VoiceProviderStatus {
+  font-size: 12px;
+  color: var(--lime, #a3e635);
+  margin-top: 2px;
+}
+
+.VoiceProviderBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(230, 237, 243, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.VoiceKeySection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--surface-overlay);
+  border-radius: var(--radius-lg);
+}
+
+.VoiceKeyLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(230, 237, 243, 0.65);
+  letter-spacing: 0.02em;
+}
+
+.VoiceKeyActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.VoiceStatus {
+  font-size: 13px;
+  color: rgba(230, 237, 243, 0.55);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.VoiceSaveRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}

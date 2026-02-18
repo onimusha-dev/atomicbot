@@ -1,7 +1,8 @@
 import React from "react";
 import type { Components } from "react-markdown";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getDesktopApiOrNull } from "@ipc/desktopApi";
+import { getObject } from "@shared/utils/configHelpers";
 import { useGatewayRpc } from "@gateway/context";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
@@ -20,6 +21,7 @@ import { ChatMessageList } from "./components/ChatMessageList";
 import { ScrollToBottomButton } from "./components/ScrollToBottomButton";
 import { useOptimisticSession } from "./hooks/optimisticSessionContext";
 import { useChatStream } from "./hooks/useChatStream";
+import { useVoiceInput } from "./hooks/useVoiceInput";
 import { addToastError } from "@shared/toast";
 import ct from "./ChatTranscript.module.css";
 
@@ -232,6 +234,61 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
     }
   }, [error, dispatch]);
 
+  const navigate = useNavigate();
+  const voice = useVoiceInput(gw.request);
+
+  const [voiceConfigured, setVoiceConfigured] = React.useState<boolean | null>(null);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const snap = await gw.request<{ config: unknown }>("config.get");
+        if (cancelled) return;
+        const cfg = getObject(snap.config);
+        const auth = getObject(cfg.auth);
+        const profiles = getObject(auth.profiles);
+        const order = getObject(auth.order);
+        const hasProfile = Object.values(profiles).some((p) => {
+          if (!p || typeof p !== "object" || Array.isArray(p)) return false;
+          return (p as { provider?: unknown }).provider === "openai";
+        });
+        const hasOrder = Object.prototype.hasOwnProperty.call(order, "openai");
+        setVoiceConfigured(Boolean(hasProfile || hasOrder));
+      } catch {
+        setVoiceConfigured(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [gw.request]);
+
+  React.useEffect(() => {
+    if (voice.error) {
+      addToastError(voice.error);
+    }
+  }, [voice.error]);
+
+  const handleVoiceStart = React.useCallback(() => {
+    voice.startRecording();
+  }, [voice]);
+
+  const handleVoiceStop = React.useCallback(async () => {
+    const text = await voice.stopRecording();
+    if (text) {
+      setInput((prev) => {
+        const trimmed = prev.trim();
+        return trimmed ? `${trimmed} ${text}` : text;
+      });
+    }
+    requestAnimationFrame(() => composerRef.current?.focusInput());
+  }, [voice]);
+
+  const handleNavigateVoiceSettings = React.useCallback(() => {
+    navigate("/settings/voice");
+  }, [navigate]);
+
   const send = React.useCallback(() => {
     const message = input.trim();
     const hasAttachments = attachments.length > 0;
@@ -282,6 +339,12 @@ export function ChatPage({ state: _state }: { state: Extract<GatewayState, { kin
           onSend={send}
           disabled={sending}
           onAttachmentsLimitError={(msg) => addToastError(msg)}
+          isVoiceRecording={voice.isRecording}
+          isVoiceProcessing={voice.isProcessing}
+          onVoiceStart={handleVoiceStart}
+          onVoiceStop={handleVoiceStop}
+          voiceNotConfigured={voiceConfigured === false}
+          onNavigateVoiceSettings={handleNavigateVoiceSettings}
         />
       </div>
     </div>
