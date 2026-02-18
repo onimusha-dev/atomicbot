@@ -51,6 +51,11 @@ function buildValidationSpec(provider: string, apiKey: string): ProviderValidati
         url: "https://api.x.ai/v1/models",
         headers: { Authorization: `Bearer ${apiKey}` },
       };
+    case "moonshot":
+      return {
+        url: "https://api.moonshot.ai/v1/models",
+        headers: { Authorization: `Bearer ${apiKey}` },
+      };
     default:
       return null;
   }

@@ -93,6 +93,9 @@ export function spawnGateway(params: {
     // Reduce noise in embedded contexts.
     NO_COLOR: "1",
     FORCE_COLOR: "0",
+    // Prevent the gateway from spawning a detached child on self-restart (SIGUSR1).
+    // In-process restart keeps the same PID so Electron can always kill it on quit.
+    OPENCLAW_NO_RESPAWN: "1",
   };
 
   // If we're spawning via Electron, force it into "Node mode" (otherwise it tries to launch a GUI process).
@@ -104,6 +107,9 @@ export function spawnGateway(params: {
     cwd: openclawDir,
     env,
     stdio: ["ignore", "pipe", "pipe"],
+    // Make the gateway a process group leader so we can kill the entire tree
+    // (parent + any children it spawns) with process.kill(-pid, signal).
+    detached: true,
   });
 
   child.stderr.on("data", (chunk) => {

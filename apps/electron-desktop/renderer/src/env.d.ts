@@ -92,6 +92,17 @@ declare global {
       ) => () => void;
       onUpdateDownloaded: (cb: (payload: UpdateDownloadedPayload) => void) => () => void;
       onUpdateError: (cb: (payload: UpdateErrorPayload) => void) => () => void;
+      // Backup & restore
+      createBackup: () => Promise<{ ok: boolean; cancelled?: boolean; error?: string }>;
+      restoreBackup: (data: string, filename?: string) => Promise<{ ok: boolean; error?: string }>;
+      detectLocalOpenclaw: () => Promise<{ found: boolean; path: string }>;
+      restoreFromDirectory: (dirPath: string) => Promise<{ ok: boolean; error?: string }>;
+      selectOpenclawFolder: () => Promise<{
+        ok: boolean;
+        path?: string;
+        cancelled?: boolean;
+        error?: string;
+      }>;
       // Custom skills
       installCustomSkill: (data: string) => Promise<{
         ok: boolean;

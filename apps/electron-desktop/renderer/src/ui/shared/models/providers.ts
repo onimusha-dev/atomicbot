@@ -6,7 +6,9 @@ export type ModelProvider =
   | "openrouter"
   | "xai"
   | "zai"
-  | "minimax";
+  | "minimax"
+  | "moonshot"
+  | "kimi-coding";
 
 export type ModelProviderInfo = {
   id: ModelProvider;
@@ -32,6 +34,8 @@ export const PROVIDER_ICONS: Record<ModelProvider, string> = {
   xai: "xai.svg",
   zai: "zai.svg",
   openrouter: "openrouter.svg",
+  moonshot: "moonshot.svg",
+  "kimi-coding": "kimi-coding.svg",
 };
 
 export function resolveProviderIconUrl(provider: ModelProvider): string {
@@ -53,6 +57,15 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
     helpText: "Get your API key from the Anthropic Console.",
   },
   {
+    id: "moonshot",
+    name: "Moonshot (Kimi)",
+    description: "Kimi K2.5 with 256K context window for complex reasoning and coding",
+    popular: true,
+    placeholder: "sk-...",
+    helpUrl: "https://platform.moonshot.cn/console/api-keys",
+    helpText: "Get your API key from the Moonshot AI Platform.",
+  },
+  {
     id: "openrouter",
     name: "OpenRouter",
     description: "One gateway to 200+ AI models. Ideal for flexibility and experimentation",
@@ -71,7 +84,7 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   },
   {
     id: "openai",
-    name: "OpenAI (GPT)",
+    name: "OpenAI (API Key)",
     description: "An all-rounder for chat, coding, and everyday tasks",
     placeholder: "sk-...",
     helpUrl: "https://platform.openai.com/api-keys",
@@ -79,11 +92,19 @@ export const MODEL_PROVIDERS: ModelProviderInfo[] = [
   },
   {
     id: "openai-codex",
-    name: "OpenAI Codex",
+    name: "ChatGPT (Subscription)",
     description: "Use your ChatGPT subscription for coding models",
     authType: "oauth",
     helpUrl: "https://openai.com/codex/",
     helpText: "Sign in with your ChatGPT account.",
+  },
+  {
+    id: "kimi-coding",
+    name: "Kimi Coding",
+    description: "Dedicated coding endpoint with Kimi K2.5 optimized for development tasks",
+    placeholder: "sk-...",
+    helpUrl: "https://www.kimi.com/code/en",
+    helpText: "Get your API key from the Kimi Coding Platform.",
   },
   {
     id: "xai",
@@ -120,4 +141,6 @@ export const MODEL_PROVIDER_BY_ID: Record<ModelProvider, ModelProviderInfo> = {
   xai: MODEL_PROVIDERS.find((p) => p.id === "xai")!,
   zai: MODEL_PROVIDERS.find((p) => p.id === "zai")!,
   minimax: MODEL_PROVIDERS.find((p) => p.id === "minimax")!,
+  moonshot: MODEL_PROVIDERS.find((p) => p.id === "moonshot")!,
+  "kimi-coding": MODEL_PROVIDERS.find((p) => p.id === "kimi-coding")!,
 };

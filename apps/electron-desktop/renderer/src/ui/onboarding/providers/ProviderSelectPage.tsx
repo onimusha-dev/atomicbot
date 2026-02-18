@@ -15,6 +15,7 @@ export function ProviderSelectPage(props: {
   error: string | null;
   onSelect: (provider: Provider) => void;
   selectedProvider: Provider | null;
+  onBack?: () => void;
 }) {
   const [selected, setSelected] = React.useState<Provider | null>(
     props.selectedProvider ? props.selectedProvider : null
@@ -76,7 +77,13 @@ export function ProviderSelectPage(props: {
           ))}
         </div>
         <div className="UiProviderContinueRow">
-          <div></div>
+          <div>
+            {props.onBack ? (
+              <button className="UiTextButton" type="button" onClick={props.onBack}>
+                Back
+              </button>
+            ) : null}
+          </div>
           <div>
             <PrimaryButton
               size={"sm"}

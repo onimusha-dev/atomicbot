@@ -40,7 +40,7 @@ export function killOrphanedGateway(stateDir: string): number | null {
   } catch {
     return null;
   }
-
+  console.log("raw>>>>>>", raw);
   const pid = Number(raw);
   if (!Number.isFinite(pid) || pid <= 0) {
     removeGatewayPid(stateDir);
@@ -56,17 +56,21 @@ export function killOrphanedGateway(stateDir: string): number | null {
     return null;
   }
 
-  // Process is alive — kill it.
-  console.warn(`[pid-file] Killing orphaned gateway process (PID ${pid})`);
+  // Process is alive — kill the entire process group immediately.
+  console.warn(`[pid-file] Killing orphaned gateway process group (PID ${pid})`);
   try {
-    process.kill(pid, "SIGTERM");
-  } catch (err) {
-    console.warn("[pid-file] SIGTERM failed:", err);
+    process.kill(-pid, "SIGKILL");
+  } catch {
+    // Group kill failed — fall back to single-process kill.
+    try {
+      process.kill(pid, "SIGKILL");
+    } catch (err) {
+      console.warn("[pid-file] SIGKILL failed:", err);
+    }
   }
 
-  // Give it a moment, then escalate.
+  // Brief wait to confirm the process is dead.
   try {
-    // Brief synchronous wait via busy-loop (we're in startup, blocking is acceptable).
     const deadline = Date.now() + 1500;
     while (Date.now() < deadline) {
       try {
@@ -76,14 +80,10 @@ export function killOrphanedGateway(stateDir: string): number | null {
         removeGatewayPid(stateDir);
         return pid;
       }
-      // ~50ms spin
       Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 50);
     }
-    // Still alive after timeout — force kill.
-    process.kill(pid, "SIGKILL");
-    console.warn(`[pid-file] Escalated to SIGKILL for orphaned gateway (PID ${pid})`);
   } catch (err) {
-    console.warn("[pid-file] kill escalation failed:", err);
+    console.warn("[pid-file] kill confirmation failed:", err);
   }
 
   removeGatewayPid(stateDir);

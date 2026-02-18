@@ -1,9 +1,10 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { getDesktopApiOrNull } from "@ipc/desktopApi";
 import { routes } from "../app/routes";
 import { settingsStyles as ps } from "./SettingsPage";
+import { RestoreBackupModal } from "./RestoreBackupModal";
 import s from "./OtherTab.module.css";
 import pkg from "../../../../package.json";
 
@@ -36,6 +37,9 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
   const [launchAtStartup, setLaunchAtStartup] = React.useState(false);
   const [resetBusy, setResetBusy] = React.useState(false);
   const [terminalSidebar, setTerminalSidebar] = useTerminalSidebarVisible();
+  const [backupBusy, setBackupBusy] = React.useState(false);
+  const [restoreModalOpen, setRestoreModalOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const appVersion = pkg.version || "0.0.0";
 
@@ -89,6 +93,31 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
     }
   }, [onError]);
 
+  const handleCreateBackup = React.useCallback(async () => {
+    const api = getDesktopApiOrNull();
+    if (!api?.createBackup) {
+      onError("Desktop API not available");
+      return;
+    }
+    onError(null);
+    setBackupBusy(true);
+    try {
+      const result = await api.createBackup();
+      if (!result.ok && !result.cancelled) {
+        onError(result.error || "Failed to create backup");
+      }
+    } catch (err) {
+      onError(String(err));
+    } finally {
+      setBackupBusy(false);
+    }
+  }, [onError]);
+
+  const handleRestored = React.useCallback(() => {
+    setRestoreModalOpen(false);
+    navigate(routes.chat);
+  }, [navigate]);
+
   const api = getDesktopApiOrNull();
 
   return (
@@ -123,6 +152,44 @@ export function OtherTab({ onError }: { onError: (msg: string | null) => void })
           (AGENTS, SOUL, USER, IDENTITY, TOOLS, HEARTBEAT, BOOTSTRAP) that shape the agent.
         </p>
       </section>
+
+      {/* Backup */}
+      <section className={s.UiSettingsOtherSection}>
+        <h3 className={s.UiSettingsOtherSectionTitle}>Backup</h3>
+        <div className={s.UiSettingsOtherCard}>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>Create backup</span>
+            <button
+              type="button"
+              className={s.UiSettingsOtherLink}
+              disabled={backupBusy}
+              onClick={() => void handleCreateBackup()}
+            >
+              {backupBusy ? "Creating..." : "Save to file"}
+            </button>
+          </div>
+          <div className={s.UiSettingsOtherRow}>
+            <span className={s.UiSettingsOtherRowLabel}>Restore from backup</span>
+            <button
+              type="button"
+              className={s.UiSettingsOtherLink}
+              onClick={() => setRestoreModalOpen(true)}
+            >
+              Choose file
+            </button>
+          </div>
+        </div>
+        <p className={s.UiSettingsOtherHint}>
+          Create a full backup of your OpenClaw configuration or restore from a previously saved
+          backup.
+        </p>
+      </section>
+
+      <RestoreBackupModal
+        open={restoreModalOpen}
+        onClose={() => setRestoreModalOpen(false)}
+        onRestored={handleRestored}
+      />
 
       {/* Terminal */}
       <section className={s.UiSettingsOtherSection}>

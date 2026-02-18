@@ -2,7 +2,6 @@ import React from "react";
 
 import { getDesktopApiOrNull } from "@ipc/desktopApi";
 import { FooterText, HeroPageLayout, PrimaryButton, SplashLogo } from "@shared/kit";
-import { LoadingScreen } from "./LoadingScreen";
 import { addToastError } from "@shared/toast";
 import pkg from "../../../../package.json";
 import s from "./ConsentScreen.module.css";
@@ -10,41 +9,43 @@ import s from "./ConsentScreen.module.css";
 export type ConsentDesktopApi = NonNullable<Window["openclawDesktop"]> & {
   getConsentInfo?: () => Promise<{ accepted: boolean }>;
   acceptConsent?: () => Promise<{ ok: true }>;
-  startGateway?: () => Promise<{ ok: true }>;
 };
 
-export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
+export function ConsentScreen({
+  onAccepted,
+  onImport,
+}: {
+  onAccepted: () => void;
+  onImport: () => void;
+}) {
   const api = getDesktopApiOrNull() as ConsentDesktopApi | null;
   const [busy, setBusy] = React.useState(false);
   const termsUrl = "https://atomicbot.ai/terms-of-service";
   const appVersion = pkg.version || "0.0.0";
 
-  const accept = React.useCallback(async () => {
-    if (busy) {
-      return;
-    }
-    if (!api || typeof api.acceptConsent !== "function") {
-      addToastError("Desktop API is not available. Please restart the app.");
-      return;
-    }
-    setBusy(true);
-    try {
-      await api.acceptConsent();
-      // Redundant safety: ensure gateway start even if consent handler changes.
-      if (typeof api.startGateway === "function") {
-        await api.startGateway();
+  // Record TOS acceptance, then invoke the callback. Gateway is already
+  // running at this point so we only need to persist the consent flag.
+  const acceptAndRun = React.useCallback(
+    async (callback: () => void) => {
+      if (busy) {
+        return;
       }
-      onAccepted();
-    } catch (err) {
-      addToastError(err);
-    } finally {
-      setBusy(false);
-    }
-  }, [api, busy, onAccepted]);
-
-  if (busy) {
-    return <LoadingScreen state={null} />;
-  }
+      if (!api || typeof api.acceptConsent !== "function") {
+        addToastError("Desktop API is not available. Please restart the app.");
+        return;
+      }
+      setBusy(true);
+      try {
+        await api.acceptConsent();
+        callback();
+      } catch (err) {
+        addToastError(err);
+      } finally {
+        setBusy(false);
+      }
+    },
+    [api, busy]
+  );
 
   return (
     <HeroPageLayout
@@ -58,22 +59,36 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
         <div className={s.UiConsentCenter}>
           <SplashLogo iconAlt="Atomic Bot" />
           <div className={s.UiConsentTitle}>Welcome to Atomic Bot</div>
-          <div className={s.UiConsentSubtitle}>Your Personal AI Agent based on OpenClaw</div>
+          <div className={s.UiConsentSubtitle}>
+            Get started by creating a new AI agent
+            <br />
+            or continue with an existing instance
+          </div>
 
-          <PrimaryButton onClick={() => void accept()}>Start</PrimaryButton>
+          <PrimaryButton disabled={busy} onClick={() => void acceptAndRun(onAccepted)}>
+            Create a new AI agent
+          </PrimaryButton>
+
+          <button
+            type="button"
+            className={s.UiConsentSecondaryButton}
+            disabled={busy}
+            onClick={() => void acceptAndRun(onImport)}
+          >
+            Import an existing setup
+          </button>
 
           <div className="UiLinkContainer">
             <span>
               Atomic Bot is experimental product. By clicking
               <br />
-              “Start” you agree to the{" "}
+              button you agree to the{" "}
               <a
                 className="UiLink UiLinkMainPage"
                 href={termsUrl}
                 target="_blank"
                 rel="noreferrer"
                 onClick={(e) => {
-                  // Prevent toggling the checkbox when clicking the link.
                   e.preventDefault();
                   e.stopPropagation();
                   const openExternal = getDesktopApiOrNull()?.openExternal;
@@ -81,13 +96,11 @@ export function ConsentScreen({ onAccepted }: { onAccepted: () => void }) {
                     void openExternal(termsUrl);
                     return;
                   }
-                  // Fallback for non-desktop contexts.
                   window.open(termsUrl, "_blank", "noopener,noreferrer");
                 }}
               >
-                Terms of Use
+                Terms of Use.
               </a>
-              .
             </span>
           </div>
         </div>

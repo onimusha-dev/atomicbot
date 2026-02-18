@@ -21,4 +21,6 @@ export type RegisterParams = {
   obsidianCliBin: string;
   ghBin: string;
   stopGatewayChild: () => Promise<void>;
+  getGatewayToken: () => string;
+  setGatewayToken: (token: string) => void;
 };

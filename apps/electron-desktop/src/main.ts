@@ -44,25 +44,60 @@ let gatewayState: GatewayState | null = null;
 let consentAccepted = false;
 
 async function stopGatewayChild(): Promise<void> {
-  const child = gateway;
+  const pid = gatewayPid;
   gateway = null;
-  gatewayPid = null;
-  if (!child) {
+  if (!pid) {
     return;
   }
-  try {
-    child.kill("SIGTERM");
-  } catch (err) {
-    console.warn("[main] stopGatewayChild SIGTERM failed:", err);
-  }
-  await new Promise((r) => setTimeout(r, 1500));
-  if (!child.killed) {
+
+  // Graceful shutdown: SIGTERM lets the gateway drain active tasks and close cleanly.
+  const killGroup = (signal: NodeJS.Signals) => {
     try {
-      child.kill("SIGKILL");
-    } catch (err) {
-      console.warn("[main] stopGatewayChild SIGKILL failed:", err);
+      process.kill(-pid, signal);
+    } catch {
+      process.kill(pid, signal);
     }
+  };
+
+  try {
+    killGroup("SIGTERM");
+  } catch {
+    // Already dead
+    gatewayPid = null;
+    return;
   }
+
+  // Wait up to 5s for graceful exit, then escalate to SIGKILL.
+  const gracefulDeadline = Date.now() + 5000;
+  while (Date.now() < gracefulDeadline) {
+    try {
+      process.kill(pid, 0);
+    } catch {
+      gatewayPid = null;
+      return;
+    }
+    await new Promise((r) => setTimeout(r, 100));
+  }
+
+  // Still alive — force kill the process group.
+  try {
+    killGroup("SIGKILL");
+  } catch {
+    // Already dead
+  }
+
+  // Brief wait for SIGKILL to take effect.
+  const killDeadline = Date.now() + 2000;
+  while (Date.now() < killDeadline) {
+    try {
+      process.kill(pid, 0);
+    } catch {
+      break;
+    }
+    await new Promise((r) => setTimeout(r, 50));
+  }
+
+  gatewayPid = null;
 }
 
 function broadcastGatewayState(win: BrowserWindow | null, state: GatewayState) {
@@ -181,13 +216,17 @@ app.on("activate", () => {
 });
 
 // Last-resort synchronous kill: if the process exits without proper cleanup,
-// force-kill the gateway child so it doesn't linger as an orphan.
+// force-kill the gateway process group so nothing lingers as an orphan.
 process.on("exit", () => {
   if (gatewayPid) {
     try {
-      process.kill(gatewayPid, "SIGKILL");
+      process.kill(-gatewayPid, "SIGKILL");
     } catch {
-      // Already dead — nothing to do.
+      try {
+        process.kill(gatewayPid, "SIGKILL");
+      } catch {
+        // Already dead — nothing to do.
+      }
     }
     gatewayPid = null;
   }
@@ -228,6 +267,17 @@ void app.whenReady().then(async () => {
     console.log(`[main] Cleaned up orphaned gateway process (PID ${killedPid})`);
   }
 
+  // Temporary: force-kill all lingering openclaw-gateway processes to prevent
+  // zombie instances. Safe because we are about to spawn a fresh one.
+  // TODO: remove after 1-2 releases once the orphan cleanup above is proven reliable.
+  try {
+    const { execSync } = await import("node:child_process");
+    execSync("pkill -9 openclaw-gateway", { stdio: "ignore" });
+    console.log("[main] pkill openclaw-gateway: killed lingering processes");
+  } catch {
+    // pkill exits non-zero when no matching processes found — expected.
+  }
+
   // Remove stale gateway lock file so the new spawn can acquire it.
   const configPath = path.join(stateDir, "openclaw.json");
   removeStaleGatewayLock(configPath);
@@ -249,7 +299,7 @@ void app.whenReady().then(async () => {
   const port = await pickPort(DEFAULT_PORT);
   const url = `http://127.0.0.1:${port}/`;
   const tokenFromConfig = readGatewayTokenFromConfig(configPath);
-  const token = tokenFromConfig ?? randomBytes(24).toString("base64url");
+  let token = tokenFromConfig ?? randomBytes(24).toString("base64url");
   ensureGatewayConfigFile({ configPath, token });
 
   const rendererIndex = resolveRendererIndex({
@@ -303,13 +353,19 @@ void app.whenReady().then(async () => {
     });
 
     // Track the PID for orphan cleanup (process.on('exit') guard + PID file for next launch).
-    gatewayPid = gateway.pid ?? null;
-    if (gatewayPid) {
-      writeGatewayPid(stateDir, gatewayPid);
+    const thisPid = gateway.pid ?? null;
+    gatewayPid = thisPid;
+    if (thisPid) {
+      writeGatewayPid(stateDir, thisPid);
     }
     gateway.on("exit", () => {
-      gatewayPid = null;
-      removeGatewayPid(stateDir);
+      // Only clear if this is still the active gateway — avoids a race where
+      // the old process's exit event fires after a new gateway has been spawned,
+      // which would null out the new PID and leave it un-killable on quit.
+      if (gatewayPid === thisPid) {
+        gatewayPid = null;
+        removeGatewayPid(stateDir);
+      }
     });
 
     const ok = await waitForPortOpen("127.0.0.1", port, 30_000);
@@ -353,6 +409,10 @@ void app.whenReady().then(async () => {
     obsidianCliBin,
     ghBin,
     stopGatewayChild,
+    getGatewayToken: () => token,
+    setGatewayToken: (t: string) => {
+      token = t;
+    },
   });
 
   registerTerminalIpcHandlers({
@@ -368,10 +428,9 @@ void app.whenReady().then(async () => {
     ghBin,
   });
 
-  // If consent has already been accepted previously, start the gateway immediately.
-  if (consentAccepted) {
-    await startGateway();
-  }
+  // Always start the gateway on launch — consent is handled in the renderer
+  // after the gateway is ready (loading screen shows while gateway starts).
+  await startGateway();
 });
 
 function readConsentAccepted(consentPath: string): boolean {

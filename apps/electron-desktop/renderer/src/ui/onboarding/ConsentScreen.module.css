@@ -36,4 +36,32 @@
 
 .UiConsentCenter :global(.UiPrimaryButton) {
   margin-top: 8px;
+  width: 280px;
+  min-width: 280px;
+  box-sizing: border-box;
+}
+
+.UiConsentSecondaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  min-width: 280px;
+  box-sizing: border-box;
+  margin-top: 12px;
+  padding: 9px 14px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 22px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.UiConsentSecondaryButton:hover {
+  background: #3a3a3a;
 }
